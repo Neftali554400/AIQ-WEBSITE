@@ -103,6 +103,9 @@
     .btn-paywall:hover{background:var(--fathom-lt);transform:translateY(-1px)}
     .btn-paywall:active{transform:translateY(0)}
     .btn-paywall:focus-visible{outline:2px solid var(--glow);outline-offset:3px}
+    .paywall-price-wrap{display:flex;align-items:baseline;gap:.6rem;margin-bottom:1.5rem;padding:.85rem 1rem;background:rgba(3,79,70,.12);border:1px solid rgba(94,207,187,.15);border-radius:.875rem}
+    .paywall-price{font-family:'EB Garamond',Georgia,serif;font-size:2.2rem;font-weight:600;color:var(--lumen);letter-spacing:-.02em;line-height:1}
+    .paywall-price-note{font-size:.73rem;color:rgba(255,255,235,.4);font-weight:500;line-height:1.3}
     .paywall-signin{font-size:.78rem;color:rgba(255,255,235,.35);text-align:center}
     .paywall-signin a{color:#5ecfbb;text-decoration:none}
     .paywall-signin a:hover{text-decoration:underline}
@@ -189,6 +192,8 @@
       </div>
 
       <div class="sidebar-card">
+        <div style="font-family:'EB Garamond',Georgia,serif;font-size:1.9rem;font-weight:600;color:var(--lumen);letter-spacing:-.02em;text-align:center;margin-bottom:.25rem" id="sidebar-price">—</div>
+        <div style="font-size:.7rem;color:rgba(255,255,235,.35);text-align:center;margin-bottom:1rem;font-weight:500">one-time · lifetime access</div>
         <button class="btn-enroll" id="btn-enroll" onclick="toggleEnroll()">Enrol in this course</button>
         <p class="enroll-note" id="enroll-note">Enrol once. Access all lessons and earn your certificate.</p>
         <div id="superadmin-access" style="display:none" class="superadmin-badge">
@@ -216,13 +221,17 @@
       </div>
       <h2 class="paywall-title" id="paywall-heading">Unlock <span id="paywall-course-title">this course</span></h2>
       <p class="paywall-sub">Get full access to all lessons, resources, and your completion certificate.</p>
+      <div class="paywall-price-wrap">
+        <span class="paywall-price" id="paywall-price">₦0</span>
+        <span class="paywall-price-note">one-time payment · lifetime access</span>
+      </div>
       <ul class="paywall-features">
         <li><span class="paywall-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="#5ecfbb"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>All lessons and future content updates</li>
         <li><span class="paywall-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="#5ecfbb"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>Downloadable resources and templates</li>
         <li><span class="paywall-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="#5ecfbb"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>Completion certificate</li>
         <li><span class="paywall-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="#5ecfbb"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>Community access and peer support</li>
       </ul>
-      <button class="btn-paywall" onclick="initiatePayment()">Enrol Now</button>
+      <button class="btn-paywall" id="btn-paywall-enrol" onclick="initiatePayment()">Enrol Now — <span id="paywall-btn-price">₦0</span></button>
       <p class="paywall-signin">Already have an account? <a href="signup.html" id="paywall-signin-link">Sign in to continue</a></p>
     </div>
   </div>
@@ -231,6 +240,7 @@
     const COURSES = {
       video: {
         title: 'Create Videos Using AI',
+        price: 9999,
         category: 'Video Creation',
         icon: '🎬',
         level: 'Beginner',
@@ -250,6 +260,7 @@
       },
       books: {
         title: 'Write Books Using AI',
+        price: 9999,
         category: 'Writing and Publishing',
         icon: '📖',
         level: 'All levels',
@@ -271,6 +282,7 @@
       },
       music: {
         title: 'Create Songs Using AI',
+        price: 24999,
         category: 'Music and Audio',
         icon: '🎵',
         level: 'No experience needed',
@@ -289,6 +301,7 @@
       },
       motion: {
         title: 'Create Motion Graphics Using AI',
+        price: 19999,
         category: 'Motion and Design',
         icon: '✨',
         level: 'Intermediate',
@@ -309,6 +322,7 @@
       },
       games: {
         title: 'Create Games Using AI',
+        price: 29999,
         category: 'Game Development',
         icon: '🎮',
         level: 'All levels',
@@ -332,6 +346,7 @@
       },
       animate: {
         title: 'Animate Images Using AI',
+        price: 4999,
         category: 'Image Animation',
         icon: '🖼️',
         level: 'Beginner',
@@ -351,6 +366,7 @@
       },
       web: {
         title: 'Create Websites Using AI',
+        price: 24999,
         category: 'Web Design',
         icon: '🌐',
         level: 'All levels',
@@ -368,6 +384,28 @@
           { title: 'SEO and Performance with AI', duration: '14 min' },
           { title: 'Deploying to a Live Domain', duration: '16 min' },
           { title: 'Maintaining and Updating Your Site', duration: '12 min' },
+        ]
+      },
+      automation: {
+        title: 'AI Automation',
+        price: 34999,
+        category: 'Automation and Productivity',
+        icon: '⚡',
+        level: 'Intermediate',
+        duration: '3h 30min',
+        desc: 'Eliminate repetitive work and build income-generating workflows. Learn Make, Zapier and Claude to automate your business end to end.',
+        tools: ['Make', 'Zapier', 'Claude', 'Airtable', 'Notion'],
+        lessons: [
+          { title: 'Introduction to AI Automation', duration: '10 min' },
+          { title: 'Understanding Workflows and Triggers', duration: '16 min' },
+          { title: 'Building Your First Make Scenario', duration: '22 min' },
+          { title: 'Zapier Automation Essentials', duration: '20 min' },
+          { title: 'Connecting Claude to Your Workflows', duration: '25 min' },
+          { title: 'Automating Social Media and Content', duration: '18 min' },
+          { title: 'Client Onboarding Automation', duration: '20 min' },
+          { title: 'Automating Data and Reporting', duration: '16 min' },
+          { title: 'Building a Lead Generation Machine', duration: '22 min' },
+          { title: 'Selling Automation as a Service', duration: '18 min' },
         ]
       }
     };
@@ -398,8 +436,14 @@
     function canAccessContent() {
       return isSuperAdmin() || hasPaid();
     }
+    function formatPrice(n) {
+      return '₦' + n.toLocaleString('en-NG');
+    }
     function showPaywall() {
       document.getElementById('paywall-course-title').textContent = '"' + course.title + '"';
+      const priceStr = formatPrice(course.price || 0);
+      document.getElementById('paywall-price').textContent = priceStr;
+      document.getElementById('paywall-btn-price').textContent = priceStr;
       const overlay = document.getElementById('paywall-overlay');
       overlay.style.display = 'flex';
       // Update the sign-in link based on auth state
@@ -449,6 +493,7 @@
     document.getElementById('s-lessons').textContent = course.lessons.length + ' lessons';
     document.getElementById('s-level').textContent = course.level;
     document.getElementById('s-duration').textContent = course.duration;
+    document.getElementById('sidebar-price').textContent = formatPrice(course.price || 0);
 
     // Meta pills
     const meta = document.getElementById('course-meta');
