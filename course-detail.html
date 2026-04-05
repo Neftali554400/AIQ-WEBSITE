@@ -84,34 +84,6 @@
     .tools-list{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.5rem}
     .tool-tag{background:rgba(255,255,235,.06);border:1px solid rgba(255,255,235,.1);border-radius:9999px;padding:.25rem .75rem;font-size:.72rem;color:rgba(255,255,235,.55);font-weight:500}
 
-    /* PAYWALL */
-    @keyframes paywallIn{from{opacity:0;transform:translateY(16px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
-    @keyframes paywallOut{from{opacity:1;transform:translateY(0) scale(1)}to{opacity:0;transform:translateY(12px) scale(.97)}}
-    @keyframes overlayIn{from{opacity:0}to{opacity:1}}
-    @keyframes overlayOut{from{opacity:1}to{opacity:0}}
-    .paywall-overlay{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:1.5rem;background:rgba(10,10,8,.82);backdrop-filter:blur(12px);animation:overlayIn .25s ease both}
-    .paywall-overlay.closing{animation:overlayOut .22s ease forwards}
-    .paywall-overlay.closing .paywall-modal{animation:paywallOut .22s cubic-bezier(.4,0,1,1) forwards}
-    .paywall-modal{background:#111110;border:1px solid rgba(255,255,235,.1);border-radius:2rem;padding:2.5rem;max-width:460px;width:100%;box-shadow:0 32px 80px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,235,.04);position:relative;animation:paywallIn .3s cubic-bezier(.16,1,.3,1) both}
-    .paywall-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(255,169,70,.1);border:1px solid rgba(255,169,70,.25);border-radius:9999px;padding:.3rem .85rem;font-size:.72rem;font-weight:700;color:#ffa946;letter-spacing:.04em;text-transform:uppercase;margin-bottom:1.25rem}
-    .paywall-title{font-family:'EB Garamond',Georgia,serif;font-size:2rem;font-weight:500;line-height:1.1;color:var(--lumen);margin-bottom:.65rem}
-    .paywall-sub{font-size:.88rem;color:rgba(255,255,235,.45);line-height:1.7;margin-bottom:1.75rem}
-    .paywall-features{list-style:none;display:flex;flex-direction:column;gap:.6rem;margin-bottom:2rem}
-    .paywall-features li{display:flex;align-items:center;gap:.75rem;font-size:.85rem;color:rgba(255,255,235,.65)}
-    .paywall-check{width:18px;height:18px;border-radius:50%;background:rgba(3,79,70,.5);border:1px solid rgba(94,207,187,.4);display:flex;align-items:center;justify-content:center;flex-shrink:0}
-    .btn-paywall{width:100%;background:var(--fathom);color:var(--lumen);border:none;border-radius:.875rem;padding:1rem 1.25rem;font-family:'Figtree',sans-serif;font-size:.98rem;font-weight:600;cursor:pointer;transition:background .2s ease,transform .15s ease;margin-bottom:.85rem}
-    .btn-paywall:hover{background:var(--fathom-lt);transform:translateY(-1px)}
-    .btn-paywall:active{transform:translateY(0)}
-    .btn-paywall:focus-visible{outline:2px solid var(--glow);outline-offset:3px}
-    .paywall-price-wrap{display:flex;align-items:baseline;gap:.6rem;margin-bottom:1.5rem;padding:.85rem 1rem;background:rgba(3,79,70,.12);border:1px solid rgba(94,207,187,.15);border-radius:.875rem}
-    .paywall-price{font-family:'EB Garamond',Georgia,serif;font-size:2.2rem;font-weight:600;color:var(--lumen);letter-spacing:-.02em;line-height:1}
-    .paywall-price-note{font-size:.73rem;color:rgba(255,255,235,.4);font-weight:500;line-height:1.3}
-    .paywall-signin{font-size:.78rem;color:rgba(255,255,235,.35);text-align:center}
-    .paywall-signin a{color:#5ecfbb;text-decoration:none}
-    .paywall-signin a:hover{text-decoration:underline}
-    .paywall-close{position:absolute;top:1.25rem;right:1.25rem;background:none;border:none;color:rgba(255,255,235,.25);cursor:pointer;padding:.35rem;border-radius:.5rem;transition:color .15s ease,background .15s ease;display:flex;align-items:center;justify-content:center}
-    .paywall-close:hover{color:var(--lumen);background:rgba(255,255,235,.06)}
-    .paywall-close:focus-visible{outline:2px solid var(--glow);outline-offset:3px}
     .lesson-item.locked .lesson-num::after{content:'🔒';font-size:.65rem;position:absolute}
     .superadmin-badge{display:inline-flex;align-items:center;gap:.4rem;background:rgba(255,169,70,.1);border:1px solid rgba(255,169,70,.25);border-radius:9999px;padding:.3rem .85rem;font-size:.72rem;font-weight:600;color:#ffa946;margin-top:.5rem}
     /* HAMBURGER */
@@ -207,33 +179,6 @@
         <div class="tools-list" id="tools-list"></div>
       </div>
     </aside>
-  </div>
-
-  <!-- PAYWALL MODAL -->
-  <div id="paywall-overlay" class="paywall-overlay" style="display:none" role="dialog" aria-modal="true" aria-labelledby="paywall-heading">
-    <div class="paywall-modal">
-      <button class="paywall-close" onclick="closePaywall()" aria-label="Close paywall">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
-      </button>
-      <div class="paywall-badge">
-        <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
-        Premium Course
-      </div>
-      <h2 class="paywall-title" id="paywall-heading">Unlock <span id="paywall-course-title">this course</span></h2>
-      <p class="paywall-sub">Get full access to all lessons, resources, and your completion certificate.</p>
-      <div class="paywall-price-wrap">
-        <span class="paywall-price" id="paywall-price">₦0</span>
-        <span class="paywall-price-note">one-time payment · lifetime access</span>
-      </div>
-      <ul class="paywall-features">
-        <li><span class="paywall-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="#5ecfbb"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>All lessons and future content updates</li>
-        <li><span class="paywall-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="#5ecfbb"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>Downloadable resources and templates</li>
-        <li><span class="paywall-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="#5ecfbb"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>Completion certificate</li>
-        <li><span class="paywall-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="#5ecfbb"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>Community access and peer support</li>
-      </ul>
-      <button class="btn-paywall" id="btn-paywall-enrol" onclick="initiatePayment()">Enrol Now — <span id="paywall-btn-price">₦0</span></button>
-      <p class="paywall-signin">Already have an account? <a href="signup.html" id="paywall-signin-link">Sign in to continue</a></p>
-    </div>
   </div>
 
   <script>
@@ -431,7 +376,11 @@
     }
     function hasPaid() {
       const u = getUser();
-      return u && u.paid === true;
+      if (!u) return false;
+      // Check per-course payment
+      if (u.paidCourses && u.paidCourses.includes(courseId)) return true;
+      // Legacy global paid flag
+      return u.paid === true;
     }
     function canAccessContent() {
       return isSuperAdmin() || hasPaid();
@@ -439,39 +388,14 @@
     function formatPrice(n) {
       return '₦' + n.toLocaleString('en-NG');
     }
-    function showPaywall() {
-      document.getElementById('paywall-course-title').textContent = '"' + course.title + '"';
-      const priceStr = formatPrice(course.price || 0);
-      document.getElementById('paywall-price').textContent = priceStr;
-      document.getElementById('paywall-btn-price').textContent = priceStr;
-      const overlay = document.getElementById('paywall-overlay');
-      overlay.style.display = 'flex';
-      // Update the sign-in link based on auth state
-      const u = getUser();
-      const signinLink = document.getElementById('paywall-signin-link');
-      if (!u) {
-        signinLink.href = 'signup.html?next=' + encodeURIComponent(window.location.href);
-        signinLink.textContent = 'Sign in or create an account';
-      } else {
-        signinLink.href = 'account.html';
-        signinLink.textContent = 'Go to my account';
-      }
-    }
-    function closePaywall() {
-      const overlay = document.getElementById('paywall-overlay');
-      overlay.classList.add('closing');
-      setTimeout(() => {
-        overlay.style.display = 'none';
-        overlay.classList.remove('closing');
-      }, 220);
-    }
     function initiatePayment() {
-      // Payment gateway will be wired here
+      const u = getUser();
+      if (!u) {
+        window.location.href = 'signup.html?next=' + encodeURIComponent(window.location.href);
+        return;
+      }
+      window.location.href = 'payment.html?course=' + courseId;
     }
-    // Close paywall when clicking outside the modal
-    document.getElementById('paywall-overlay').addEventListener('click', function(e) {
-      if (e.target === this) closePaywall();
-    });
     function getProgress() {
       try { return JSON.parse(localStorage.getItem('aiq_progress_' + courseId)) || {}; } catch(e) { return {}; }
     }
@@ -533,12 +457,12 @@
         item.setAttribute('tabindex', '0');
         item.onclick = () => selectLesson(i);
         item.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') selectLesson(i); };
-        const lockIcon = locked && i > 0 ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="opacity:.4"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>' : (done ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>' : '');
+        const lockIcon = locked ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="opacity:.4"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>' : (done ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>' : '');
         item.innerHTML = `
-          <div class="lesson-num" style="${locked && i > 0 ? 'opacity:.4' : ''}">${done ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>' : (i + 1)}</div>
+          <div class="lesson-num" style="${locked ? 'opacity:.4' : ''}">${done ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>' : (i + 1)}</div>
           <div class="lesson-info">
-            <div class="lesson-title" style="${locked && i > 0 ? 'opacity:.4' : ''}">${l.title}</div>
-            <div class="lesson-duration" style="${locked && i > 0 ? 'opacity:.3' : ''}">${l.duration}</div>
+            <div class="lesson-title" style="${locked ? 'opacity:.55' : ''}">${l.title}</div>
+            <div class="lesson-duration" style="${locked ? 'opacity:.35' : ''}">${l.duration}</div>
           </div>
           <div class="lesson-status">${lockIcon}</div>
         `;
@@ -570,7 +494,7 @@
       if (!canAccessContent()) {
         const u = getUser();
         if (!u) { window.location.href = 'signup.html'; return; }
-        showPaywall();
+        initiatePayment();
         return;
       }
       activeLesson = i;
@@ -585,7 +509,7 @@
       if (!canAccessContent()) {
         const u = getUser();
         if (!u) { window.location.href = 'signup.html?next=' + encodeURIComponent(window.location.href); return; }
-        showPaywall();
+        initiatePayment();
         return;
       }
       // Ensure enrolled
@@ -618,7 +542,7 @@
       const u = getUser();
       if (!u) { window.location.href = 'signup.html'; return; }
       if (!canAccessContent()) {
-        showPaywall();
+        initiatePayment();
         return;
       }
       enrollUser();
@@ -663,11 +587,6 @@
     initPlayer();
     updateEnrollBtn();
     renderNavAvatar();
-
-    // Gate access immediately on page load — do not wait for a click
-    if (!canAccessContent()) {
-      showPaywall();
-    }
 
     // Secret admin shortcut
     document.addEventListener('keydown', e => { if (e.ctrlKey && e.shiftKey && e.key === 'A') window.location.href = 'admin-login.html'; });

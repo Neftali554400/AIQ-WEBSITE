@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enrol — AIQ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://js.paystack.co/v1/inline.js"></script>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{--lumen:#ffffeb;--fathom:#034f46;--fathom-lt:#056b5e;--glow:#ffa946;--bg:#0a0a08;--surface:rgba(255,255,235,0.04);--border:rgba(255,255,235,0.09)}
+    body{font-family:'Figtree',Arial,sans-serif;-webkit-font-smoothing:antialiased;background:var(--bg);color:var(--lumen);min-height:100vh;display:flex;flex-direction:column}
+    body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:128px}
+
+    nav{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 2.5rem;border-bottom:1px solid rgba(255,255,235,0.06)}
+    .nav-logo{font-family:'EB Garamond',Georgia,serif;font-size:1.45rem;font-weight:500;color:var(--lumen);text-decoration:none;letter-spacing:-0.01em}
+    .nav-back{display:inline-flex;align-items:center;gap:.4rem;font-size:.85rem;color:rgba(255,255,235,.5);text-decoration:none;transition:color .15s ease}
+    .nav-back:hover{color:var(--lumen)}
+    .nav-back svg{flex-shrink:0}
+
+    main{flex:1;display:flex;align-items:center;justify-content:center;padding:3rem 1.5rem;position:relative}
+    .glow{position:absolute;inset:0;background:radial-gradient(ellipse 60% 55% at 50% 0%,rgba(3,79,70,.3) 0%,transparent 65%);pointer-events:none}
+
+    .card{position:relative;z-index:1;width:100%;max-width:480px;background:rgba(255,255,235,.04);border:1px solid rgba(255,255,235,.1);border-radius:2rem;padding:2.75rem 2.25rem;box-shadow:0 40px 80px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,235,.04)}
+
+    .badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(255,169,70,.1);border:1px solid rgba(255,169,70,.25);border-radius:9999px;padding:.3rem .85rem;font-size:.72rem;font-weight:700;color:var(--glow);letter-spacing:.04em;text-transform:uppercase;margin-bottom:1.25rem}
+    .card-title{font-family:'EB Garamond',Georgia,serif;font-size:2rem;font-weight:500;line-height:1.1;color:var(--lumen);margin-bottom:.5rem}
+    .card-course{font-size:1rem;color:rgba(255,255,235,.55);margin-bottom:1.75rem;line-height:1.5}
+
+    .price-box{display:flex;align-items:baseline;gap:.6rem;background:rgba(3,79,70,.12);border:1px solid rgba(94,207,187,.15);border-radius:.875rem;padding:.85rem 1rem;margin-bottom:1.5rem}
+    .price-amount{font-family:'EB Garamond',Georgia,serif;font-size:2.4rem;font-weight:600;color:var(--lumen);letter-spacing:-.02em;line-height:1}
+    .price-note{font-size:.73rem;color:rgba(255,255,235,.4);font-weight:500;line-height:1.4}
+
+    .features{list-style:none;display:flex;flex-direction:column;gap:.6rem;margin-bottom:2rem}
+    .features li{display:flex;align-items:center;gap:.75rem;font-size:.85rem;color:rgba(255,255,235,.65)}
+    .feat-check{width:18px;height:18px;border-radius:50%;background:rgba(3,79,70,.5);border:1px solid rgba(94,207,187,.4);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+    .btn-pay{width:100%;background:var(--fathom);color:var(--lumen);border:none;border-radius:.875rem;padding:1.1rem 1.25rem;font-family:'Figtree',sans-serif;font-size:1rem;font-weight:600;cursor:pointer;transition:background .2s ease,transform .15s ease;margin-bottom:.85rem;letter-spacing:.01em}
+    .btn-pay:hover{background:var(--fathom-lt);transform:translateY(-2px)}
+    .btn-pay:active{transform:translateY(0)}
+    .btn-pay:focus-visible{outline:2px solid var(--glow);outline-offset:3px}
+    .btn-pay:disabled{opacity:.5;cursor:not-allowed;transform:none}
+
+    .secure-note{display:flex;align-items:center;justify-content:center;gap:.5rem;font-size:.75rem;color:rgba(255,255,235,.3);text-align:center}
+
+    .error-msg{background:rgba(255,80,80,.1);border:1px solid rgba(255,80,80,.25);border-radius:.75rem;padding:.85rem 1rem;font-size:.85rem;color:#ff8080;margin-bottom:1rem;display:none}
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">AIQ</a>
+    <a href="#" onclick="history.back();return false" class="nav-back">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+      Back to course
+    </a>
+  </nav>
+
+  <main>
+    <div class="glow"></div>
+    <div class="card">
+      <div class="badge">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+        Premium Course
+      </div>
+      <h1 class="card-title">Complete your enrolment</h1>
+      <p class="card-course" id="course-name">Loading course…</p>
+
+      <div class="price-box">
+        <span class="price-amount" id="price-display">—</span>
+        <span class="price-note">one-time payment<br>lifetime access</span>
+      </div>
+
+      <ul class="features">
+        <li><span class="feat-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="#5ecfbb"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>All lessons and future content updates</li>
+        <li><span class="feat-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="#5ecfbb"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>Downloadable resources and templates</li>
+        <li><span class="feat-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="#5ecfbb"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>Completion certificate</li>
+        <li><span class="feat-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="#5ecfbb"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>Community access and peer support</li>
+      </ul>
+
+      <div class="error-msg" id="error-msg"></div>
+
+      <button class="btn-pay" id="btn-pay" onclick="pay()">Pay now</button>
+
+      <p class="secure-note">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="opacity:.4"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+        Secured by Paystack · SSL encrypted
+      </p>
+    </div>
+  </main>
+
+  <script>
+    // ── PAYSTACK PUBLIC KEY ────────────────────────────────────────────────
+    // Paste your Paystack PUBLIC key below (starts with pk_test_ or pk_live_)
+    var PAYSTACK_PUBLIC_KEY = 'pk_test_REPLACE_WITH_YOUR_NEW_KEY';
+    // ──────────────────────────────────────────────────────────────────────
+
+    var COURSES = {
+      video:    { title: 'Create Videos Using AI',      price: 9999  },
+      books:    { title: 'Write Books Using AI',         price: 9999  },
+      music:    { title: 'Create Songs Using AI',        price: 24999 },
+      motion:   { title: 'Motion Graphics with AI',      price: 19999 },
+      games:    { title: 'Create Games with AI',         price: 14999 },
+      animate:  { title: 'AI Image Animation',           price: 4999  },
+      web:      { title: 'Build Websites with AI',       price: 14999 },
+      automation:{ title: 'AI Automation',               price: 34999 }
+    };
+
+    function getUser() {
+      try { return JSON.parse(localStorage.getItem('aiq_user')); } catch(e) { return null; }
+    }
+    function formatPrice(n) {
+      return '₦' + n.toLocaleString('en-NG');
+    }
+    function showError(msg) {
+      var el = document.getElementById('error-msg');
+      el.textContent = msg;
+      el.style.display = 'block';
+    }
+
+    var params = new URLSearchParams(window.location.search);
+    var courseId = params.get('course') || 'video';
+    var course = COURSES[courseId];
+
+    if (!course) {
+      document.getElementById('course-name').textContent = 'Course not found.';
+      document.getElementById('btn-pay').disabled = true;
+    } else {
+      document.title = 'Enrol in ' + course.title + ' — AIQ';
+      document.getElementById('course-name').textContent = course.title;
+      document.getElementById('price-display').textContent = formatPrice(course.price);
+      document.getElementById('btn-pay').textContent = 'Pay ' + formatPrice(course.price) + ' now';
+    }
+
+    // Redirect to signup if not logged in
+    var currentUser = getUser();
+    if (!currentUser) {
+      window.location.href = 'signup.html?next=' + encodeURIComponent('payment.html?course=' + courseId);
+    }
+
+    function pay() {
+      var u = getUser();
+      if (!u) { window.location.href = 'signup.html'; return; }
+      if (!u.email) {
+        showError('Your account has no email. Please sign in with email or Google to continue.');
+        return;
+      }
+      if (PAYSTACK_PUBLIC_KEY === 'pk_test_REPLACE_WITH_YOUR_NEW_KEY') {
+        showError('Payment is not configured yet. Please contact support.');
+        return;
+      }
+
+      var btn = document.getElementById('btn-pay');
+      btn.disabled = true;
+      btn.textContent = 'Opening payment…';
+
+      var handler = PaystackPop.setup({
+        key: PAYSTACK_PUBLIC_KEY,
+        email: u.email,
+        amount: course.price * 100,
+        currency: 'NGN',
+        ref: 'AIQ_' + courseId + '_' + Date.now(),
+        metadata: {
+          custom_fields: [
+            { display_name: 'Course',    variable_name: 'course',    value: course.title },
+            { display_name: 'Student',   variable_name: 'student',   value: u.name || u.email }
+          ]
+        },
+        onClose: function() {
+          btn.disabled = false;
+          btn.textContent = 'Pay ' + formatPrice(course.price) + ' now';
+        },
+        callback: function(response) {
+          // Unlock the course in localStorage and redirect back
+          var paidCourses = u.paidCourses || [];
+          if (!paidCourses.includes(courseId)) paidCourses.push(courseId);
+          u.paidCourses = paidCourses;
+          var enrolled = u.enrolled || [];
+          if (!enrolled.includes(courseId)) enrolled.push(courseId);
+          u.enrolled = enrolled;
+          localStorage.setItem('aiq_user', JSON.stringify(u));
+          window.location.href = 'course-detail.html?id=' + courseId + '&paid=1';
+        }
+      });
+      handler.openIframe();
+    }
+  </script>
+</body>
+</html>
