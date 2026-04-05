@@ -990,6 +990,7 @@
       if (!vid) return;
 
       var previewSet = false;
+      var hasStarted = false;
 
       vid.addEventListener('loadedmetadata', function() {
         if (badge && vid.duration && isFinite(vid.duration)) {
@@ -1018,7 +1019,11 @@
             v && (v.style.opacity = '.7');
           }
         });
-        vid.currentTime = 0;
+        // Only rewind on first play, not after pause
+        if (!hasStarted) {
+          vid.currentTime = 0;
+          hasStarted = true;
+        }
         vid.play().catch(function(){});
         thumb.classList.add('playing');
         vid.style.opacity = '1';
@@ -1057,6 +1062,7 @@
         thumb.classList.remove('playing');
         vid.style.opacity = '.7';
         previewSet = false;
+        hasStarted = false;
         vid.currentTime = vid.duration / 2;
         if (badge) badge.textContent = fmtTime(vid.duration);
       });
