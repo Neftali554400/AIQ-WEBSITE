@@ -82,7 +82,9 @@
     /* HAMBURGER */
     .btn-ham{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:.5rem;color:var(--lumen);position:relative;z-index:1001}
     .btn-ham .bar{display:block;width:22px;height:2px;background:currentColor;border-radius:2px;transition:transform .25s ease,opacity .2s ease}
-    .mob-nav{position:fixed;inset:0;z-index:55;background:rgba(10,10,8,.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2.5rem;opacity:0;transform:translateY(-10px);pointer-events:none;transition:opacity .25s ease,transform .25s ease}
+        .mob-nav-close{position:absolute;top:1.25rem;right:1.25rem;background:none;border:none;color:rgba(255,255,235,.7);cursor:pointer;padding:.5rem;border-radius:.625rem;transition:color .15s ease,background .15s ease;display:flex;align-items:center;justify-content:center;z-index:10}
+    .mob-nav-close:hover{color:var(--lumen);background:rgba(255,255,235,.06)}
+    .mob-nav{position:fixed;inset:0;z-index:150;background:rgba(10,10,8,.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2.5rem;opacity:0;transform:translateY(-10px);pointer-events:none;transition:opacity .25s ease,transform .25s ease}
     .mob-nav.open{opacity:1;transform:translateY(0);pointer-events:all}
     .mob-nav a{font-family:'EB Garamond',Georgia,serif;font-size:2.4rem;font-weight:500;color:rgba(255,255,235,.6);text-decoration:none;transition:color .15s ease}
     .mob-nav a:hover,.mob-nav a.active{color:var(--lumen)}
@@ -106,6 +108,7 @@
     </div>
   </nav>
   <div class="mob-nav" id="mob-nav" role="dialog" aria-label="Mobile navigation">
+    <button class="mob-nav-close" onclick="document.getElementById('btn-ham').click()" aria-label="Close menu"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
     <a href="index.html">Home</a><a href="courses.html">Courses</a><a href="about.html">About</a><a href="community.html">Community</a><a href="blog.html">Blog</a>
     <a href="#" onclick="signOut();return false;" class="mob-cta">Sign out</a>
   </div>
