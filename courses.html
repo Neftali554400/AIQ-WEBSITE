@@ -142,6 +142,16 @@
     @media(max-width:1000px){.cards-grid{grid-template-columns:repeat(2,1fr)}.reviews-grid{grid-template-columns:1fr 1fr}.footer-inner{grid-template-columns:1fr 1fr}}
     @media(max-width:700px){.cards-grid{grid-template-columns:1fr}.reviews-grid{grid-template-columns:1fr}.stat-div{display:none}.stat-row{gap:1.5rem}.footer-inner{grid-template-columns:1fr}}
     @media(max-width:600px){nav{padding:1rem 1.25rem}.nav-links{display:none}}
+    /* HAMBURGER */
+    .btn-ham{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:.5rem;color:var(--lumen);position:relative;z-index:60}
+    .btn-ham .bar{display:block;width:22px;height:2px;background:currentColor;border-radius:2px;transition:transform .25s ease,opacity .2s ease}
+    .mob-nav{position:fixed;inset:0;z-index:55;background:rgba(10,10,8,.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2.5rem;opacity:0;transform:translateY(-10px);pointer-events:none;transition:opacity .25s ease,transform .25s ease}
+    .mob-nav.open{opacity:1;transform:translateY(0);pointer-events:all}
+    .mob-nav a{font-family:'EB Garamond',Georgia,serif;font-size:2.4rem;font-weight:500;color:rgba(255,255,235,.6);text-decoration:none;transition:color .15s ease}
+    .mob-nav a:hover,.mob-nav a.active{color:var(--lumen)}
+    .mob-nav .mob-cta{margin-top:.5rem;background:var(--fathom);color:var(--lumen);border-radius:9999px;padding:.75rem 2.2rem;font-family:'Figtree',sans-serif;font-size:1rem;font-weight:600;text-decoration:none;transition:background .2s ease}
+    .mob-nav .mob-cta:hover{background:var(--fathom-lt);color:var(--lumen)}
+    @media(max-width:640px){.btn-ham{display:flex}.btn-nav{display:none}.btn-signout{display:none}}
   </style>
 </head>
 <body>
@@ -155,11 +165,13 @@
       <li><a href="community.html">Community</a></li>
       <li><a href="blog.html">Blog</a></li>
     </ul>
-    <a href="signup.html" class="btn-nav">
-      Start here
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
-    </a>
+    <a href="signup.html" class="btn-nav">Start here <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></a>
+    <button class="btn-ham" id="btn-ham" aria-label="Open menu" aria-expanded="false"><span class="bar"></span><span class="bar"></span><span class="bar"></span></button>
   </nav>
+  <div class="mob-nav" id="mob-nav" role="dialog" aria-label="Mobile navigation">
+    <a href="index.html">Home</a><a href="courses.html" class="active">Courses</a><a href="about.html">About</a><a href="community.html">Community</a><a href="blog.html">Blog</a>
+    <a href="signup.html" class="mob-cta">Start here</a>
+  </div>
 
   <!-- HERO -->
   <section class="page-hero">
@@ -234,7 +246,7 @@
       <!-- Video -->
       <a href="course-detail.html?id=video" class="course-card card-video" data-level="beginner">
         <div class="card-visual">
-          <img src="https://placehold.co/600x200/0d1a2e/5ecfbb?text=AI+Video+Creation" alt="AI Video Creation" style="width:100%;height:100%;object-fit:cover;display:block" />
+          <img src="thumb-video.svg" alt="AI Video Creation" style="width:100%;height:100%;object-fit:cover;display:block" />
           <div class="card-visual-fade"></div>
         </div>
         <div class="card-body">
@@ -251,7 +263,7 @@
       <!-- Books -->
       <a href="course-detail.html?id=books" class="course-card card-book" data-level="all">
         <div class="card-visual">
-          <img src="https://placehold.co/600x200/1a0d2e/c084fc?text=AI+Writing+%26+Publishing" alt="AI Writing and Publishing" style="width:100%;height:100%;object-fit:cover;display:block" />
+          <img src="thumb-books.svg" alt="AI Writing and Publishing" style="width:100%;height:100%;object-fit:cover;display:block" />
           <div class="card-visual-fade"></div>
         </div>
         <div class="card-body">
@@ -268,7 +280,7 @@
       <!-- Music -->
       <a href="course-detail.html?id=music" class="course-card card-music" data-level="beginner">
         <div class="card-visual">
-          <img src="https://placehold.co/600x200/0a1525/60a5fa?text=AI+Music+%26+Audio" alt="AI Music and Audio" style="width:100%;height:100%;object-fit:cover;display:block" />
+          <img src="thumb-music.svg" alt="AI Music and Audio" style="width:100%;height:100%;object-fit:cover;display:block" />
           <div class="card-visual-fade"></div>
         </div>
         <div class="card-body">
@@ -285,7 +297,7 @@
       <!-- Motion -->
       <a href="course-detail.html?id=motion" class="course-card card-motion" data-level="intermediate">
         <div class="card-visual">
-          <img src="https://placehold.co/600x200/1a1200/fbbf24?text=Motion+Graphics+with+AI" alt="Motion Graphics with AI" style="width:100%;height:100%;object-fit:cover;display:block" />
+          <img src="thumb-motion.svg" alt="Motion Graphics with AI" style="width:100%;height:100%;object-fit:cover;display:block" />
           <div class="card-visual-fade"></div>
         </div>
         <div class="card-body">
@@ -302,7 +314,7 @@
       <!-- Games -->
       <a href="course-detail.html?id=games" class="course-card card-games" data-level="all">
         <div class="card-visual">
-          <img src="https://placehold.co/600x200/0d1a0d/34d399?text=AI+Game+Development" alt="AI Game Development" style="width:100%;height:100%;object-fit:cover;display:block" />
+          <img src="thumb-games.svg" alt="AI Game Development" style="width:100%;height:100%;object-fit:cover;display:block" />
           <div class="card-visual-fade"></div>
         </div>
         <div class="card-body">
@@ -319,7 +331,7 @@
       <!-- Animate Images -->
       <a href="course-detail.html?id=animate" class="course-card card-animate" data-level="beginner">
         <div class="card-visual">
-          <img src="https://placehold.co/600x200/1a0d1a/f0abfc?text=Animate+Images+with+AI" alt="Animate Images with AI" style="width:100%;height:100%;object-fit:cover;display:block" />
+          <img src="thumb-animate.svg" alt="Animate Images with AI" style="width:100%;height:100%;object-fit:cover;display:block" />
           <div class="card-visual-fade"></div>
         </div>
         <div class="card-body">
@@ -336,7 +348,7 @@
       <!-- Create Websites -->
       <a href="course-detail.html?id=web" class="course-card card-web" data-level="all">
         <div class="card-visual">
-          <img src="https://placehold.co/600x200/0d1a1a/67e8f9?text=Create+Websites+with+AI" alt="Create Websites with AI" style="width:100%;height:100%;object-fit:cover;display:block" />
+          <img src="thumb-web.svg" alt="Create Websites with AI" style="width:100%;height:100%;object-fit:cover;display:block" />
           <div class="card-visual-fade"></div>
         </div>
         <div class="card-body">
@@ -353,7 +365,7 @@
       <!-- AI Automation — Coming Soon -->
       <div class="course-card card-auto card-coming-soon" role="article">
         <div class="card-visual">
-          <img src="https://placehold.co/600x200/1a0a2e/a78bfa?text=AI+Automation" alt="AI Automation" style="width:100%;height:100%;object-fit:cover;display:block" />
+          <img src="thumb-automation.svg" alt="AI Automation" style="width:100%;height:100%;object-fit:cover;display:block" />
           <div class="card-visual-fade"></div>
           <div class="card-badge">Coming Soon</div>
         </div>
@@ -476,6 +488,7 @@
         }
       });
     }
-  </script>
+      (function(){var btn=document.getElementById("btn-ham"),menu=document.getElementById("mob-nav"),bars=btn.querySelectorAll(".bar");btn.addEventListener("click",function(){var open=menu.classList.toggle("open");btn.setAttribute("aria-expanded",open);if(open){bars[0].style.transform="translateY(7px) rotate(45deg)";bars[1].style.opacity="0";bars[2].style.transform="translateY(-7px) rotate(-45deg)";}else{bars[0].style.transform="";bars[1].style.opacity="";bars[2].style.transform="";}});menu.querySelectorAll("a").forEach(function(a){a.addEventListener("click",function(){menu.classList.remove("open");btn.setAttribute("aria-expanded","false");bars[0].style.transform="";bars[1].style.opacity="";bars[2].style.transform="";});});})();
+</script>
 </body>
 </html>

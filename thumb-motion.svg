@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 300">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1a1208"/><stop offset="100%" stop-color="#2a1500"/></linearGradient>
+    <radialGradient id="gl" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fbbf24" stop-opacity=".22"/><stop offset="100%" stop-color="#fbbf24" stop-opacity="0"/></radialGradient>
+    <radialGradient id="gl2" cx="20%" cy="30%" r="35%"><stop offset="0%" stop-color="#f97316" stop-opacity=".15"/><stop offset="100%" stop-color="#f97316" stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect width="600" height="300" fill="url(#bg)"/>
+  <rect width="600" height="300" fill="url(#gl)"/>
+  <rect width="600" height="300" fill="url(#gl2)"/>
+  <pattern id="dots" x="0" y="0" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="#fbbf24" opacity=".06"/></pattern>
+  <rect width="600" height="300" fill="url(#dots)"/>
+  <!-- concentric orbit rings -->
+  <circle cx="300" cy="150" r="115" fill="none" stroke="#fbbf24" stroke-width="1" opacity=".1"/>
+  <circle cx="300" cy="150" r="88" fill="none" stroke="#fbbf24" stroke-width="1" opacity=".14"/>
+  <circle cx="300" cy="150" r="62" fill="none" stroke="#fbbf24" stroke-width="1" opacity=".18"/>
+  <circle cx="300" cy="150" r="36" fill="none" stroke="#fbbf24" stroke-width="1.5" opacity=".25"/>
+  <!-- core glow -->
+  <circle cx="300" cy="150" r="18" fill="#fbbf24" opacity=".2"/>
+  <circle cx="300" cy="150" r="8" fill="#fbbf24" opacity=".6"/>
+  <!-- orbiting dots on rings -->
+  <circle cx="388" cy="150" r="6" fill="#fbbf24" opacity=".7"/>
+  <circle cx="300" cy="62" r="5" fill="#f97316" opacity=".6"/>
+  <circle cx="212" cy="150" r="4" fill="#fbbf24" opacity=".5"/>
+  <circle cx="300" cy="238" r="5" fill="#f97316" opacity=".45"/>
+  <!-- trail arcs -->
+  <path d="M388,150 A88,88 0 0,0 356,74" fill="none" stroke="#fbbf24" stroke-width="2" opacity=".25" stroke-linecap="round"/>
+  <path d="M300,62 A88,88 0 0,0 218,108" fill="none" stroke="#f97316" stroke-width="1.5" opacity=".2" stroke-linecap="round"/>
+  <!-- diamond shapes scattered -->
+  <polygon points="120,80 130,95 120,110 110,95" fill="none" stroke="#fbbf24" stroke-width="1.5" opacity=".25"/>
+  <polygon points="470,60 483,78 470,96 457,78" fill="none" stroke="#fbbf24" stroke-width="1.5" opacity=".2"/>
+  <polygon points="490,200 500,215 490,230 480,215" fill="none" stroke="#f97316" stroke-width="1.5" opacity=".2"/>
+  <polygon points="90,190 98,203 90,216 82,203" fill="none" stroke="#fbbf24" stroke-width="1" opacity=".2"/>
+  <!-- motion trail lines -->
+  <line x1="50" y1="150" x2="160" y2="150" stroke="#fbbf24" stroke-width="1" opacity=".08" stroke-dasharray="4,8"/>
+  <line x1="440" y1="150" x2="550" y2="150" stroke="#fbbf24" stroke-width="1" opacity=".08" stroke-dasharray="4,8"/>
+  <!-- sparkle dots -->
+  <circle cx="155" cy="70" r="2" fill="#fbbf24" opacity=".5"/>
+  <circle cx="445" cy="240" r="2.5" fill="#fbbf24" opacity=".45"/>
+  <circle cx="480" cy="120" r="1.5" fill="#f97316" opacity=".4"/>
+  <circle cx="120" cy="220" r="2" fill="#fbbf24" opacity=".35"/>
+</svg>

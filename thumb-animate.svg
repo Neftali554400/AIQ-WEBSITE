@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 300">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1a0a16"/><stop offset="100%" stop-color="#0a1018"/></linearGradient>
+    <radialGradient id="gl" cx="50%" cy="50%" r="48%"><stop offset="0%" stop-color="#f472b6" stop-opacity=".22"/><stop offset="100%" stop-color="#f472b6" stop-opacity="0"/></radialGradient>
+  </defs>
+  <rect width="600" height="300" fill="url(#bg)"/>
+  <rect width="600" height="300" fill="url(#gl)"/>
+  <pattern id="dots" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="#f472b6" opacity=".06"/></pattern>
+  <rect width="600" height="300" fill="url(#dots)"/>
+  <!-- stacked frame layers (back to front) -->
+  <rect x="170" y="108" width="180" height="135" rx="8" fill="none" stroke="#f472b6" stroke-width="1" opacity=".1" transform="rotate(-6,260,175)"/>
+  <rect x="175" y="104" width="180" height="135" rx="8" fill="none" stroke="#f472b6" stroke-width="1" opacity=".15" transform="rotate(-3,265,172)"/>
+  <!-- main frame -->
+  <rect x="180" y="100" width="180" height="135" rx="8" fill="#f472b6" opacity=".06" stroke="#f472b6" stroke-width="1.5" stroke-opacity=".4"/>
+  <!-- image inside frame (landscape thumbnail feel) -->
+  <rect x="188" y="110" width="164" height="100" rx="4" fill="#f472b6" opacity=".05"/>
+  <rect x="188" y="218" width="164" height="10" rx="3" fill="#f472b6" opacity=".12"/>
+  <!-- landscape hills inside -->
+  <ellipse cx="260" cy="195" rx="60" ry="28" fill="#f472b6" opacity=".08"/>
+  <ellipse cx="320" cy="200" rx="50" ry="22" fill="#f472b6" opacity=".06"/>
+  <!-- sun -->
+  <circle cx="310" cy="138" r="18" fill="#fbbf24" opacity=".18"/>
+  <circle cx="310" cy="138" r="11" fill="#fbbf24" opacity=".3"/>
+  <!-- sparkle burst right side -->
+  <g transform="translate(420,120)">
+    <line x1="0" y1="-45" x2="0" y2="-28" stroke="#f472b6" stroke-width="2" stroke-linecap="round" opacity=".7"/>
+    <line x1="0" y1="28" x2="0" y2="45" stroke="#f472b6" stroke-width="2" stroke-linecap="round" opacity=".7"/>
+    <line x1="-45" y1="0" x2="-28" y2="0" stroke="#f472b6" stroke-width="2" stroke-linecap="round" opacity=".7"/>
+    <line x1="28" y1="0" x2="45" y2="0" stroke="#f472b6" stroke-width="2" stroke-linecap="round" opacity=".7"/>
+    <line x1="-32" y1="-32" x2="-20" y2="-20" stroke="#f472b6" stroke-width="1.5" stroke-linecap="round" opacity=".5"/>
+    <line x1="20" y1="20" x2="32" y2="32" stroke="#f472b6" stroke-width="1.5" stroke-linecap="round" opacity=".5"/>
+    <line x1="20" y1="-20" x2="32" y2="-32" stroke="#f472b6" stroke-width="1.5" stroke-linecap="round" opacity=".5"/>
+    <line x1="-32" y1="32" x2="-20" y2="20" stroke="#f472b6" stroke-width="1.5" stroke-linecap="round" opacity=".5"/>
+    <circle cx="0" cy="0" r="10" fill="#f472b6" opacity=".35"/>
+    <circle cx="0" cy="0" r="5" fill="#f472b6" opacity=".7"/>
+  </g>
+  <!-- mini sparkle top left -->
+  <g transform="translate(130,90)">
+    <line x1="0" y1="-18" x2="0" y2="-10" stroke="#f472b6" stroke-width="1.5" stroke-linecap="round" opacity=".5"/>
+    <line x1="0" y1="10" x2="0" y2="18" stroke="#f472b6" stroke-width="1.5" stroke-linecap="round" opacity=".5"/>
+    <line x1="-18" y1="0" x2="-10" y2="0" stroke="#f472b6" stroke-width="1.5" stroke-linecap="round" opacity=".5"/>
+    <line x1="10" y1="0" x2="18" y2="0" stroke="#f472b6" stroke-width="1.5" stroke-linecap="round" opacity=".5"/>
+    <circle cx="0" cy="0" r="5" fill="#f472b6" opacity=".5"/>
+  </g>
+  <!-- animation timeline bottom -->
+  <rect x="80" y="258" width="440" height="3" rx="1.5" fill="#f472b6" opacity=".1"/>
+  <rect x="80" y="248" width="80" height="8" rx="2" fill="#f472b6" opacity=".15"/>
+  <rect x="172" y="248" width="50" height="8" rx="2" fill="#f472b6" opacity=".1"/>
+  <rect x="234" y="248" width="70" height="8" rx="2" fill="#f472b6" opacity=".08"/>
+  <circle cx="160" cy="260" r="4" fill="#f472b6" opacity=".5"/>
+  <!-- dots -->
+  <circle cx="470" cy="200" r="2.5" fill="#f472b6" opacity=".4"/>
+  <circle cx="500" cy="180" r="1.5" fill="#f472b6" opacity=".35"/>
+  <circle cx="100" cy="200" r="2" fill="#f472b6" opacity=".35"/>
+</svg>
