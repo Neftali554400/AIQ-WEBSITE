@@ -95,17 +95,39 @@
     .mob-nav a:hover,.mob-nav a.active{color:var(--lumen)}
     .mob-nav .mob-cta{margin-top:.5rem;background:var(--fathom);color:var(--lumen);border-radius:9999px;padding:.75rem 2.2rem;font-family:'Figtree',sans-serif;font-size:1rem;font-weight:600;text-decoration:none;transition:background .2s ease}
     .mob-nav .mob-cta:hover{background:var(--fathom-lt);color:var(--lumen)}
-    @media(max-width:640px){.btn-ham{display:flex}.btn-nav{display:none}.btn-signout{display:none}}
-  html{overflow-x:hidden;overscroll-behavior-x:none}body{overflow-x:hidden;overscroll-behavior-x:none}
+    /* Sticky enrol bar — hidden by default, shown on mobile */
+    .mob-enrol-bar{display:none;position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(10,10,8,.97);border-top:1px solid rgba(255,255,235,.1);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);padding:.9rem 1.25rem;align-items:center;gap:.9rem}
+    .mob-enrol-price{flex-shrink:0}
+    .mob-enrol-price-amt{font-family:'EB Garamond',Georgia,serif;font-size:1.35rem;font-weight:600;color:var(--lumen);letter-spacing:-.02em;line-height:1}
+    .mob-enrol-price-note{font-size:.65rem;color:rgba(255,255,235,.35);font-weight:500;margin-top:.1rem}
+    .mob-enrol-btn{flex:1;background:var(--fathom);color:var(--lumen);border:none;border-radius:.75rem;padding:.8rem 1rem;font-family:'Figtree',sans-serif;font-size:.9rem;font-weight:600;cursor:pointer;transition:background .2s ease;white-space:nowrap}
+    .mob-enrol-btn:hover{background:var(--fathom-lt)}
+    .mob-enrol-btn:focus-visible{outline:2px solid var(--glow);outline-offset:3px}
+    .mob-enrol-btn.enrolled{background:rgba(255,255,235,.08);color:rgba(255,255,235,.5);cursor:default}
+    @media(max-width:640px){
+      .btn-ham{display:flex}
+      .btn-nav{display:none}
+      .btn-signout{display:none}
+      .nav-hide-mob{display:none!important}
+      .layout{padding:1.5rem 1rem 5rem;gap:1.5rem}
+      .course-title{font-size:2rem}
+      .player-wrap{border-radius:1rem}
+      .lesson-item{padding:.75rem 1rem;gap:.75rem}
+      .lesson-num{width:28px;height:28px;font-size:.7rem}
+      .sidebar{position:static}
+      .sidebar-card:last-child{margin-bottom:0}
+      .mob-enrol-bar{display:flex}
+    }
+    html{overflow-x:hidden;overscroll-behavior-x:none}body{overflow-x:hidden;overscroll-behavior-x:none}
   </style>
 </head>
 <body>
   <nav>
     <a href="index.html" class="nav-logo">AIQ</a>
     <div class="nav-right" style="display:flex;align-items:center;gap:1.5rem">
-      <a href="courses.html" style="font-size:.85rem;color:rgba(255,255,235,.5);text-decoration:none;transition:color .15s ease" onmouseover="this.style.color='#ffffeb'" onmouseout="this.style.color='rgba(255,255,235,.5)'">All Courses</a>
-      <a href="community.html" style="font-size:.85rem;color:rgba(255,255,235,.5);text-decoration:none;transition:color .15s ease" onmouseover="this.style.color='#ffffeb'" onmouseout="this.style.color='rgba(255,255,235,.5)'">Community</a>
-      <a href="javascript:history.back()" class="nav-back">
+      <a href="courses.html" class="nav-hide-mob" style="font-size:.85rem;color:rgba(255,255,235,.5);text-decoration:none;transition:color .15s ease" onmouseover="this.style.color='#ffffeb'" onmouseout="this.style.color='rgba(255,255,235,.5)'">All Courses</a>
+      <a href="community.html" class="nav-hide-mob" style="font-size:.85rem;color:rgba(255,255,235,.5);text-decoration:none;transition:color .15s ease" onmouseover="this.style.color='#ffffeb'" onmouseout="this.style.color='rgba(255,255,235,.5)'">Community</a>
+      <a href="javascript:history.back()" class="nav-back nav-hide-mob">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
         Back
       </a>
@@ -113,6 +135,15 @@
       <button class="btn-ham" id="btn-ham" aria-label="Open menu" aria-expanded="false"><span class="bar"></span><span class="bar"></span><span class="bar"></span></button>
     </div>
   </nav>
+  <!-- MOBILE STICKY ENROL BAR -->
+  <div class="mob-enrol-bar" id="mob-enrol-bar" aria-hidden="true">
+    <div class="mob-enrol-price">
+      <div class="mob-enrol-price-amt" id="mob-price">—</div>
+      <div class="mob-enrol-price-note">one-time · lifetime access</div>
+    </div>
+    <button class="mob-enrol-btn" id="mob-enrol-btn" onclick="toggleEnroll()">Enrol now</button>
+  </div>
+
   <div class="mob-nav" id="mob-nav" role="dialog" aria-label="Mobile navigation">
     <a href="index.html">Home</a><a href="courses.html" class="active">Courses</a><a href="about.html">About</a><a href="community.html">Community</a><a href="blog.html">Blog</a>
     <a href="account.html" class="mob-cta">My Account</a>
@@ -553,17 +584,25 @@
       const btn = document.getElementById('btn-enroll');
       const note = document.getElementById('enroll-note');
       const badge = document.getElementById('superadmin-access');
+      const mobBtn = document.getElementById('mob-enrol-btn');
+      const mobBar = document.getElementById('mob-enrol-bar');
+      const mobPrice = document.getElementById('mob-price');
+      if (mobPrice) mobPrice.textContent = formatPrice(course.price || 0);
       if (isSuperAdmin()) {
         badge.style.display = 'inline-flex';
         btn.textContent = 'Full Access Granted';
         btn.classList.add('enrolled');
         if (note) note.style.display = 'none';
+        if (mobBtn) { mobBtn.textContent = 'Full Access Granted'; mobBtn.classList.add('enrolled'); }
+        if (mobBar) mobBar.style.display = 'none';
       } else if (isEnrolled()) {
         btn.textContent = 'Enrolled ✓';
         btn.classList.add('enrolled');
+        if (mobBtn) { mobBtn.textContent = 'Continue Learning'; mobBtn.classList.add('enrolled'); }
       } else {
         btn.textContent = 'Enrol in this course';
         btn.classList.remove('enrolled');
+        if (mobBtn) { mobBtn.textContent = 'Enrol now'; mobBtn.classList.remove('enrolled'); }
       }
     }
 
