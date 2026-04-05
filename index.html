@@ -267,6 +267,8 @@
     .mob-nav a:hover,.mob-nav a.active{color:var(--lumen)}
     .mob-nav .mob-cta{margin-top:.5rem;background:var(--fathom);color:var(--lumen);border-radius:9999px;padding:.75rem 2.2rem;font-family:'Figtree',sans-serif;font-size:1rem;font-weight:600;text-decoration:none;transition:background .2s ease}
     .mob-nav .mob-cta:hover{background:var(--fathom-lt);color:var(--lumen)}
+    .nav-avatar{width:34px;height:34px;border-radius:50%;border:2px solid rgba(255,255,235,.15);cursor:pointer;overflow:hidden;flex-shrink:0;text-decoration:none;display:none;align-items:center;justify-content:center;background:var(--fathom);font-size:.85rem;font-weight:600;color:var(--lumen)}
+    .nav-avatar img{width:100%;height:100%;object-fit:cover}
     @media(max-width:640px){.btn-ham{display:flex}.btn-nav{display:none}}
     @media(max-width:600px){nav{padding:1rem 1.25rem}.nav-links{display:none}.cards-grid{grid-template-columns:1fr}.footer-inner{grid-template-columns:1fr}.hero-stat-div{display:none}.hero-stats{gap:1.25rem}.counter-inner{grid-template-columns:1fr 1fr}.testimonial-card{flex:0 0 100%}}
   html{overflow-x:hidden;overscroll-behavior-x:none}body{overflow-x:hidden;overscroll-behavior-x:none}
@@ -284,10 +286,11 @@
       <li><a href="community.html">Community</a></li>
       <li><a href="blog.html">Blog</a></li>
     </ul>
-    <a href="signup.html" class="btn-nav">
+    <a href="signup.html" class="btn-nav" id="nav-start-btn">
       Start here
       <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
     </a>
+    <a href="account.html" class="nav-avatar" id="nav-avatar" aria-label="My account"></a>
     <button class="btn-ham" id="btn-ham" aria-label="Open menu" aria-expanded="false" aria-controls="mob-nav">
       <span class="bar"></span><span class="bar"></span><span class="bar"></span>
     </button>
@@ -298,7 +301,7 @@
     <a href="about.html">About</a>
     <a href="community.html">Community</a>
     <a href="blog.html">Blog</a>
-    <a href="signup.html" class="mob-cta">Start here</a>
+    <a href="signup.html" class="mob-cta" id="mob-nav-cta">Start here</a>
   </div>
 
   <!-- HERO -->
@@ -883,6 +886,25 @@
   </footer>
 
   <script>
+    /* NAV AUTH STATE */
+    (function(){
+      try {
+        var u = JSON.parse(localStorage.getItem('aiq_user'));
+        if (!u) return;
+        var startBtn = document.getElementById('nav-start-btn');
+        var avatar = document.getElementById('nav-avatar');
+        var mobCta = document.getElementById('mob-nav-cta');
+        if (startBtn) startBtn.style.display = 'none';
+        if (avatar) {
+          avatar.style.display = 'flex';
+          avatar.innerHTML = u.picture
+            ? '<img src="' + u.picture + '" alt="My account">'
+            : (u.name || u.email || 'A')[0].toUpperCase();
+        }
+        if (mobCta) { mobCta.textContent = 'My Account'; mobCta.href = 'account.html'; }
+      } catch(e) {}
+    })();
+
     /* HAMBURGER MENU */
     (function(){
       const btn = document.getElementById('btn-ham');

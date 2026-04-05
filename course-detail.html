@@ -595,10 +595,10 @@
         if (note) note.style.display = 'none';
         if (mobBtn) { mobBtn.textContent = 'Full Access Granted'; mobBtn.classList.add('enrolled'); }
         if (mobBar) mobBar.style.display = 'none';
-      } else if (isEnrolled()) {
+      } else if (isEnrolled() || canAccessContent()) {
         btn.textContent = 'Enrolled ✓';
         btn.classList.add('enrolled');
-        if (mobBtn) { mobBtn.textContent = 'Continue Learning'; mobBtn.classList.add('enrolled'); }
+        if (mobBar) mobBar.style.display = 'none';
       } else {
         btn.textContent = 'Enrol in this course';
         btn.classList.remove('enrolled');
