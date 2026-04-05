@@ -206,6 +206,28 @@
     .testimonial-name{font-size:.83rem;font-weight:600;color:var(--lumen)}
     .testimonial-role{font-size:.75rem;color:rgba(255,255,235,.35)}
 
+
+    /* VIDEO TESTIMONIALS */
+    .vid-testimonials{padding:7rem 2rem;position:relative;overflow:hidden}
+    .vid-testimonials::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 20% 50%,rgba(3,79,70,.14) 0%,transparent 60%);pointer-events:none}
+    .vid-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;max-width:1080px;margin:0 auto}
+    .vid-card{background:rgba(255,255,235,.03);border:1px solid rgba(255,255,235,.09);border-radius:1.5rem;overflow:hidden;transition:border-color .25s ease,transform .2s ease,box-shadow .25s ease}
+    .vid-card:hover{border-color:rgba(255,255,235,.18);transform:translateY(-4px);box-shadow:0 24px 64px rgba(0,0,0,.45)}
+    .vid-thumb{position:relative;aspect-ratio:16/9;background:linear-gradient(135deg,#0a1a12 0%,#061a2e 100%);overflow:hidden;cursor:pointer}
+    .vid-thumb-glow{position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 40%,rgba(3,79,70,.35) 0%,transparent 70%);pointer-events:none}
+    .vid-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:2}
+    .vid-play-btn{width:56px;height:56px;border-radius:50%;background:rgba(255,255,235,.12);border:1.5px solid rgba(255,255,235,.25);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px);transition:background .2s ease,transform .15s ease}
+    .vid-thumb:hover .vid-play-btn{background:var(--fathom);border-color:var(--fathom);transform:scale(1.08)}
+    .vid-duration{position:absolute;bottom:.6rem;right:.75rem;font-size:.65rem;font-weight:700;color:rgba(255,255,235,.6);background:rgba(0,0,0,.45);border-radius:.3rem;padding:.15rem .4rem;letter-spacing:.03em;z-index:2}
+    .vid-body{padding:1.25rem 1.4rem 1.4rem}
+    .vid-quote{font-family:'EB Garamond',Georgia,serif;font-size:1rem;font-style:italic;color:rgba(255,255,235,.75);line-height:1.6;margin-bottom:1.1rem}
+    .vid-footer{display:flex;align-items:center;gap:.75rem}
+    .vid-avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:var(--lumen);flex-shrink:0;border:1.5px solid rgba(255,255,235,.12)}
+    .vid-name{font-size:.85rem;font-weight:600;color:var(--lumen);line-height:1.2}
+    .vid-location{font-size:.72rem;color:rgba(255,255,235,.35);display:flex;align-items:center;gap:.3rem;margin-top:.15rem}
+    .vid-stars{color:var(--glow);font-size:.72rem;letter-spacing:.05em}
+    @media(max-width:768px){.vid-grid{grid-template-columns:1fr;max-width:420px}}
+
     /* CTA */
     .cta-section{padding:9rem 2rem;text-align:center;position:relative;overflow:hidden}
     .cta-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 65% at 50% 110%,rgba(3,79,70,.45) 0%,transparent 60%);pointer-events:none}
@@ -675,6 +697,110 @@
     </div>
   </section>
 
+
+  <!-- VIDEO TESTIMONIALS -->
+  <section class="vid-testimonials" aria-labelledby="vid-heading">
+    <div class="section-header">
+      <div class="tag-chip"><span class="tag-chip-dot" aria-hidden="true"></span>Hear it from them</div>
+      <h2 class="section-h2" id="vid-heading">Students who<br/><em>made it happen</em></h2>
+      <p class="section-sub">Real people. Real results. Watch what our students created using AI.</p>
+    </div>
+
+    <div class="vid-grid">
+
+      <!-- Card 1 -->
+      <div class="vid-card">
+        <div class="vid-thumb" role="button" aria-label="Play video testimonial from Tunde Adeyemi" tabindex="0">
+          <div class="vid-thumb-glow"></div>
+          <video style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.45" muted playsinline preload="none" poster="">
+            <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4" type="video/mp4">
+          </video>
+          <div class="vid-play">
+            <div class="vid-play-btn" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--lumen)"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+          </div>
+          <div class="vid-duration">2:14</div>
+        </div>
+        <div class="vid-body">
+          <p class="vid-quote">"I went from zero to launching my own AI-generated music EP in 6 weeks. AIQ changed everything for me."</p>
+          <div class="vid-footer">
+            <div class="vid-avatar" style="background:linear-gradient(135deg,#065f46,#34d399)">TA</div>
+            <div>
+              <div class="vid-name">Tunde Adeyemi</div>
+              <div class="vid-location">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" style="opacity:.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                Lagos, Nigeria
+                <span style="margin-left:.4rem" class="vid-stars">★★★★★</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="vid-card">
+        <div class="vid-thumb" role="button" aria-label="Play video testimonial from Chisom Eze" tabindex="0">
+          <div class="vid-thumb-glow" style="background:radial-gradient(ellipse 70% 60% at 50% 40%,rgba(124,58,237,.28) 0%,transparent 70%)"></div>
+          <video style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.45" muted playsinline preload="none" poster="">
+            <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4" type="video/mp4">
+          </video>
+          <div class="vid-play">
+            <div class="vid-play-btn" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--lumen)"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+          </div>
+          <div class="vid-duration">1:48</div>
+        </div>
+        <div class="vid-body">
+          <p class="vid-quote">"I built and sold my first AI website to a client within a month of finishing the web design course."</p>
+          <div class="vid-footer">
+            <div class="vid-avatar" style="background:linear-gradient(135deg,#4c1d95,#a78bfa)">CE</div>
+            <div>
+              <div class="vid-name">Chisom Eze</div>
+              <div class="vid-location">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" style="opacity:.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                Abuja, Nigeria
+                <span style="margin-left:.4rem" class="vid-stars">★★★★★</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="vid-card">
+        <div class="vid-thumb" role="button" aria-label="Play video testimonial from Amara Osei" tabindex="0">
+          <div class="vid-thumb-glow" style="background:radial-gradient(ellipse 70% 60% at 50% 40%,rgba(251,191,36,.18) 0%,transparent 70%)"></div>
+          <video style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.45" muted playsinline preload="none" poster="">
+            <source src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4" type="video/mp4">
+          </video>
+          <div class="vid-play">
+            <div class="vid-play-btn" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--lumen)"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+          </div>
+          <div class="vid-duration">3:02</div>
+        </div>
+        <div class="vid-body">
+          <p class="vid-quote">"The motion graphics course helped me land a remote job with a Dutch agency. I never expected this to happen so fast."</p>
+          <div class="vid-footer">
+            <div class="vid-avatar" style="background:linear-gradient(135deg,#92400e,#fbbf24)">AO</div>
+            <div>
+              <div class="vid-name">Amara Osei</div>
+              <div class="vid-location">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" style="opacity:.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                Owerri, Nigeria → Netherlands
+                <span style="margin-left:.4rem" class="vid-stars">★★★★★</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
   <!-- CTA -->
   <section class="cta-section" aria-labelledby="cta-heading">
     <div class="cta-inner">
@@ -829,6 +955,26 @@
     }, { threshold: 0.3 });
 
     observer.observe(counterSection);
+
+    /* ── VIDEO TESTIMONIALS ── */
+    document.querySelectorAll('.vid-thumb').forEach(function(thumb) {
+      function playVid() {
+        var vid = thumb.querySelector('video');
+        var btn = thumb.querySelector('.vid-play-btn');
+        if (!vid) return;
+        if (vid.paused) {
+          vid.play();
+          btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="var(--lumen)"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
+          vid.style.opacity = '1';
+        } else {
+          vid.pause();
+          btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="var(--lumen)"><path d="M8 5v14l11-7z"/></svg>';
+          vid.style.opacity = '.45';
+        }
+      }
+      thumb.addEventListener('click', playVid);
+      thumb.addEventListener('keydown', function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); playVid(); }});
+    });
   </script>
 </body>
 </html>
