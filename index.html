@@ -1009,8 +1009,7 @@
         }
       });
 
-      function startPlay() {
-        // Pause all other cards
+      function stopOthers() {
         document.querySelectorAll('.vid-thumb').forEach(function(t) {
           if (t !== thumb) {
             var v = t.querySelector('video');
@@ -1019,7 +1018,10 @@
             v && (v.style.opacity = '.7');
           }
         });
-        // Only rewind on first play, not after pause
+      }
+
+      function startPlay() {
+        // Call play() immediately in the gesture handler — mobile requires this
         if (!hasStarted) {
           vid.currentTime = 0;
           hasStarted = true;
@@ -1027,19 +1029,21 @@
         vid.play().catch(function(){});
         thumb.classList.add('playing');
         vid.style.opacity = '1';
+        // Pause others after — safe because our video is already playing
+        stopOthers();
       }
 
       function pausePlay() {
         vid.pause();
         thumb.classList.remove('playing');
         vid.style.opacity = '.7';
-        if (badge) badge.textContent = fmtTime(vid.duration);
+        if (badge) badge.textContent = fmtTime(vid.duration - vid.currentTime);
       }
 
-      // Click centre area = play (only when not playing)
+      // Click anywhere on thumb: play if paused, pause if playing
       thumb.addEventListener('click', function(e) {
-        if (thumb.classList.contains('playing')) return;
-        startPlay();
+        if (thumb.classList.contains('playing')) pausePlay();
+        else startPlay();
       });
 
       // Bottom pause button
