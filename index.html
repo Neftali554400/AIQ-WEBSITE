@@ -215,10 +215,17 @@
     .vid-card:hover{border-color:rgba(255,255,235,.18);transform:translateY(-4px);box-shadow:0 24px 64px rgba(0,0,0,.45)}
     .vid-thumb{position:relative;height:340px;background:linear-gradient(135deg,#0a1a12 0%,#061a2e 100%);overflow:hidden;cursor:pointer}
     .vid-thumb-glow{position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 40%,rgba(3,79,70,.35) 0%,transparent 70%);pointer-events:none}
-    .vid-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:2}
+    /* centre play button — shown at rest, hidden when playing */
+    .vid-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:2;transition:opacity .2s ease}
+    .vid-thumb.playing .vid-play{opacity:0;pointer-events:none}
     .vid-play-btn{width:56px;height:56px;border-radius:50%;background:rgba(255,255,235,.12);border:1.5px solid rgba(255,255,235,.25);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(6px);transition:background .2s ease,transform .15s ease}
     .vid-thumb:hover .vid-play-btn{background:var(--fathom);border-color:var(--fathom);transform:scale(1.08)}
-    .vid-duration{position:absolute;bottom:.6rem;right:.75rem;font-size:.65rem;font-weight:700;color:rgba(255,255,235,.6);background:rgba(0,0,0,.45);border-radius:.3rem;padding:.15rem .4rem;letter-spacing:.03em;z-index:2}
+    /* bottom control bar — hidden at rest, slides up when playing */
+    .vid-controls{position:absolute;bottom:0;left:0;right:0;z-index:3;display:flex;align-items:center;justify-content:center;gap:.65rem;padding:.55rem 1rem;background:linear-gradient(to top,rgba(0,0,0,.7) 0%,transparent 100%);opacity:0;transform:translateY(6px);transition:opacity .22s ease,transform .22s ease;pointer-events:none}
+    .vid-thumb.playing .vid-controls{opacity:1;transform:translateY(0);pointer-events:all}
+    .vid-ctrl-btn{width:32px;height:32px;border-radius:50%;background:rgba(255,255,235,.15);border:1px solid rgba(255,255,235,.2);display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);cursor:pointer;flex-shrink:0;transition:background .15s ease}
+    .vid-ctrl-btn:hover{background:var(--fathom)}
+    .vid-duration{font-size:.65rem;font-weight:700;color:rgba(255,255,235,.75);letter-spacing:.03em}
     .vid-body{padding:1.25rem 1.4rem 1.4rem}
     .vid-quote{font-family:'EB Garamond',Georgia,serif;font-size:1rem;font-style:italic;color:rgba(255,255,235,.75);line-height:1.6;margin-bottom:1.1rem}
     .vid-footer{display:flex;align-items:center;gap:.75rem}
@@ -720,7 +727,12 @@
               <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--lumen)"><path d="M8 5v14l11-7z"/></svg>
             </div>
           </div>
-          <div class="vid-duration">2:14</div>
+          <div class="vid-controls">
+            <div class="vid-ctrl-btn" aria-label="Pause video">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--lumen)"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            </div>
+            <span class="vid-duration">0:00</span>
+          </div>
         </div>
         <div class="vid-body">
           <p class="vid-quote">"I went from zero to launching my own AI-generated music EP in 6 weeks. AIQ changed everything for me."</p>
@@ -750,7 +762,12 @@
               <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--lumen)"><path d="M8 5v14l11-7z"/></svg>
             </div>
           </div>
-          <div class="vid-duration">1:48</div>
+          <div class="vid-controls">
+            <div class="vid-ctrl-btn" aria-label="Pause video">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--lumen)"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            </div>
+            <span class="vid-duration">0:00</span>
+          </div>
         </div>
         <div class="vid-body">
           <p class="vid-quote">"I built and sold my first AI website to a client within a month of finishing the web design course."</p>
@@ -780,7 +797,12 @@
               <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--lumen)"><path d="M8 5v14l11-7z"/></svg>
             </div>
           </div>
-          <div class="vid-duration">3:02</div>
+          <div class="vid-controls">
+            <div class="vid-ctrl-btn" aria-label="Pause video">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="var(--lumen)"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            </div>
+            <span class="vid-duration">0:00</span>
+          </div>
         </div>
         <div class="vid-body">
           <p class="vid-quote">"The motion graphics course helped me land a remote job with a Dutch agency. I never expected this to happen so fast."</p>
@@ -963,8 +985,8 @@
     }
     document.querySelectorAll('.vid-thumb').forEach(function(thumb) {
       var vid = thumb.querySelector('video');
-      var btn = thumb.querySelector('.vid-play-btn');
       var badge = thumb.querySelector('.vid-duration');
+      var ctrlBtn = thumb.querySelector('.vid-ctrl-btn');
       if (!vid) return;
 
       var previewSet = false;
@@ -979,36 +1001,64 @@
         }
       });
 
-      function playVid() {
-        if (vid.paused) {
-          document.querySelectorAll('.vid-thumb video').forEach(function(v) {
-            if (v !== vid && !v.paused) {
-              v.pause();
-              v.closest('.vid-thumb').querySelector('.vid-play-btn').innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="var(--lumen)"><path d="M8 5v14l11-7z"/></svg>';
-              v.style.opacity = '.7';
-            }
-          });
-          vid.currentTime = 0;
-          vid.play().catch(function(){});
-          btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="var(--lumen)"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
-          vid.style.opacity = '1';
-        } else {
-          vid.pause();
-          btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="var(--lumen)"><path d="M8 5v14l11-7z"/></svg>';
-          vid.style.opacity = '.7';
+      // Update duration badge as video plays
+      vid.addEventListener('timeupdate', function() {
+        if (!vid.paused && badge) {
+          badge.textContent = fmtTime(vid.duration - vid.currentTime);
         }
+      });
+
+      function startPlay() {
+        // Pause all other cards
+        document.querySelectorAll('.vid-thumb').forEach(function(t) {
+          if (t !== thumb) {
+            var v = t.querySelector('video');
+            if (v && !v.paused) { v.pause(); }
+            t.classList.remove('playing');
+            v && (v.style.opacity = '.7');
+          }
+        });
+        vid.currentTime = 0;
+        vid.play().catch(function(){});
+        thumb.classList.add('playing');
+        vid.style.opacity = '1';
       }
 
+      function pausePlay() {
+        vid.pause();
+        thumb.classList.remove('playing');
+        vid.style.opacity = '.7';
+        if (badge) badge.textContent = fmtTime(vid.duration);
+      }
+
+      // Click centre area = play (only when not playing)
+      thumb.addEventListener('click', function(e) {
+        if (thumb.classList.contains('playing')) return;
+        startPlay();
+      });
+
+      // Bottom pause button
+      if (ctrlBtn) {
+        ctrlBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          pausePlay();
+        });
+      }
+
+      thumb.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          if (thumb.classList.contains('playing')) pausePlay();
+          else startPlay();
+        }
+      });
+
       vid.addEventListener('ended', function() {
-        btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="var(--lumen)"><path d="M8 5v14l11-7z"/></svg>';
+        thumb.classList.remove('playing');
         vid.style.opacity = '.7';
         previewSet = false;
         vid.currentTime = vid.duration / 2;
-      });
-
-      thumb.addEventListener('click', playVid);
-      thumb.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); playVid(); }
+        if (badge) badge.textContent = fmtTime(vid.duration);
       });
     });
   </script>
