@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — AIQ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{--lumen:#ffffeb;--fathom:#034f46;--fathom-lt:#056b5e;--glow:#ffa946;--dawn:#f0d7ff;--bg:#0a0a08;--surface:rgba(255,255,235,0.04);--border:rgba(255,255,235,0.09)}
+    body{font-family:'Figtree',Arial,sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;background:var(--bg);color:var(--lumen);min-height:100vh}
+    body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:128px}
+    @keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+    /* NAV */
+    nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:1.1rem 2.5rem;background:rgba(10,10,8,0.82);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,235,0.06)}
+    .nav-logo{font-family:'EB Garamond',Georgia,serif;font-size:1.45rem;font-weight:500;color:var(--lumen);text-decoration:none;letter-spacing:-0.01em}
+    .nav-links{display:flex;align-items:center;gap:2rem;list-style:none}
+    .nav-links a{font-size:.875rem;font-weight:500;color:rgba(255,255,235,0.55);text-decoration:none;transition:color .15s ease}
+    .nav-links a:hover,.nav-links a.active{color:var(--lumen)}
+    .btn-nav{display:inline-flex;align-items:center;gap:.4rem;background:var(--fathom);color:var(--lumen);border:none;border-radius:9999px;padding:.55rem 1.25rem;font-family:'Figtree',sans-serif;font-size:.85rem;font-weight:600;text-decoration:none;cursor:pointer;transition:background .2s ease,transform .15s ease}
+    .btn-nav:hover{background:var(--fathom-lt);transform:translateY(-1px)}
+    .btn-nav:active{transform:translateY(0)}
+    .btn-nav:focus-visible{outline:2px solid var(--glow);outline-offset:3px}
+
+    /* HERO — PROFILE SPLIT */
+    .profile-hero{padding:9rem 2rem 5rem;position:relative;overflow:hidden}
+    .profile-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 30% 50%,rgba(3,79,70,.28) 0%,transparent 65%);pointer-events:none}
+    .profile-hero::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 40% 50% at 80% 30%,rgba(240,215,255,.08) 0%,transparent 65%);pointer-events:none}
+    .profile-hero-inner{max-width:1060px;margin:0 auto;display:grid;grid-template-columns:420px 1fr;gap:5rem;align-items:center;position:relative;z-index:1}
+    .photo-wrap{position:relative}
+    .photo-frame{border-radius:2rem;overflow:hidden;aspect-ratio:4/5;background:rgba(255,255,235,.04);border:1px solid rgba(255,255,235,.1);position:relative}
+    .photo-frame img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block}
+    .photo-accent{position:absolute;bottom:-1rem;right:-1rem;width:80px;height:80px;border-radius:1.25rem;background:rgba(3,79,70,.5);border:1px solid rgba(3,79,70,.6);display:flex;align-items:center;justify-content:center;font-size:2rem;backdrop-filter:blur(8px)}
+    .photo-chip{position:absolute;top:1.25rem;left:1.25rem;display:inline-flex;align-items:center;gap:.4rem;background:rgba(10,10,8,.75);border:1px solid rgba(255,255,235,.12);border-radius:9999px;padding:.3rem .8rem;font-size:.72rem;font-weight:600;color:#5ecfbb;backdrop-filter:blur(8px)}
+    .chip-dot{width:5px;height:5px;border-radius:50%;background:#5ecfbb;animation:pulse 2s ease-in-out infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+    .social-buttons{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1.25rem;justify-content:center}
+    .social-btn{display:inline-flex;align-items:center;gap:.5rem;border-radius:9999px;padding:.5rem 1.1rem;font-size:.78rem;font-weight:600;text-decoration:none;transition:background .15s ease,transform .15s ease,opacity .15s ease;border:1px solid transparent}
+    .social-btn:hover{transform:translateY(-2px)}
+    .social-btn:active{transform:translateY(0)}
+    .social-btn:focus-visible{outline:2px solid var(--glow);outline-offset:3px}
+    .social-btn-ig{background:#E1306C;color:#fff;border-color:#E1306C}
+    .social-btn-ig:hover{background:#c0254f}
+    .social-btn-fb{background:#1877F2;color:#fff;border-color:#1877F2}
+    .social-btn-fb:hover{background:#1464cc}
+    .social-btn-tt{background:#111;color:#fff;border-color:rgba(255,255,255,.15)}
+    .social-btn-tt:hover{background:#222}
+
+    .profile-content{animation:fadeInUp .9s cubic-bezier(.16,1,.3,1) .15s both}
+    .eyebrow{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:#5ecfbb;margin-bottom:1rem}
+    .profile-name{font-family:'EB Garamond',Georgia,serif;font-size:clamp(2.8rem,5vw,4.5rem);font-weight:500;line-height:1.03;letter-spacing:-.025em;color:var(--lumen);margin-bottom:.5rem}
+    .profile-name em{font-style:italic}
+    .profile-title{font-size:1rem;color:rgba(255,255,235,.45);font-weight:500;margin-bottom:2rem;letter-spacing:.01em}
+    .profile-bio{font-size:1rem;color:rgba(255,255,235,.55);line-height:1.85;margin-bottom:2rem}
+    .profile-bio p{margin-bottom:1rem}
+    .profile-bio p:last-child{margin-bottom:0}
+    .profile-links{display:flex;gap:.85rem;flex-wrap:wrap;margin-bottom:2.5rem}
+    .profile-link{display:inline-flex;align-items:center;gap:.45rem;background:rgba(255,255,235,.06);border:1px solid rgba(255,255,235,.1);border-radius:9999px;padding:.45rem 1.1rem;font-size:.8rem;font-weight:600;color:rgba(255,255,235,.65);text-decoration:none;transition:background .15s ease,border-color .15s ease,color .15s ease}
+    .profile-link:hover{background:rgba(255,255,235,.1);border-color:rgba(255,255,235,.2);color:var(--lumen)}
+    .profile-link:focus-visible{outline:2px solid var(--glow);outline-offset:3px}
+    .profile-ctas{display:flex;gap:.75rem;flex-wrap:wrap}
+    .btn-primary{display:inline-flex;align-items:center;gap:.5rem;background:var(--fathom);color:var(--lumen);border:none;border-radius:9999px;padding:.75rem 1.6rem;font-family:'Figtree',sans-serif;font-size:.9rem;font-weight:600;text-decoration:none;cursor:pointer;transition:background .2s ease,transform .15s ease;box-shadow:0 4px 20px rgba(3,79,70,.35)}
+    .btn-primary:hover{background:var(--fathom-lt);transform:translateY(-2px)}
+    .btn-primary:active{transform:translateY(0)}
+    .btn-primary:focus-visible{outline:2px solid var(--glow);outline-offset:3px}
+    .btn-ghost{display:inline-flex;align-items:center;gap:.5rem;background:transparent;color:var(--lumen);border:1.5px solid rgba(255,255,235,.2);border-radius:9999px;padding:.75rem 1.6rem;font-family:'Figtree',sans-serif;font-size:.9rem;font-weight:500;text-decoration:none;cursor:pointer;transition:border-color .2s ease,background .2s ease,transform .15s ease}
+    .btn-ghost:hover{border-color:rgba(255,255,235,.45);background:rgba(255,255,235,.05);transform:translateY(-2px)}
+    .btn-ghost:active{transform:translateY(0)}
+    .btn-ghost:focus-visible{outline:2px solid var(--glow);outline-offset:3px}
+
+    /* STATS STRIP */
+    .stats-strip{background:rgba(255,255,235,.02);border-top:1px solid rgba(255,255,235,.06);border-bottom:1px solid rgba(255,255,235,.06);padding:3rem 2rem}
+    .stats-inner{max-width:800px;margin:0 auto;display:flex;align-items:center;justify-content:space-around;gap:2rem;flex-wrap:wrap}
+    .stat-item{text-align:center}
+    .stat-num{font-family:'EB Garamond',Georgia,serif;font-size:2.6rem;font-weight:500;color:var(--lumen);line-height:1;margin-bottom:.2rem}
+    .stat-lbl{font-size:.78rem;color:rgba(255,255,235,.38);font-weight:500}
+    .stat-div{width:1px;height:40px;background:rgba(255,255,235,.1)}
+
+    /* SECTIONS */
+    .section{max-width:1060px;margin:0 auto;padding:5rem 2rem}
+    .section-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:#5ecfbb;margin-bottom:1rem}
+    .section-h2{font-family:'EB Garamond',Georgia,serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:500;line-height:1.1;letter-spacing:-.02em;color:var(--lumen);margin-bottom:1.25rem}
+    .section-h2 em{font-style:italic}
+    .body-text{font-size:.97rem;color:rgba(255,255,235,.55);line-height:1.85}
+    .body-text p{margin-bottom:1rem}
+    .body-text p:last-child{margin-bottom:0}
+    .divider{border-top:1px solid rgba(255,255,235,.07)}
+
+    /* STORY SECTION */
+    .story-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start}
+
+    /* SKILLS */
+    .skills-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:2rem}
+    .skill-card{background:rgba(255,255,235,.04);border:1px solid rgba(255,255,235,.08);border-radius:1.25rem;padding:1.5rem}
+    .skill-icon{font-size:1.5rem;margin-bottom:.75rem}
+    .skill-title{font-size:.9rem;font-weight:600;color:rgba(255,255,235,.8);margin-bottom:.35rem}
+    .skill-desc{font-size:.78rem;color:rgba(255,255,235,.38);line-height:1.6}
+
+    /* VALUES */
+    .values-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.25rem;margin-top:2rem}
+    .value-card{background:rgba(255,255,235,.04);border:1px solid rgba(255,255,235,.08);border-radius:1.25rem;padding:1.5rem 1.75rem;display:flex;gap:1rem;align-items:flex-start}
+    .value-icon{font-size:1.4rem;flex-shrink:0;margin-top:.1rem}
+    .value-title{font-size:.9rem;font-weight:600;color:rgba(255,255,235,.8);margin-bottom:.3rem}
+    .value-desc{font-size:.8rem;color:rgba(255,255,235,.38);line-height:1.65}
+
+    /* CONTACT */
+    .contact-section{background:rgba(3,79,70,.1);border-top:1px solid rgba(3,79,70,.25);border-bottom:1px solid rgba(3,79,70,.25);padding:5rem 2rem;text-align:center;position:relative;overflow:hidden}
+    .contact-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 50%,rgba(3,79,70,.15) 0%,transparent 70%);pointer-events:none}
+    .contact-inner{max-width:540px;margin:0 auto;position:relative;z-index:1}
+    .contact-h2{font-family:'EB Garamond',Georgia,serif;font-size:clamp(2rem,4vw,3rem);font-weight:500;color:var(--lumen);margin-bottom:.75rem;letter-spacing:-.02em}
+    .contact-h2 em{font-style:italic}
+    .contact-sub{font-size:.95rem;color:rgba(255,255,235,.45);line-height:1.7;margin-bottom:2rem}
+    .contact-btns{display:flex;justify-content:center;gap:.75rem;flex-wrap:wrap}
+
+    /* FOOTER */
+    footer{background:var(--bg);border-top:1px solid rgba(255,255,235,.06);padding:3.5rem 2.5rem 2.5rem}
+    .footer-inner{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem}
+    .footer-logo{font-family:'EB Garamond',Georgia,serif;font-size:1.3rem;font-weight:500;color:rgba(255,255,235,.85);display:block;margin-bottom:.5rem}
+    .footer-desc{font-size:.82rem;color:rgba(255,255,235,.32);line-height:1.72;max-width:240px;margin-top:.75rem}
+    .footer-col-head{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,235,.3);margin-bottom:1rem}
+    .footer-links{list-style:none;display:flex;flex-direction:column;gap:.6rem}
+    .footer-links a{font-size:.85rem;color:rgba(255,255,235,.45);text-decoration:none;transition:color .15s ease}
+    .footer-links a:hover{color:rgba(255,255,235,.85)}
+    .footer-bottom{max-width:1120px;margin:0 auto;border-top:1px solid rgba(255,255,235,.06);padding-top:1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+    .footer-bottom span{font-size:.78rem;color:rgba(255,255,235,.22)}
+
+    @media(max-width:960px){.profile-hero-inner{grid-template-columns:1fr;gap:3rem}.photo-wrap{max-width:360px}.story-grid{grid-template-columns:1fr}.skills-grid{grid-template-columns:1fr 1fr}.footer-inner{grid-template-columns:1fr 1fr}}
+    @media(max-width:600px){nav{padding:1rem 1.25rem}.nav-links{display:none}.skills-grid{grid-template-columns:1fr}.values-grid{grid-template-columns:1fr}.stat-div{display:none}.footer-inner{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+
+  <nav aria-label="Main navigation">
+    <a href="index.html" class="nav-logo">AIQ</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="courses.html">Courses</a></li>
+      <li><a href="about.html" class="active">About</a></li>
+      <li><a href="community.html">Community</a></li>
+      <li><a href="blog.html">Blog</a></li>
+    </ul>
+    <a href="signup.html" class="btn-nav">
+      Start here
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+    </a>
+  </nav>
+
+  <!-- PROFILE HERO -->
+  <section class="profile-hero" aria-labelledby="profile-name">
+    <div class="profile-hero-inner">
+
+      <div style="display:flex;flex-direction:column;align-items:center;gap:1.5rem;animation:fadeInUp .9s cubic-bezier(.16,1,.3,1) both">
+        <div class="photo-wrap">
+          <div class="photo-frame">
+            <img src="me.PNG" alt="Michael Neftali, Founder of AIQ" />
+            <div class="photo-chip"><span class="chip-dot"></span> Founder, AIQ</div>
+          </div>
+          <div class="photo-accent" aria-hidden="true">🤖</div>
+        </div>
+        <div class="social-buttons">
+          <a class="social-btn social-btn-ig" href="https://www.instagram.com/michaelneftali?igsh=MXFiNGk4cmpzYndkNQ%3D%3D&utm_source=qr" target="_blank" rel="noopener noreferrer" aria-label="Michael Neftali on Instagram">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            Instagram
+          </a>
+          <a class="social-btn social-btn-fb" href="https://facebook.com/michael.n.elliot" target="_blank" rel="noopener noreferrer" aria-label="Michael Neftali on Facebook">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            Facebook
+          </a>
+          <a class="social-btn social-btn-tt" href="https://www.tiktok.com/@michaelneftali" target="_blank" rel="noopener noreferrer" aria-label="Michael Neftali on TikTok">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.2 8.2 0 004.79 1.52V6.75a4.85 4.85 0 01-1.02-.06z"/></svg>
+            TikTok
+          </a>
+        </div>
+      </div>
+
+      <div class="profile-content">
+        <div class="eyebrow">The mind behind AIQ</div>
+        <h1 class="profile-name" id="profile-name">Michael<br/><em>Neftali</em></h1>
+        <div class="profile-title">Founder and CEO · AI Educator · Creative Technologist</div>
+
+        <div class="profile-bio">
+          <p>I built AIQ because I was tired of watching people sit on the sidelines of the AI revolution, convinced they were not technical enough, not creative enough, or simply did not have the right background to participate.</p>
+          <p>That belief is wrong. And proving it wrong is what drives everything we do at AIQ.</p>
+          <p>Before starting AIQ, I spent years at the intersection of technology and creativity: building digital products, consulting for brands navigating AI transformation, and teaching anyone who would listen how to use these tools to produce real, meaningful work. I have seen first-hand what happens when ordinary people get access to the right knowledge. They do extraordinary things.</p>
+          <p>AIQ is the platform I wish had existed when I started. A place where the door is always open, the teaching is honest, and the only thing standing between you and your first AI-created video, song, or book is a decision to begin.</p>
+        </div>
+
+        <div class="profile-links">
+          <a href="mailto:michael.neftali@gmail.com" class="profile-link">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+            Email me
+          </a>
+          <a href="community.html" class="profile-link">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+            Join the community
+          </a>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats-strip">
+    <div class="stats-inner">
+      <div class="stat-item"><div class="stat-num">52K+</div><div class="stat-lbl">Students taught</div></div>
+      <div class="stat-div"></div>
+      <div class="stat-item"><div class="stat-num">7</div><div class="stat-lbl">Courses built</div></div>
+      <div class="stat-div"></div>
+      <div class="stat-item"><div class="stat-num">180+</div><div class="stat-lbl">Countries reached</div></div>
+      <div class="stat-div"></div>
+      <div class="stat-item"><div class="stat-num">2026</div><div class="stat-lbl">Founded</div></div>
+    </div>
+  </div>
+
+  <!-- STORY -->
+  <div class="section divider">
+    <div class="story-grid">
+      <div>
+        <div class="section-label">My story</div>
+        <h2 class="section-h2">Why I built <em>AIQ</em></h2>
+        <div class="body-text">
+          <p>The turning point came when I watched a friend spend three months trying to learn video editing through paid courses that taught software, not thinking. At the end of it, she still could not make the creative work she imagined. The tools had changed. The teaching had not.</p>
+          <p>When AI video tools began to emerge, I realised that the same pattern would repeat itself. A wave of powerful, accessible tools, surrounded by a fog of hype and gatekeeping, leaving most people either overwhelmed or exploited by expensive courses promising impossible outcomes.</p>
+          <p>I built AIQ to be the honest alternative. Practical lessons, real projects, real tools, no gatekeeping. The mission is simple: if you have an idea and a few hours, you should be able to bring it to life. AIQ is how you do that.</p>
+        </div>
+      </div>
+      <div>
+        <div class="section-label">What I bring</div>
+        <h2 class="section-h2">Skills and <em>expertise</em></h2>
+        <div class="skills-grid">
+          <div class="skill-card">
+            <div class="skill-icon">🎬</div>
+            <div class="skill-title">AI Video</div>
+            <div class="skill-desc">Sora, Runway, Pika, Kling and the full generative video stack</div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-icon">🎵</div>
+            <div class="skill-title">AI Music</div>
+            <div class="skill-desc">Suno, Udio, ElevenLabs and AI-driven audio production</div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-icon">🌐</div>
+            <div class="skill-title">AI Websites</div>
+            <div class="skill-desc">v0, Bolt, Cursor, Framer and no-code AI development</div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-icon">📖</div>
+            <div class="skill-title">AI Writing</div>
+            <div class="skill-desc">Claude, GPT-4, Sudowrite and AI-assisted publishing</div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-icon">⚡</div>
+            <div class="skill-title">Automation</div>
+            <div class="skill-desc">Make, Zapier, n8n and AI agent workflow design</div>
+          </div>
+          <div class="skill-card">
+            <div class="skill-icon">🎓</div>
+            <div class="skill-title">Education</div>
+            <div class="skill-desc">Curriculum design, instructional strategy and online learning</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VALUES -->
+  <div class="divider">
+    <div class="section">
+      <div style="text-align:center;max-width:560px;margin:0 auto 3rem">
+        <div class="section-label">What I believe</div>
+        <h2 class="section-h2">The values behind <em>everything</em></h2>
+      </div>
+      <div class="values-grid">
+        <div class="value-card">
+          <div class="value-icon">🔓</div>
+          <div>
+            <div class="value-title">Accessible, honest education</div>
+            <p class="value-desc">Quality AI education should be within reach. AIQ delivers structured, no-fluff courses built for people ready to do real work.</p>
+          </div>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">🎯</div>
+          <div>
+            <div class="value-title">Practical over theoretical</div>
+            <p class="value-desc">I do not teach concepts for their own sake. Every lesson exists to produce something real that you can use, share or build on.</p>
+          </div>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">🌍</div>
+          <div>
+            <div class="value-title">Built for everyone</div>
+            <p class="value-desc">AIQ courses assume no prior technical background. The only requirement is curiosity and the willingness to try.</p>
+          </div>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">⚡</div>
+          <div>
+            <div class="value-title">Always current</div>
+            <p class="value-desc">AI moves fast. I update courses constantly so you are always working with the tools that actually matter right now, not six months ago.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTACT -->
+  <section class="contact-section" id="contact">
+    <div class="contact-inner">
+      <h2 class="contact-h2" id="contact-heading">Let us <em>connect</em></h2>
+      <p class="contact-sub">Have a question, a collaboration idea, or just want to talk AI? I read every message personally and reply within 48 hours.</p>
+      <div class="contact-btns">
+        <a href="mailto:michael.neftali@gmail.com" class="btn-primary">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+          Send me an email
+        </a>
+        <a href="courses.html" class="btn-ghost">
+          Browse the courses
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+        </a>
+        <a href="community.html" class="btn-ghost">Join the community</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <span class="footer-logo">AIQ</span>
+        <p class="footer-desc">Open AI courses for curious creators. Master video, music, books, games and more with no experience required.</p>
+      </div>
+      <div>
+        <div class="footer-col-head">Courses</div>
+        <ul class="footer-links">
+          <li><a href="course-detail.html?id=video">AI Video</a></li>
+          <li><a href="course-detail.html?id=books">AI Writing</a></li>
+          <li><a href="course-detail.html?id=music">AI Music</a></li>
+          <li><a href="course-detail.html?id=games">AI Games</a></li>
+          <li><a href="course-detail.html?id=web">AI Websites</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-head">Company</div>
+        <ul class="footer-links">
+          <li><a href="about.html">About</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="community.html">Community</a></li>
+          <li><a href="mailto:michael.neftali@gmail.com">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-head">Legal</div>
+        <ul class="footer-links">
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="terms.html">Terms of Use</a></li>
+          <li><a href="privacy.html#cookies">Cookie Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 AIQ. All rights reserved.</span>
+      <span>Made for curious creators</span>
+    </div>
+  </footer>
+
+</body>
+</html>

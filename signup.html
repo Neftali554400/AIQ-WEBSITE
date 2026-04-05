@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Join AIQ — Create with AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!--
+    ══════════════════════════════════════════════════════════
+    GOOGLE OAUTH SETUP
+    1. Go to https://console.cloud.google.com/
+    2. Create a project, enable "Google Identity" API
+    3. Create OAuth 2.0 credentials (Web application type)
+    4. Add your domain to "Authorised JavaScript origins"
+    5. Replace YOUR_GOOGLE_CLIENT_ID below with your client ID
+    ══════════════════════════════════════════════════════════
+  -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+  <!--
+    ══════════════════════════════════════════════════════════
+    FACEBOOK LOGIN SETUP
+    1. Go to https://developers.facebook.com/
+    2. Create a new app (choose "Consumer" type)
+    3. Add Facebook Login product to your app
+    4. Under Valid OAuth Redirect URIs add your domain
+    5. Replace YOUR_FACEBOOK_APP_ID below with your App ID
+    ══════════════════════════════════════════════════════════
+  -->
+
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --lumen:#ffffeb;--fathom:#034f46;--fathom-lt:#056b5e;
+      --glow:#ffa946;--bg:#0a0a08;--surface:rgba(255,255,235,0.05);--border:rgba(255,255,235,0.10);
+    }
+    body{font-family:'Figtree',Arial,sans-serif;-webkit-font-smoothing:antialiased;background:var(--bg);color:var(--lumen);min-height:100vh;display:flex;flex-direction:column}
+    body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:128px}
+
+    /* NAV */
+    nav{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 2.5rem;border-bottom:1px solid rgba(255,255,235,0.06)}
+    .nav-logo{font-family:'EB Garamond',Georgia,serif;font-size:1.45rem;font-weight:500;color:var(--lumen);text-decoration:none;letter-spacing:-0.01em}
+    .nav-back{display:inline-flex;align-items:center;gap:.4rem;font-size:.85rem;color:rgba(255,255,235,.5);text-decoration:none;transition:color .15s ease}
+    .nav-back:hover{color:var(--lumen)}
+
+    /* PAGE */
+    .page{flex:1;display:flex;align-items:center;justify-content:center;padding:3rem 1.5rem;position:relative;overflow:hidden}
+    .glow-1{position:absolute;inset:0;background:radial-gradient(ellipse 60% 55% at 50% 0%,rgba(3,79,70,.35) 0%,transparent 65%);pointer-events:none}
+    .glow-2{position:absolute;inset:0;background:radial-gradient(ellipse 40% 40% at 80% 80%,rgba(240,215,255,.1) 0%,transparent 60%);pointer-events:none}
+
+    /* CARD */
+    .signup-card{position:relative;z-index:1;width:100%;max-width:420px;background:rgba(255,255,235,.04);border:1px solid rgba(255,255,235,.1);border-radius:2rem;padding:2.75rem 2.25rem;box-shadow:0 40px 80px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,235,.04)}
+
+    .card-eyebrow{display:inline-flex;align-items:center;gap:.4rem;background:rgba(255,169,70,.1);border:1px solid rgba(255,169,70,.28);border-radius:9999px;padding:.28rem .8rem;font-size:.72rem;font-weight:600;color:var(--glow);letter-spacing:.04em;text-transform:uppercase;margin-bottom:1.5rem}
+    .eyebrow-dot{width:5px;height:5px;border-radius:50%;background:var(--glow);animation:pulse 2s ease-in-out infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+    .card-title{font-family:'EB Garamond',Georgia,serif;font-size:2.2rem;font-weight:500;line-height:1.1;letter-spacing:-.02em;color:var(--lumen);margin-bottom:.6rem}
+    .card-title em{font-style:italic}
+    .card-sub{font-size:.9rem;color:rgba(255,255,235,.48);line-height:1.65;margin-bottom:2rem}
+
+    /* OAUTH BUTTONS */
+    .oauth-btn{width:100%;display:flex;align-items:center;justify-content:center;gap:.75rem;padding:.9rem 1.25rem;border-radius:.875rem;font-family:'Figtree',sans-serif;font-size:.95rem;font-weight:600;cursor:pointer;transition:transform .15s ease,box-shadow .15s ease,opacity .15s ease;border:none;text-decoration:none;margin-bottom:.85rem}
+    .oauth-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.3)}
+    .oauth-btn:active{transform:translateY(0)}
+    .oauth-btn:focus-visible{outline:2px solid var(--glow);outline-offset:3px}
+    .oauth-btn:last-of-type{margin-bottom:0}
+
+    .btn-google{background:#fff;color:#1f1f1f}
+    .btn-google:hover{background:#f5f5f5}
+
+    .btn-facebook{background:#1877f2;color:#fff}
+    .btn-facebook:hover{background:#166fe5}
+
+    .btn-icon{width:22px;height:22px;flex-shrink:0}
+
+    /* Divider */
+    .divider{display:flex;align-items:center;gap:1rem;margin:1.5rem 0}
+    .divider-line{flex:1;height:1px;background:rgba(255,255,235,.1)}
+    .divider-text{font-size:.75rem;color:rgba(255,255,235,.3);font-weight:500;white-space:nowrap}
+
+    /* Email fallback */
+    .email-form{display:flex;flex-direction:column;gap:.75rem}
+    .email-input{width:100%;background:rgba(255,255,235,.06);border:1px solid rgba(255,255,235,.12);border-radius:.75rem;padding:.85rem 1.1rem;font-family:'Figtree',sans-serif;font-size:.9rem;color:var(--lumen);outline:none;transition:border-color .2s ease,background .2s ease}
+    .email-input::placeholder{color:rgba(255,255,235,.3)}
+    .email-input:focus{border-color:rgba(255,255,235,.3);background:rgba(255,255,235,.08)}
+    .btn-email{width:100%;background:var(--fathom);color:var(--lumen);border:none;border-radius:.75rem;padding:.85rem 1.25rem;font-family:'Figtree',sans-serif;font-size:.95rem;font-weight:600;cursor:pointer;transition:background .2s ease,transform .15s ease}
+    .btn-email:hover{background:var(--fathom-lt);transform:translateY(-1px)}
+    .btn-email:active{transform:translateY(0)}
+    .btn-email:focus-visible{outline:2px solid var(--glow);outline-offset:3px}
+
+    .terms-note{font-size:.72rem;color:rgba(255,255,235,.28);line-height:1.6;text-align:center;margin-top:1.5rem}
+    .terms-note a{color:rgba(255,255,235,.45);text-decoration:underline;text-decoration-color:rgba(255,255,235,.2)}
+    .terms-note a:hover{color:rgba(255,255,235,.75)}
+
+    /* Success state */
+    .success-state{display:none;text-align:center;padding:1rem 0}
+    .success-state.visible{display:block}
+    .success-icon{font-size:3rem;margin-bottom:1rem}
+    .success-title{font-family:'EB Garamond',Georgia,serif;font-size:1.6rem;font-weight:500;color:var(--lumen);margin-bottom:.5rem}
+    .success-sub{font-size:.9rem;color:rgba(255,255,235,.5);line-height:1.6}
+    .success-link{display:inline-flex;align-items:center;gap:.4rem;margin-top:1.5rem;background:var(--fathom);color:var(--lumen);border-radius:9999px;padding:.65rem 1.5rem;font-size:.88rem;font-weight:600;text-decoration:none;transition:background .2s ease}
+    .success-link:hover{background:var(--fathom-lt)}
+
+    /* FOOTER */
+    footer{padding:1.5rem 2.5rem;border-top:1px solid rgba(255,255,235,.06);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+    footer span{font-size:.78rem;color:rgba(255,255,235,.2)}
+    footer a{font-size:.78rem;color:rgba(255,255,235,.35);text-decoration:none}
+    footer a:hover{color:rgba(255,255,235,.7)}
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-logo">AIQ</a>
+    <a href="index.html" class="nav-back">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
+      Back to home
+    </a>
+  </nav>
+
+  <!-- PAGE -->
+  <main class="page">
+    <div class="glow-1" aria-hidden="true"></div>
+    <div class="glow-2" aria-hidden="true"></div>
+
+    <div class="signup-card">
+
+      <!-- Default form state -->
+      <div id="form-state">
+        <div class="card-eyebrow">
+          <span class="eyebrow-dot" aria-hidden="true"></span>
+          Create your account
+        </div>
+
+        <h1 class="card-title">Join <em>AIQ</em></h1>
+        <p class="card-sub">Create your account to access all courses and track your progress.</p>
+
+        <!-- Google Sign-In -->
+        <button class="oauth-btn btn-google" onclick="handleGoogleClick()" type="button" aria-label="Continue with Google">
+          <svg class="btn-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          Continue with Google
+        </button>
+
+        <!-- Facebook Login -->
+        <button class="oauth-btn btn-facebook" onclick="handleFacebookClick()" type="button" aria-label="Continue with Facebook">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="white" aria-hidden="true">
+            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+          </svg>
+          Continue with Facebook
+        </button>
+
+        <div class="divider">
+          <div class="divider-line" aria-hidden="true"></div>
+          <span class="divider-text">or sign up with email</span>
+          <div class="divider-line" aria-hidden="true"></div>
+        </div>
+
+        <!-- Email form -->
+        <form class="email-form" onsubmit="handleEmailSignup(event)" novalidate>
+          <input
+            class="email-input"
+            type="email"
+            id="email"
+            name="email"
+            placeholder="your@email.com"
+            autocomplete="email"
+            required
+            aria-label="Email address"
+          />
+          <button class="btn-email" type="submit">Create account</button>
+        </form>
+
+        <p class="terms-note">
+          By creating an account you agree to our
+          <a href="terms.html" target="_blank">Terms of Use</a> and <a href="privacy.html" target="_blank">Privacy Policy</a>.
+          We will never share your data with third parties.
+        </p>
+
+        <p style="font-size:.82rem;color:rgba(255,255,235,.35);text-align:center;margin-top:1.25rem">
+          Already have an account?
+          <a href="#" onclick="showLogin(event)" style="color:rgba(255,255,235,.6);text-decoration:underline;text-decoration-color:rgba(255,255,235,.2);cursor:pointer">Sign in</a>
+        </p>
+      </div>
+
+      <!-- Sign-in state -->
+      <div id="login-state" style="display:none">
+        <div class="card-eyebrow">
+          <span class="eyebrow-dot" aria-hidden="true"></span>
+          Welcome back
+        </div>
+        <h1 class="card-title">Sign <em>in</em></h1>
+        <p class="card-sub">Good to have you back. Sign in to continue learning.</p>
+
+        <button class="oauth-btn btn-google" onclick="handleGoogleClick()" type="button" aria-label="Sign in with Google">
+          <svg class="btn-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+          Sign in with Google
+        </button>
+
+        <button class="oauth-btn btn-facebook" onclick="handleFacebookClick()" type="button" aria-label="Sign in with Facebook">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="white" aria-hidden="true">
+            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+          </svg>
+          Sign in with Facebook
+        </button>
+
+        <div class="divider">
+          <div class="divider-line" aria-hidden="true"></div>
+          <span class="divider-text">or sign in with email</span>
+          <div class="divider-line" aria-hidden="true"></div>
+        </div>
+
+        <form class="email-form" onsubmit="handleEmailSignin(event)" novalidate>
+          <input class="email-input" type="email" placeholder="your@email.com" autocomplete="email" required aria-label="Email address" />
+          <input class="email-input" type="password" placeholder="Password" autocomplete="current-password" required aria-label="Password" style="margin-top:0" />
+          <button class="btn-email" type="submit">Sign in</button>
+        </form>
+
+        <p style="font-size:.82rem;color:rgba(255,255,235,.35);text-align:center;margin-top:1.25rem">
+          No account yet?
+          <a href="#" onclick="showSignup(event)" style="color:rgba(255,255,235,.6);text-decoration:underline;text-decoration-color:rgba(255,255,235,.2);cursor:pointer">Create one</a>
+        </p>
+      </div>
+
+      <!-- Success state -->
+      <div class="success-state" id="success-state" aria-live="polite">
+        <div class="success-icon" aria-hidden="true">🎉</div>
+        <div class="success-title">You are in!</div>
+        <p class="success-sub">Welcome to AIQ. Your account is ready. Start exploring courses and building with AI today.</p>
+        <a href="index.html#courses" class="success-link">
+          Browse courses
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    <span>© 2026 AIQ</span>
+    <div style="display:flex;gap:1.5rem">
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="index.html">Home</a>
+    </div>
+  </footer>
+
+  <script>
+    // ══════════════════════════════════════════════════════
+    // GOOGLE SIGN-IN
+    // Replace 'YOUR_GOOGLE_CLIENT_ID' with your actual
+    // Google OAuth 2.0 Client ID from Google Cloud Console
+    // ══════════════════════════════════════════════════════
+    const GOOGLE_CLIENT_ID = '846815529793-t4f02mai8albvjr1tldaaukhffsdpta1.apps.googleusercontent.com';
+
+    window.onload = function () {
+      if (typeof google !== 'undefined' && GOOGLE_CLIENT_ID !== 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com') {
+        google.accounts.id.initialize({
+          client_id: GOOGLE_CLIENT_ID,
+          callback: handleGoogleSignIn,
+          context: 'signup',
+        });
+      }
+    };
+
+    function handleGoogleClick() {
+      if (GOOGLE_CLIENT_ID === 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com') {
+        alert('Google Sign-In is not yet configured.\n\nAdd your Google Client ID to signup.html to enable this.');
+        return;
+      }
+      const client = google.accounts.oauth2.initTokenClient({
+        client_id: GOOGLE_CLIENT_ID,
+        scope: 'openid profile email',
+        callback: handleGoogleSignIn,
+      });
+      client.requestAccessToken({ prompt: 'select_account' });
+    }
+
+    function handleGoogleSignIn(response) {
+      if (response.error) { console.error(response); return; }
+      // Fetch basic profile using the access token
+      fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+        headers: { Authorization: 'Bearer ' + response.access_token }
+      })
+      .then(r => r.json())
+      .then(profile => {
+        saveUser({ name: profile.name, email: profile.email, picture: profile.picture, provider: 'google' });
+      })
+      .catch(() => {
+        saveUser({ provider: 'google' });
+      });
+    }
+
+    // ══════════════════════════════════════════════════════
+    // FACEBOOK LOGIN
+    // Replace 'YOUR_FACEBOOK_APP_ID' with your actual
+    // Facebook App ID from developers.facebook.com
+    // ══════════════════════════════════════════════════════
+    const FACEBOOK_APP_ID = '951787590558414';
+
+    window.fbAsyncInit = function () {
+      if (FACEBOOK_APP_ID !== 'YOUR_FACEBOOK_APP_ID') {
+        FB.init({
+          appId: FACEBOOK_APP_ID,
+          cookie: true,
+          xfbml: true,
+          version: 'v19.0',
+        });
+      }
+    };
+
+    // Load Facebook SDK
+    (function (d, s, id) {
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s); js.id = id;
+      js.src = 'https://connect.facebook.net/en_US/sdk.js';
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+
+    function handleFacebookClick() {
+      if (FACEBOOK_APP_ID === 'YOUR_FACEBOOK_APP_ID') {
+        alert('Facebook Login is not yet configured.\n\nAdd your Facebook App ID to signup.html to enable this.');
+        return;
+      }
+      FB.login(function (response) {
+        if (response.authResponse) {
+          FB.api('/me', { fields: 'name,picture.width(200)' }, function (userData) {
+            const picture = userData.picture && userData.picture.data ? userData.picture.data.url : null;
+            saveUser({ name: userData.name, picture: picture, provider: 'facebook' });
+          });
+        }
+      }, { scope: 'public_profile' });
+    }
+
+    // ══════════════════════════════════════════════════════
+    // EMAIL SIGN-UP
+    // Connect this to your backend or a service like
+    // Supabase, Firebase Auth, or Auth0
+    // ══════════════════════════════════════════════════════
+    function handleEmailSignup(e) {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      if (!email || !email.includes('@')) return;
+      saveUser({ email: email, provider: 'email' });
+    }
+
+    // Redirect destination — respects ?next= param
+    const _nextUrl = (() => {
+      try {
+        const n = new URLSearchParams(window.location.search).get('next');
+        if (n && n.startsWith(window.location.origin) || (n && !n.startsWith('http'))) return n;
+      } catch(e) {}
+      return 'account.html';
+    })();
+
+    // Already logged in? Skip signup
+    (function() {
+      try {
+        const u = JSON.parse(localStorage.getItem('aiq_user'));
+        if (u && u.email) window.location.replace(_nextUrl !== 'account.html' ? _nextUrl : 'account.html');
+      } catch(e) {}
+    })();
+
+    function saveUser(data) {
+      const existing = (() => { try { return JSON.parse(localStorage.getItem('aiq_user')) || {}; } catch(e) { return {}; } })();
+      const user = Object.assign({}, existing, data);
+      if (!user.joined) user.joined = new Date().toISOString().split('T')[0];
+      if (!user.enrolled) user.enrolled = [];
+      localStorage.setItem('aiq_user', JSON.stringify(user));
+      showSuccess();
+    }
+
+    function showSuccess() {
+      document.getElementById('form-state').style.display = 'none';
+      document.getElementById('login-state').style.display = 'none';
+      const s = document.getElementById('success-state');
+      s.classList.add('visible');
+      s.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // Redirect after short delay — back to the page they came from, or account
+      setTimeout(() => { window.location.href = _nextUrl; }, 1800);
+    }
+
+    function showLogin(e) {
+      e.preventDefault();
+      document.getElementById('form-state').style.display = 'none';
+      document.getElementById('login-state').style.display = 'block';
+    }
+
+    function showSignup(e) {
+      e.preventDefault();
+      document.getElementById('login-state').style.display = 'none';
+      document.getElementById('form-state').style.display = 'block';
+    }
+
+    function handleEmailSignin(e) {
+      e.preventDefault();
+      const existing = (() => { try { return JSON.parse(localStorage.getItem('aiq_user')); } catch(e) { return null; } })();
+      if (existing) {
+        window.location.href = 'account.html';
+      } else {
+        // No local account — treat as new signup
+        const emailInput = e.target.querySelector('[type="email"]');
+        saveUser({ email: emailInput ? emailInput.value : '', provider: 'email' });
+      }
+    }
+  </script>
+
+</body>
+</html>

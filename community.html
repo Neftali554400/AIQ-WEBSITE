@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Community — AIQ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{--lumen:#ffffeb;--fathom:#034f46;--fathom-lt:#056b5e;--glow:#ffa946;--dawn:#f0d7ff;--bg:#0a0a08;--surface:rgba(255,255,235,0.04);--border:rgba(255,255,235,0.09)}
+    body{font-family:'Figtree',Arial,sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;background:var(--bg);color:var(--lumen);min-height:100vh}
+    body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:128px}
+
+    nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:1.1rem 2.5rem;background:rgba(10,10,8,0.82);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,235,0.06)}
+    .nav-logo{font-family:'EB Garamond',Georgia,serif;font-size:1.45rem;font-weight:500;color:var(--lumen);text-decoration:none;letter-spacing:-0.01em}
+    .nav-links{display:flex;align-items:center;gap:2rem;list-style:none}
+    .nav-links a{font-size:.875rem;font-weight:500;color:rgba(255,255,235,0.55);text-decoration:none;transition:color .15s ease}
+    .nav-links a:hover,.nav-links a.active{color:var(--lumen)}
+    .btn-nav{display:inline-flex;align-items:center;gap:.4rem;background:var(--fathom);color:var(--lumen);border:none;border-radius:9999px;padding:.55rem 1.25rem;font-family:'Figtree',sans-serif;font-size:.85rem;font-weight:600;text-decoration:none;cursor:pointer;transition:background .2s ease,transform .15s ease}
+    .btn-nav:hover{background:var(--fathom-lt);transform:translateY(-1px)}
+    .btn-nav:focus-visible{outline:2px solid var(--glow);outline-offset:3px}
+
+    .page-hero{padding:10rem 2rem 5rem;text-align:center;position:relative;overflow:hidden}
+    .page-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 65% 55% at 50% -10%,rgba(3,79,70,.4) 0%,transparent 65%);pointer-events:none}
+    .page-hero::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 40% 35% at 15% 70%,rgba(255,169,70,.07) 0%,transparent 60%);pointer-events:none}
+    .page-hero-inner{position:relative;z-index:1;max-width:720px;margin:0 auto}
+    .tag-chip{display:inline-flex;align-items:center;gap:.4rem;background:rgba(3,79,70,.22);border:1px solid rgba(3,79,70,.45);border-radius:9999px;padding:.3rem .85rem;font-size:.75rem;font-weight:600;color:#5ecfbb;letter-spacing:.03em;margin-bottom:1.25rem}
+    .tag-chip-dot{width:5px;height:5px;border-radius:50%;background:#5ecfbb}
+    .page-h1{font-family:'EB Garamond',Georgia,serif;font-size:clamp(3rem,6vw,5.5rem);font-weight:500;line-height:1.05;letter-spacing:-.025em;color:var(--lumen);margin-bottom:1.5rem}
+    .page-h1 em{font-style:italic}
+    .page-sub{font-size:1.1rem;color:rgba(255,255,235,.52);line-height:1.75;max-width:520px;margin:0 auto 2.5rem}
+
+    .btn-primary{display:inline-flex;align-items:center;gap:.5rem;background:var(--fathom);color:var(--lumen);border:none;border-radius:9999px;padding:.8rem 1.75rem;font-family:'Figtree',sans-serif;font-size:.95rem;font-weight:600;text-decoration:none;cursor:pointer;transition:background .2s ease,transform .15s ease;box-shadow:0 4px 20px rgba(3,79,70,.35)}
+    .btn-primary:hover{background:var(--fathom-lt);transform:translateY(-2px)}
+    .btn-primary:focus-visible{outline:2px solid var(--glow);outline-offset:3px}
+
+    /* CHANNELS */
+    .section{max-width:1080px;margin:0 auto;padding:5rem 2rem}
+    .section-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:#5ecfbb;margin-bottom:.85rem}
+    .section-h2{font-family:'EB Garamond',Georgia,serif;font-size:clamp(2rem,4vw,3rem);font-weight:500;line-height:1.1;letter-spacing:-.02em;color:var(--lumen);margin-bottom:1rem}
+    .section-h2 em{font-style:italic}
+    .section-sub{font-size:1rem;color:rgba(255,255,235,.48);line-height:1.72;max-width:540px;margin-bottom:3rem}
+
+    .channels-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
+    .channel-card{background:var(--surface);border:1px solid var(--border);border-radius:1.5rem;padding:1.75rem;display:flex;flex-direction:column;gap:1rem;transition:border-color .2s ease,transform .2s ease}
+    .channel-card:hover{border-color:rgba(255,255,235,.18);transform:translateY(-3px)}
+    .channel-card a{text-decoration:none}
+    .ch-icon{width:48px;height:48px;border-radius:.875rem;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:.25rem}
+    .ch-discord .ch-icon{background:rgba(88,101,242,.2);border:1px solid rgba(88,101,242,.35)}
+    .ch-x .ch-icon{background:rgba(255,255,235,.08);border:1px solid rgba(255,255,235,.15)}
+    .ch-yt .ch-icon{background:rgba(255,0,0,.15);border:1px solid rgba(255,0,0,.3)}
+    .ch-title{font-family:'EB Garamond',Georgia,serif;font-size:1.15rem;font-weight:500;color:var(--lumen);margin-bottom:.35rem}
+    .ch-desc{font-size:.83rem;color:rgba(255,255,235,.43);line-height:1.62;margin-bottom:1rem;flex:1}
+    .ch-link{display:inline-flex;align-items:center;gap:.4rem;font-size:.83rem;font-weight:600;text-decoration:none;transition:opacity .15s ease}
+    .ch-link:hover{opacity:.75}
+    .ch-discord .ch-link{color:#7289da}
+    .ch-x .ch-link{color:rgba(255,255,235,.7)}
+    .ch-yt .ch-link{color:#ff4444}
+
+    /* PROJECTS */
+    .divider-section{border-top:1px solid var(--border)}
+    .projects-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
+    .project-card{background:var(--surface);border:1px solid var(--border);border-radius:1.5rem;overflow:hidden;transition:border-color .2s ease,transform .2s ease}
+    .project-card:hover{border-color:rgba(255,255,235,.18);transform:translateY(-3px)}
+    .project-visual{aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;font-size:3rem;position:relative}
+    .project-body{padding:1.25rem}
+    .project-tag{display:inline-block;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#5ecfbb;margin-bottom:.5rem}
+    .project-title{font-family:'EB Garamond',Georgia,serif;font-size:1.1rem;font-weight:500;color:var(--lumen);margin-bottom:.35rem}
+    .project-author{font-size:.78rem;color:rgba(255,255,235,.38)}
+
+    /* STATS */
+    .stats-band{background:var(--fathom);padding:4rem 2rem}
+    .stats-inner{max-width:900px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;text-align:center}
+    .stat-num{font-family:'EB Garamond',Georgia,serif;font-size:3rem;font-weight:500;color:var(--lumen);line-height:1}
+    .stat-label{font-size:.82rem;color:rgba(255,255,235,.55);margin-top:.4rem}
+
+    /* CTA */
+    .cta-section{padding:8rem 2rem;text-align:center;position:relative;overflow:hidden}
+    .cta-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 65% at 50% 110%,rgba(3,79,70,.45) 0%,transparent 60%);pointer-events:none}
+    .cta-inner{position:relative;z-index:1;max-width:580px;margin:0 auto}
+    .cta-h2{font-family:'EB Garamond',Georgia,serif;font-size:clamp(2.5rem,5vw,4.5rem);font-weight:500;line-height:1.05;letter-spacing:-.02em;color:var(--lumen);margin-bottom:1.25rem}
+    .cta-h2 em{font-style:italic}
+    .cta-sub{font-size:.95rem;color:rgba(255,255,235,.48);line-height:1.72;margin-bottom:2.25rem}
+
+    /* FOOTER */
+    footer{background:var(--bg);border-top:1px solid rgba(255,255,235,.06);padding:3.5rem 2.5rem 2.5rem}
+    .footer-inner{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem}
+    .footer-logo{font-family:'EB Garamond',Georgia,serif;font-size:1.3rem;font-weight:500;color:rgba(255,255,235,.85);display:block;margin-bottom:.5rem}
+    .footer-desc{font-size:.82rem;color:rgba(255,255,235,.32);line-height:1.72;max-width:240px;margin-top:.75rem}
+    .footer-col-head{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,235,.3);margin-bottom:1rem}
+    .footer-links{list-style:none;display:flex;flex-direction:column;gap:.6rem}
+    .footer-links a{font-size:.85rem;color:rgba(255,255,235,.45);text-decoration:none;transition:color .15s ease}
+    .footer-links a:hover{color:rgba(255,255,235,.85)}
+    .footer-bottom{max-width:1120px;margin:0 auto;border-top:1px solid rgba(255,255,235,.06);padding-top:1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+    .footer-bottom span{font-size:.78rem;color:rgba(255,255,235,.22)}
+
+    @media(max-width:900px){.channels-grid,.projects-grid{grid-template-columns:1fr 1fr}.stats-inner{grid-template-columns:1fr 1fr;gap:1.5rem}.footer-inner{grid-template-columns:1fr 1fr}}
+    @media(max-width:600px){nav{padding:1rem 1.25rem}.nav-links{display:none}.channels-grid,.projects-grid{grid-template-columns:1fr}.footer-inner{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+
+  <nav aria-label="Main navigation">
+    <a href="index.html" class="nav-logo">AIQ</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="courses.html">Courses</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="community.html" class="active">Community</a></li>
+      <li><a href="blog.html">Blog</a></li>
+    </ul>
+    <a href="signup.html" class="btn-nav">
+      Start here
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+    </a>
+  </nav>
+
+  <section class="page-hero" aria-labelledby="community-heading">
+    <div class="page-hero-inner">
+      <div class="tag-chip"><span class="tag-chip-dot" aria-hidden="true"></span>Join the movement</div>
+      <h1 class="page-h1" id="community-heading">Create together,<br/><em>grow faster</em></h1>
+      <p class="page-sub">A global community of AI creators sharing work, giving feedback and building things that did not exist before.</p>
+      <a href="signup.html" class="btn-primary">
+        Join the community
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- COMMUNITY CHANNELS -->
+  <div class="section">
+    <div class="section-label">Where we gather</div>
+    <h2 class="section-h2">Find your <em>people</em></h2>
+    <p class="section-sub">We hang out across a few platforms. Pick the one that suits you best, or join all of them.</p>
+
+    <div class="channels-grid">
+      <div class="channel-card ch-discord">
+        <div class="ch-icon" aria-hidden="true">💬</div>
+        <div class="ch-title">Discord Server</div>
+        <p class="ch-desc">Our main hub. Share your work, get feedback, ask questions and connect with creators working on the same tracks as you.</p>
+        <a href="#" class="ch-link" aria-label="Join AIQ Discord">
+          Join Discord
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+        </a>
+      </div>
+      <div class="channel-card ch-x">
+        <div class="ch-icon" aria-hidden="true">𝕏</div>
+        <div class="ch-title">X (Twitter)</div>
+        <p class="ch-desc">Follow us for the latest AI tool releases, course updates and community spotlights. Tag us in your work and we will share it.</p>
+        <a href="#" class="ch-link" aria-label="Follow AIQ on X">
+          Follow @AIQ
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+        </a>
+      </div>
+      <div class="channel-card ch-yt">
+        <div class="ch-icon" aria-hidden="true">▶</div>
+        <div class="ch-title">YouTube</div>
+        <p class="ch-desc">Watch extended lessons, tool walkthroughs and student project showcases on our YouTube channel. New videos every week.</p>
+        <a href="#" class="ch-link" aria-label="Subscribe to AIQ on YouTube">
+          Subscribe
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURED PROJECTS -->
+  <div class="divider-section">
+    <div class="section">
+      <div class="section-label">Community spotlight</div>
+      <h2 class="section-h2">What our members<br/>are <em>building</em></h2>
+      <p class="section-sub">Real projects from real learners. Every week we spotlight the work coming out of the AIQ community.</p>
+
+      <div class="projects-grid">
+        <div class="project-card">
+          <div class="project-visual" style="background:linear-gradient(135deg,#0d1a2e,#0a2a1e)">🎬</div>
+          <div class="project-body">
+            <div class="project-tag">AI Video</div>
+            <div class="project-title">A short film made entirely with Sora in 3 days</div>
+            <div class="project-author">by Kofi A. in Accra</div>
+          </div>
+        </div>
+        <div class="project-card">
+          <div class="project-visual" style="background:linear-gradient(135deg,#0d1a0d,#1a2a0d)">🎵</div>
+          <div class="project-body">
+            <div class="project-tag">AI Music</div>
+            <div class="project-title">An original EP produced using only Suno and ElevenLabs</div>
+            <div class="project-author">by Maria S. in Lisbon</div>
+          </div>
+        </div>
+        <div class="project-card">
+          <div class="project-visual" style="background:linear-gradient(135deg,#1a0d2e,#2e0d1a)">📖</div>
+          <div class="project-body">
+            <div class="project-tag">AI Writing</div>
+            <div class="project-title">A 60,000-word thriller written and self-published in 6 weeks</div>
+            <div class="project-author">by Yemi O. in Lagos</div>
+          </div>
+        </div>
+        <div class="project-card">
+          <div class="project-visual" style="background:linear-gradient(135deg,#0d0d1a,#1a0d2a)">🎮</div>
+          <div class="project-body">
+            <div class="project-tag">AI Games</div>
+            <div class="project-title">A side-scrolling platformer built and published to itch.io</div>
+            <div class="project-author">by Lena P. in Berlin</div>
+          </div>
+        </div>
+        <div class="project-card">
+          <div class="project-visual" style="background:linear-gradient(135deg,#1a1a0d,#2a1a0d)">✨</div>
+          <div class="project-body">
+            <div class="project-tag">Motion Graphics</div>
+            <div class="project-title">Brand identity animations for a local café using Firefly</div>
+            <div class="project-author">by Sam K. in Toronto</div>
+          </div>
+        </div>
+        <div class="project-card">
+          <div class="project-visual" style="background:linear-gradient(135deg,#1a150d,#2a1a0a)">🌐</div>
+          <div class="project-body">
+            <div class="project-tag">AI Websites</div>
+            <div class="project-title">A portfolio site built and live in under 4 hours using v0</div>
+            <div class="project-author">by Aisha M. in Dubai</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATS BAND -->
+  <div class="stats-band" aria-label="Community statistics">
+    <div class="stats-inner">
+      <div><div class="stat-num">50K+</div><div class="stat-label">Members worldwide</div></div>
+      <div><div class="stat-num">180+</div><div class="stat-label">Countries represented</div></div>
+      <div><div class="stat-num">2K+</div><div class="stat-label">Projects shared this month</div></div>
+      <div><div class="stat-num">4.9</div><div class="stat-label">Average rating from members</div></div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <section class="cta-section" aria-labelledby="comm-cta-heading">
+    <div class="cta-inner">
+      <div class="tag-chip" style="margin-bottom:1.5rem"><span class="tag-chip-dot" aria-hidden="true"></span>It is open to everyone</div>
+      <h2 class="cta-h2" id="comm-cta-heading">Ready to meet your<br/><em>people?</em></h2>
+      <p class="cta-sub">Join thousands of creators building with AI. Share your work, get inspired and level up together.</p>
+      <a href="signup.html" class="btn-primary" style="font-size:1rem;padding:.9rem 2rem">
+        Create your account
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <span class="footer-logo">AIQ</span>
+        <p class="footer-desc">Open AI courses for curious creators. Master video, music, books, games and more.</p>
+      </div>
+      <div>
+        <div class="footer-col-head">Courses</div>
+        <ul class="footer-links">
+          <li><a href="signup.html">AI Video</a></li>
+          <li><a href="signup.html">AI Writing</a></li>
+          <li><a href="signup.html">AI Music</a></li>
+          <li><a href="signup.html">AI Games</a></li>
+          <li><a href="signup.html">AI Websites</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-head">Company</div>
+        <ul class="footer-links">
+          <li><a href="about.html">About AIQ</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="community.html">Community</a></li>
+          <li><a href="about.html#careers">Careers</a></li>
+          <li><a href="about.html#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-head">Legal</div>
+        <ul class="footer-links">
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Use</a></li>
+          <li><a href="#">Cookie Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 AIQ. All rights reserved.</span>
+      <span>Made for curious creators</span>
+    </div>
+  </footer>
+
+</body>
+</html>

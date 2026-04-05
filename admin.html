@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard — AIQ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{--lumen:#ffffeb;--fathom:#034f46;--fathom-lt:#056b5e;--glow:#ffa946;--bg:#0a0a08;--surface:rgba(255,255,235,0.04);--border:rgba(255,255,235,0.09);--sidebar-w:240px}
+    body{font-family:'Figtree',Arial,sans-serif;-webkit-font-smoothing:antialiased;background:var(--bg);color:var(--lumen);min-height:100vh;display:flex}
+    body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;opacity:.02;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:128px}
+
+    /* SIDEBAR */
+    .sidebar{position:fixed;top:0;left:0;width:var(--sidebar-w);height:100vh;background:rgba(255,255,235,.03);border-right:1px solid rgba(255,255,235,.07);display:flex;flex-direction:column;z-index:40;overflow-y:auto}
+    .sidebar-logo{padding:1.5rem 1.5rem 1rem;display:flex;align-items:center;gap:.75rem;border-bottom:1px solid rgba(255,255,235,.06)}
+    .sidebar-logo-text{font-family:'EB Garamond',Georgia,serif;font-size:1.3rem;font-weight:500;color:var(--lumen);letter-spacing:-.01em}
+    .admin-tag{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--glow);background:rgba(255,169,70,.1);border:1px solid rgba(255,169,70,.25);border-radius:9999px;padding:.15rem .5rem;margin-left:.25rem}
+    .sidebar-nav{padding:1rem 0;flex:1}
+    .nav-section-label{padding:.5rem 1.5rem;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,235,.22);margin-top:.5rem}
+    .nav-item{display:flex;align-items:center;gap:.75rem;padding:.7rem 1.5rem;font-size:.85rem;font-weight:500;color:rgba(255,255,235,.5);cursor:pointer;transition:color .15s ease,background .15s ease;border:none;background:none;width:100%;text-align:left;text-decoration:none}
+    .nav-item:hover{color:var(--lumen);background:rgba(255,255,235,.04)}
+    .nav-item.active{color:var(--lumen);background:rgba(3,79,70,.2)}
+    .nav-item.active .nav-icon{color:#5ecfbb}
+    .nav-icon{width:18px;text-align:center;font-size:.95rem;flex-shrink:0}
+    .sidebar-admin{padding:1rem 1.25rem;border-top:1px solid rgba(255,255,235,.06)}
+    .admin-profile{display:flex;align-items:center;gap:.75rem}
+    .admin-avatar{width:34px;height:34px;border-radius:50%;overflow:hidden;flex-shrink:0;background:var(--fathom);display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:600;border:2px solid rgba(255,255,235,.1)}
+    .admin-avatar img{width:100%;height:100%;object-fit:cover}
+    .admin-name{font-size:.8rem;font-weight:600;color:rgba(255,255,235,.8);line-height:1.2}
+    .admin-role{font-size:.68rem;color:var(--glow);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+    .btn-signout-small{margin-top:.75rem;width:100%;font-size:.75rem;color:rgba(255,255,235,.3);background:none;border:1px solid rgba(255,255,235,.08);border-radius:.5rem;padding:.4rem;cursor:pointer;font-family:'Figtree',sans-serif;transition:color .15s ease,border-color .15s ease}
+    .btn-signout-small:hover{color:rgba(255,255,235,.6);border-color:rgba(255,255,235,.2)}
+
+    /* MAIN */
+    .main{margin-left:var(--sidebar-w);flex:1;padding:2.5rem;min-height:100vh;max-width:calc(100vw - var(--sidebar-w))}
+
+    /* HEADER */
+    .page-header{margin-bottom:2rem}
+    .page-eyebrow{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#5ecfbb;margin-bottom:.3rem}
+    .page-title{font-family:'EB Garamond',Georgia,serif;font-size:2rem;font-weight:500;color:var(--lumen);letter-spacing:-.02em}
+
+    /* PANELS (tabs) */
+    .panel{display:none}
+    .panel.active{display:block}
+
+    /* STAT CARDS */
+    .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem}
+    .stat-card{background:rgba(255,255,235,.04);border:1px solid rgba(255,255,235,.08);border-radius:1.25rem;padding:1.4rem 1.25rem}
+    .stat-num{font-family:'EB Garamond',Georgia,serif;font-size:2.2rem;font-weight:500;color:var(--lumen);line-height:1;margin-bottom:.25rem}
+    .stat-label{font-size:.75rem;color:rgba(255,255,235,.38);font-weight:500}
+    .stat-delta{font-size:.72rem;color:#5ecfbb;margin-top:.3rem;font-weight:600}
+
+    /* TABLE */
+    .table-card{background:rgba(255,255,235,.03);border:1px solid rgba(255,255,235,.08);border-radius:1.25rem;overflow:hidden;margin-bottom:1.5rem}
+    .table-header{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 1.5rem;border-bottom:1px solid rgba(255,255,235,.07)}
+    .table-title{font-size:.9rem;font-weight:600;color:rgba(255,255,235,.8)}
+    table{width:100%;border-collapse:collapse}
+    th{text-align:left;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:rgba(255,255,235,.28);padding:.75rem 1.5rem;border-bottom:1px solid rgba(255,255,235,.06)}
+    td{padding:.85rem 1.5rem;font-size:.85rem;color:rgba(255,255,235,.65);border-bottom:1px solid rgba(255,255,235,.04)}
+    tr:last-child td{border-bottom:none}
+    tr:hover td{background:rgba(255,255,235,.02)}
+    .td-name{color:rgba(255,255,235,.9);font-weight:600}
+    .badge-role{display:inline-block;font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:.2rem .6rem;border-radius:9999px}
+    .badge-super{background:rgba(255,169,70,.12);color:var(--glow);border:1px solid rgba(255,169,70,.25)}
+    .badge-sub{background:rgba(94,207,187,.1);color:#5ecfbb;border:1px solid rgba(94,207,187,.2)}
+    .badge-student{background:rgba(255,255,235,.06);color:rgba(255,255,235,.5);border:1px solid rgba(255,255,235,.1)}
+    .progress-mini{height:4px;background:rgba(255,255,235,.07);border-radius:9999px;overflow:hidden;width:120px;margin-top:.3rem}
+    .progress-mini-fill{height:100%;background:linear-gradient(90deg,var(--fathom),#5ecfbb);border-radius:9999px}
+
+    /* BUTTONS */
+    .btn{display:inline-flex;align-items:center;gap:.4rem;border:none;border-radius:.6rem;padding:.55rem 1.1rem;font-family:'Figtree',sans-serif;font-size:.82rem;font-weight:600;cursor:pointer;transition:background .15s ease,transform .15s ease}
+    .btn:hover{transform:translateY(-1px)}
+    .btn:active{transform:translateY(0)}
+    .btn-primary{background:var(--fathom);color:var(--lumen)}
+    .btn-primary:hover{background:var(--fathom-lt)}
+    .btn-danger{background:rgba(255,60,60,.12);color:rgba(255,100,100,.85);border:1px solid rgba(255,60,60,.2)}
+    .btn-danger:hover{background:rgba(255,60,60,.2)}
+    .btn-ghost-sm{background:rgba(255,255,235,.06);color:rgba(255,255,235,.6);border:1px solid rgba(255,255,235,.1)}
+    .btn-ghost-sm:hover{background:rgba(255,255,235,.1)}
+
+    /* COURSE MANAGER */
+    .course-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;margin-bottom:1.5rem}
+    .course-admin-card{background:rgba(255,255,235,.04);border:1px solid rgba(255,255,235,.08);border-radius:1.25rem;padding:1.25rem;cursor:pointer;transition:border-color .2s ease}
+    .course-admin-card:hover{border-color:rgba(255,255,235,.2)}
+    .course-admin-card.selected{border-color:rgba(3,79,70,.6);background:rgba(3,79,70,.08)}
+    .course-card-icon{font-size:1.5rem;margin-bottom:.5rem}
+    .course-card-title{font-size:.9rem;font-weight:600;color:rgba(255,255,235,.85);margin-bottom:.25rem}
+    .course-card-meta{font-size:.75rem;color:rgba(255,255,235,.35)}
+
+    /* LESSON EDITOR */
+    .lesson-editor{background:rgba(255,255,235,.03);border:1px solid rgba(255,255,235,.08);border-radius:1.25rem;padding:1.5rem}
+    .lesson-editor-title{font-size:.9rem;font-weight:600;color:rgba(255,255,235,.8);margin-bottom:1.25rem;display:flex;align-items:center;justify-content:space-between}
+    .lesson-row{display:flex;align-items:center;gap:1rem;padding:.75rem 0;border-bottom:1px solid rgba(255,255,235,.06)}
+    .lesson-row:last-of-type{border-bottom:none}
+    .lesson-drag{color:rgba(255,255,235,.2);cursor:grab;font-size:1rem}
+    .lesson-num-badge{width:26px;height:26px;border-radius:50%;border:1.5px solid rgba(255,255,235,.15);display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:600;color:rgba(255,255,235,.4);flex-shrink:0}
+    .lesson-details{flex:1;min-width:0}
+    .lesson-edit-title{background:transparent;border:none;outline:none;font-family:'Figtree',sans-serif;font-size:.88rem;font-weight:600;color:rgba(255,255,235,.85);width:100%;padding:.2rem 0}
+    .lesson-edit-title:focus{color:var(--lumen);border-bottom:1px solid rgba(255,255,235,.2)}
+    .lesson-edit-dur{background:transparent;border:none;outline:none;font-family:'Figtree',sans-serif;font-size:.75rem;color:rgba(255,255,235,.3);width:80px}
+    .lesson-edit-dur:focus{color:rgba(255,255,235,.6)}
+    .lesson-video-wrap{display:flex;align-items:center;gap:.5rem;margin-top:.3rem}
+    .lesson-video-link{flex:1;background:rgba(255,255,235,.05);border:1px solid rgba(255,255,235,.1);border-radius:.4rem;padding:.25rem .6rem;font-family:'Figtree',sans-serif;font-size:.72rem;color:rgba(255,255,235,.5);outline:none}
+    .lesson-video-link:focus{border-color:rgba(255,255,235,.25);color:rgba(255,255,235,.8)}
+    .lesson-video-link::placeholder{color:rgba(255,255,235,.2)}
+
+    /* ADD LESSON FORM */
+    .add-lesson-form{display:flex;gap:.75rem;margin-top:1rem;flex-wrap:wrap}
+    .add-input{flex:1;min-width:160px;background:rgba(255,255,235,.05);border:1px solid rgba(255,255,235,.1);border-radius:.6rem;padding:.6rem .85rem;font-family:'Figtree',sans-serif;font-size:.85rem;color:var(--lumen);outline:none}
+    .add-input:focus{border-color:rgba(255,255,235,.25)}
+    .add-input::placeholder{color:rgba(255,255,235,.25)}
+
+    /* ADMINS */
+    .add-admin-form{display:flex;gap:.75rem;margin-bottom:1.5rem;flex-wrap:wrap}
+
+    /* MODAL */
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:100;display:none;align-items:center;justify-content:center;padding:1.5rem}
+    .modal-overlay.open{display:flex}
+    .modal{background:#111110;border:1px solid rgba(255,255,235,.12);border-radius:1.5rem;padding:2rem;width:100%;max-width:480px;box-shadow:0 40px 80px rgba(0,0,0,.6)}
+    .modal-title{font-family:'EB Garamond',Georgia,serif;font-size:1.4rem;font-weight:500;color:var(--lumen);margin-bottom:.5rem}
+    .modal-sub{font-size:.85rem;color:rgba(255,255,235,.4);line-height:1.6;margin-bottom:1.5rem}
+    .modal-input{width:100%;background:rgba(255,255,235,.05);border:1px solid rgba(255,255,235,.12);border-radius:.75rem;padding:.8rem 1rem;font-family:'Figtree',sans-serif;font-size:.9rem;color:var(--lumen);outline:none;margin-bottom:.75rem}
+    .modal-input:focus{border-color:rgba(255,255,235,.25)}
+    .modal-input::placeholder{color:rgba(255,255,235,.25)}
+    .modal-actions{display:flex;justify-content:flex-end;gap:.75rem;margin-top:1rem}
+
+    /* EMPTY STATE */
+    .empty{text-align:center;padding:3rem 1.5rem;color:rgba(255,255,235,.3);font-size:.88rem}
+
+    /* NOTICE */
+    .notice{background:rgba(3,79,70,.1);border:1px solid rgba(3,79,70,.3);border-radius:.75rem;padding:.75rem 1rem;font-size:.8rem;color:rgba(255,255,235,.55);line-height:1.55;margin-bottom:1.5rem}
+    .notice strong{color:#5ecfbb}
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <span class="sidebar-logo-text">AIQ</span>
+      <span class="admin-tag">Admin</span>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Overview</div>
+      <button class="nav-item active" onclick="switchPanel('dashboard', this)">
+        <span class="nav-icon">📊</span> Dashboard
+      </button>
+      <div class="nav-section-label">Management</div>
+      <button class="nav-item" onclick="switchPanel('courses', this)">
+        <span class="nav-icon">🎓</span> Course Manager
+      </button>
+      <button class="nav-item" onclick="switchPanel('students', this)">
+        <span class="nav-icon">👥</span> Students
+      </button>
+      <div class="nav-section-label" id="admin-nav-section" style="display:none">Administration</div>
+      <button class="nav-item" id="admins-nav-item" onclick="switchPanel('admins', this)" style="display:none">
+        <span class="nav-icon">🔐</span> Admin Accounts
+      </button>
+      <div class="nav-section-label">Site</div>
+      <a href="index.html" class="nav-item" target="_blank">
+        <span class="nav-icon">🌐</span> View Site
+      </a>
+    </nav>
+    <div class="sidebar-admin">
+      <div class="admin-profile">
+        <div class="admin-avatar" id="sidebar-avatar"></div>
+        <div>
+          <div class="admin-name" id="sidebar-name">Loading...</div>
+          <div class="admin-role" id="sidebar-role">Admin</div>
+        </div>
+      </div>
+      <button class="btn-signout-small" onclick="adminSignOut()">Sign out</button>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+
+    <!-- DASHBOARD PANEL -->
+    <div class="panel active" id="panel-dashboard">
+      <div class="page-header">
+        <div class="page-eyebrow">Overview</div>
+        <div class="page-title">Dashboard</div>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-num" id="stat-total-students">0</div>
+          <div class="stat-label">Total students</div>
+          <div class="stat-delta">Registered accounts</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="stat-total-enrollments">0</div>
+          <div class="stat-label">Course enrollments</div>
+          <div class="stat-delta">Across all courses</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="stat-total-lessons-done">0</div>
+          <div class="stat-label">Lessons completed</div>
+          <div class="stat-delta">By all students</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" id="stat-total-admins">0</div>
+          <div class="stat-label">Admin accounts</div>
+          <div class="stat-delta">Super + sub-admins</div>
+        </div>
+      </div>
+
+      <div class="table-card">
+        <div class="table-header">
+          <span class="table-title">Course Overview</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Course</th>
+              <th>Lessons</th>
+              <th>Enrolled</th>
+              <th>Avg. Progress</th>
+            </tr>
+          </thead>
+          <tbody id="course-overview-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- COURSE MANAGER PANEL -->
+    <div class="panel" id="panel-courses">
+      <div class="page-header">
+        <div class="page-eyebrow">Management</div>
+        <div class="page-title">Course Manager</div>
+      </div>
+
+      <div class="notice"><strong>Editing lessons:</strong> Changes are saved to your browser's local storage. When you connect a backend database, these edits will persist for all users.</div>
+
+      <div class="course-list" id="course-card-list"></div>
+
+      <div class="lesson-editor" id="lesson-editor" style="display:none">
+        <div class="lesson-editor-title">
+          <span id="lesson-editor-label">Select a course to edit lessons</span>
+          <div style="display:flex;gap:.5rem">
+            <button class="btn btn-ghost-sm" onclick="resetCourse()" title="Reset to default lessons">Reset</button>
+          </div>
+        </div>
+        <div id="lesson-rows"></div>
+        <div class="add-lesson-form">
+          <input class="add-input" id="new-lesson-title" placeholder="New lesson title..." />
+          <input class="add-input" id="new-lesson-dur" placeholder="Duration (e.g. 15 min)" style="max-width:140px" />
+          <input class="add-input" id="new-lesson-video" placeholder="Video URL (optional)" style="max-width:220px" />
+          <button class="btn btn-primary" onclick="addLesson()">+ Add Lesson</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- STUDENTS PANEL -->
+    <div class="panel" id="panel-students">
+      <div class="page-header">
+        <div class="page-eyebrow">Management</div>
+        <div class="page-title">Students</div>
+      </div>
+
+      <div class="notice"><strong>Note:</strong> Student data is stored in each user's browser. A shared backend will allow full student management across all users.</div>
+
+      <div class="table-card">
+        <div class="table-header">
+          <span class="table-title">Registered Students</span>
+          <button class="btn btn-ghost-sm" onclick="loadStudents()">Refresh</button>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Student</th>
+              <th>Email</th>
+              <th>Provider</th>
+              <th>Joined</th>
+              <th>Courses</th>
+              <th>Lessons Done</th>
+            </tr>
+          </thead>
+          <tbody id="students-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ADMINS PANEL (super admin only) -->
+    <div class="panel" id="panel-admins">
+      <div class="page-header">
+        <div class="page-eyebrow">Administration</div>
+        <div class="page-title">Admin Accounts</div>
+      </div>
+
+      <div class="notice"><strong>Super Admin:</strong> Michael Neftali (michael.neftali@gmail.com) has permanent super admin access and cannot be removed.</div>
+
+      <div class="add-admin-form">
+        <input class="add-input" id="new-admin-email" placeholder="Sub-admin email address..." style="max-width:300px" />
+        <input class="add-input" id="new-admin-name" placeholder="Display name..." style="max-width:200px" />
+        <button class="btn btn-primary" onclick="addSubAdmin()">+ Add Sub-Admin</button>
+      </div>
+
+      <div class="table-card">
+        <div class="table-header">
+          <span class="table-title">All Administrators</span>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Added</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="admins-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- CONFIRM MODAL -->
+  <div class="modal-overlay" id="confirm-modal">
+    <div class="modal">
+      <div class="modal-title" id="modal-title">Are you sure?</div>
+      <div class="modal-sub" id="modal-sub">This action cannot be undone.</div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost-sm" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-danger" id="modal-confirm-btn">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const SUPER_ADMIN_EMAIL = 'michael.neftali@gmail.com';
+    const SUPER_ADMIN_NAME  = 'Michael Neftali';
+
+    const DEFAULT_COURSES = {
+      video:   { title: 'Create Videos Using AI',          icon: '🎬', lessons: [
+        { title: 'Introduction to AI Video', duration: '8 min', video: '' },
+        { title: 'Prompting for Cinematic Results', duration: '14 min', video: '' },
+        { title: 'Getting Started with Sora', duration: '22 min', video: '' },
+        { title: 'Runway Gen-3 Masterclass', duration: '25 min', video: '' },
+        { title: 'Pika Studio Essentials', duration: '18 min', video: '' },
+        { title: 'Building a Scene from Scratch', duration: '20 min', video: '' },
+        { title: 'Editing and Polishing AI Footage', duration: '16 min', video: '' },
+        { title: 'Publishing and Distributing Your Video', duration: '12 min', video: '' },
+      ]},
+      books:   { title: 'Write Books Using AI',            icon: '📖', lessons: [
+        { title: 'Introduction to AI Writing', duration: '10 min', video: '' },
+        { title: 'Brainstorming and Ideation with AI', duration: '15 min', video: '' },
+        { title: 'Outlining Your Book', duration: '18 min', video: '' },
+        { title: 'Chapter Drafting Techniques', duration: '22 min', video: '' },
+        { title: 'Developing Characters with AI', duration: '20 min', video: '' },
+        { title: 'Dialogue, Voice and Style', duration: '18 min', video: '' },
+        { title: 'Self-Editing with AI Assistance', duration: '16 min', video: '' },
+        { title: 'Formatting for eBook and Print', duration: '14 min', video: '' },
+        { title: 'Designing Your Book Cover', duration: '12 min', video: '' },
+        { title: 'Publishing on Amazon KDP', duration: '15 min', video: '' },
+      ]},
+      music:   { title: 'Create Songs Using AI',           icon: '🎵', lessons: [
+        { title: 'Introduction to AI Music Creation', duration: '10 min', video: '' },
+        { title: 'Writing Songs with Suno', duration: '22 min', video: '' },
+        { title: 'Advanced Tracks in Udio', duration: '20 min', video: '' },
+        { title: 'Custom Vocals with ElevenLabs', duration: '18 min', video: '' },
+        { title: 'Mixing and Mastering with AI', duration: '16 min', video: '' },
+        { title: 'Creating Playlists and Collections', duration: '12 min', video: '' },
+        { title: 'Releasing Your Music Independently', duration: '14 min', video: '' },
+      ]},
+      motion:  { title: 'Create Motion Graphics Using AI', icon: '✨', lessons: [
+        { title: 'Introduction to AI Motion Graphics', duration: '10 min', video: '' },
+        { title: 'HeyGen for Animated Presenters', duration: '20 min', video: '' },
+        { title: 'Adobe Firefly Generative Effects', duration: '18 min', video: '' },
+        { title: 'Animating with Text Prompts', duration: '22 min', video: '' },
+        { title: 'Logo and Brand Animation', duration: '20 min', video: '' },
+        { title: 'Title Sequences and Lower Thirds', duration: '18 min', video: '' },
+        { title: 'Visual Effects and Transitions', duration: '16 min', video: '' },
+        { title: 'Colour Grading AI Footage', duration: '14 min', video: '' },
+        { title: 'Exporting for Social and Web', duration: '12 min', video: '' },
+      ]},
+      games:   { title: 'Create Games Using AI',           icon: '🎮', lessons: [
+        { title: 'Introduction to AI Game Development', duration: '12 min', video: '' },
+        { title: 'Game Design and Concept with AI', duration: '18 min', video: '' },
+        { title: 'Creating Game Art in Scenario', duration: '20 min', video: '' },
+        { title: 'Planning Your Game with Ludo.ai', duration: '16 min', video: '' },
+        { title: 'Using Claude to Write Game Code', duration: '25 min', video: '' },
+        { title: 'Building Core Game Mechanics', duration: '22 min', video: '' },
+        { title: 'Level Design and World Building', duration: '20 min', video: '' },
+        { title: 'Sound Design with AI', duration: '14 min', video: '' },
+        { title: 'UI and HUD Design', duration: '16 min', video: '' },
+        { title: 'Testing and Bug Fixing', duration: '14 min', video: '' },
+        { title: 'Submitting to App Stores and Itch.io', duration: '18 min', video: '' },
+        { title: 'Marketing Your Game with AI', duration: '15 min', video: '' },
+      ]},
+      animate: { title: 'Animate Images Using AI',         icon: '🖼️', lessons: [
+        { title: 'Introduction to Image Animation', duration: '10 min', video: '' },
+        { title: 'Stable Diffusion Animation Basics', duration: '20 min', video: '' },
+        { title: 'Midjourney to Motion Pipeline', duration: '18 min', video: '' },
+        { title: 'Using Kling for Realistic Motion', duration: '22 min', video: '' },
+        { title: 'Adding Effects and Overlays', duration: '16 min', video: '' },
+        { title: 'Lip Sync and Portrait Animation', duration: '18 min', video: '' },
+        { title: 'Creating Seamless Loops', duration: '14 min', video: '' },
+        { title: 'Exporting and Sharing Your Work', duration: '12 min', video: '' },
+      ]},
+      web:     { title: 'Create Websites Using AI',        icon: '🌐', lessons: [
+        { title: 'Introduction to AI Web Design', duration: '10 min', video: '' },
+        { title: 'Building with v0 by Vercel', duration: '20 min', video: '' },
+        { title: 'Rapid Prototyping with Bolt', duration: '18 min', video: '' },
+        { title: 'Setting Up Cursor for Web Dev', duration: '16 min', video: '' },
+        { title: 'Framer Masterclass', duration: '22 min', video: '' },
+        { title: 'Designing Layouts and Components', duration: '20 min', video: '' },
+        { title: 'Adding Interactivity and Animations', duration: '18 min', video: '' },
+        { title: 'SEO and Performance with AI', duration: '14 min', video: '' },
+        { title: 'Deploying to a Live Domain', duration: '16 min', video: '' },
+        { title: 'Maintaining and Updating Your Site', duration: '12 min', video: '' },
+      ]},
+    };
+
+    // ─── AUTH ─────────────────────────────────────────────
+    let session = null;
+    try { session = JSON.parse(localStorage.getItem('aiq_admin_session')); } catch(e) {}
+    if (!session || !session.email) { window.location.href = 'admin-login.html'; }
+
+    const isSuperAdmin = session.email.toLowerCase() === SUPER_ADMIN_EMAIL.toLowerCase();
+
+    // Show super-admin-only items
+    if (isSuperAdmin) {
+      document.getElementById('admin-nav-section').style.display = 'block';
+      document.getElementById('admins-nav-item').style.display = 'flex';
+    }
+
+    // Sidebar profile
+    const avatarEl = document.getElementById('sidebar-avatar');
+    if (session.picture) {
+      avatarEl.innerHTML = '<img src="' + session.picture + '" alt="">';
+    } else {
+      avatarEl.textContent = (session.name || 'A')[0].toUpperCase();
+    }
+    document.getElementById('sidebar-name').textContent = session.name || session.email;
+    document.getElementById('sidebar-role').textContent = isSuperAdmin ? 'Super Admin' : 'Sub-Admin';
+
+    // ─── HELPERS ──────────────────────────────────────────
+    function getAdmins() {
+      try { return JSON.parse(localStorage.getItem('aiq_admins')) || []; } catch(e) { return []; }
+    }
+    function saveAdmins(arr) { localStorage.setItem('aiq_admins', JSON.stringify(arr)); }
+
+    function getCourseData(id) {
+      try {
+        const custom = JSON.parse(localStorage.getItem('aiq_course_' + id));
+        return custom || JSON.parse(JSON.stringify(DEFAULT_COURSES[id]));
+      } catch(e) {
+        return JSON.parse(JSON.stringify(DEFAULT_COURSES[id]));
+      }
+    }
+    function saveCourseData(id, data) {
+      localStorage.setItem('aiq_course_' + id, JSON.stringify(data));
+    }
+
+    function getAllStudents() {
+      // In a real app this comes from a database.
+      // Here we read the local user and simulate a roster.
+      const students = [];
+      try {
+        const u = JSON.parse(localStorage.getItem('aiq_user'));
+        if (u && u.email) students.push(u);
+      } catch(e) {}
+      return students;
+    }
+
+    function getStudentProgress(student) {
+      let total = 0, done = 0;
+      (student.enrolled || []).forEach(id => {
+        const meta = DEFAULT_COURSES[id];
+        if (!meta) return;
+        try {
+          const prog = JSON.parse(localStorage.getItem('aiq_progress_' + id)) || {};
+          total += meta.lessons.length;
+          done += Object.values(prog).filter(Boolean).length;
+        } catch(e) {}
+      });
+      return { total, done };
+    }
+
+    // ─── PANEL SWITCHING ──────────────────────────────────
+    let currentPanel = 'dashboard';
+    function switchPanel(id, btn) {
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      document.getElementById('panel-' + id).classList.add('active');
+      if (btn) btn.classList.add('active');
+      currentPanel = id;
+      if (id === 'dashboard') renderDashboard();
+      if (id === 'courses') renderCourseManager();
+      if (id === 'students') loadStudents();
+      if (id === 'admins') renderAdmins();
+    }
+
+    // ─── DASHBOARD ────────────────────────────────────────
+    function renderDashboard() {
+      const students = getAllStudents();
+      let totalEnrollments = 0, totalDone = 0;
+      students.forEach(s => {
+        totalEnrollments += (s.enrolled || []).length;
+        totalDone += getStudentProgress(s).done;
+      });
+      const allAdmins = getAdmins();
+      document.getElementById('stat-total-students').textContent = students.length;
+      document.getElementById('stat-total-enrollments').textContent = totalEnrollments;
+      document.getElementById('stat-total-lessons-done').textContent = totalDone;
+      document.getElementById('stat-total-admins').textContent = allAdmins.length + 1; // +1 for super
+
+      const tbody = document.getElementById('course-overview-tbody');
+      tbody.innerHTML = '';
+      Object.entries(DEFAULT_COURSES).forEach(([id, course]) => {
+        const cd = getCourseData(id);
+        let enrolled = 0, totalP = 0, doneP = 0;
+        students.forEach(s => {
+          if ((s.enrolled || []).includes(id)) {
+            enrolled++;
+            try {
+              const prog = JSON.parse(localStorage.getItem('aiq_progress_' + id)) || {};
+              totalP += cd.lessons.length;
+              doneP += Object.values(prog).filter(Boolean).length;
+            } catch(e) {}
+          }
+        });
+        const avgPct = totalP > 0 ? Math.round((doneP / totalP) * 100) : 0;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="td-name">${course.icon} ${course.title}</td>
+          <td>${cd.lessons.length}</td>
+          <td>${enrolled}</td>
+          <td>
+            <div class="progress-mini"><div class="progress-mini-fill" style="width:${avgPct}%"></div></div>
+            <div style="font-size:.7rem;color:rgba(255,255,235,.3);margin-top:.25rem">${avgPct}%</div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // ─── COURSE MANAGER ───────────────────────────────────
+    let selectedCourseId = null;
+
+    function renderCourseManager() {
+      const list = document.getElementById('course-card-list');
+      list.innerHTML = '';
+      Object.entries(DEFAULT_COURSES).forEach(([id, course]) => {
+        const cd = getCourseData(id);
+        const card = document.createElement('div');
+        card.className = 'course-admin-card' + (id === selectedCourseId ? ' selected' : '');
+        card.onclick = () => selectCourse(id);
+        card.innerHTML = `
+          <div class="course-card-icon">${course.icon}</div>
+          <div class="course-card-title">${course.title}</div>
+          <div class="course-card-meta">${cd.lessons.length} lessons</div>
+        `;
+        list.appendChild(card);
+      });
+      if (selectedCourseId) renderLessonEditor(selectedCourseId);
+    }
+
+    function selectCourse(id) {
+      selectedCourseId = id;
+      document.querySelectorAll('.course-admin-card').forEach(c => c.classList.remove('selected'));
+      event.currentTarget.classList.add('selected');
+      renderLessonEditor(id);
+    }
+
+    function renderLessonEditor(id) {
+      const cd = getCourseData(id);
+      const editor = document.getElementById('lesson-editor');
+      editor.style.display = 'block';
+      document.getElementById('lesson-editor-label').textContent = DEFAULT_COURSES[id].icon + ' ' + DEFAULT_COURSES[id].title + ' — Lessons';
+
+      const rows = document.getElementById('lesson-rows');
+      rows.innerHTML = '';
+      cd.lessons.forEach((l, i) => {
+        const row = document.createElement('div');
+        row.className = 'lesson-row';
+        row.innerHTML = `
+          <span class="lesson-drag">⠿</span>
+          <div class="lesson-num-badge">${i + 1}</div>
+          <div class="lesson-details">
+            <input class="lesson-edit-title" value="${escHtml(l.title)}" onchange="updateLesson(${i}, 'title', this.value)" placeholder="Lesson title" />
+            <div class="lesson-video-wrap">
+              <span style="font-size:.68rem;color:rgba(255,255,235,.2);white-space:nowrap">Video URL:</span>
+              <input class="lesson-video-link" value="${escHtml(l.video || '')}" onchange="updateLesson(${i}, 'video', this.value)" placeholder="Paste YouTube or video link..." />
+              <input class="lesson-edit-dur" value="${escHtml(l.duration)}" onchange="updateLesson(${i}, 'duration', this.value)" placeholder="15 min" />
+            </div>
+          </div>
+          <button class="btn btn-danger" style="padding:.4rem .7rem;font-size:.75rem" onclick="deleteLesson(${i})">Delete</button>
+        `;
+        rows.appendChild(row);
+      });
+    }
+
+    function updateLesson(index, field, value) {
+      const cd = getCourseData(selectedCourseId);
+      cd.lessons[index][field] = value;
+      saveCourseData(selectedCourseId, cd);
+    }
+
+    function deleteLesson(index) {
+      openModal(
+        'Delete this lesson?',
+        'This will remove the lesson from the course. Students who completed it will keep their progress record.',
+        () => {
+          const cd = getCourseData(selectedCourseId);
+          cd.lessons.splice(index, 1);
+          saveCourseData(selectedCourseId, cd);
+          renderLessonEditor(selectedCourseId);
+          renderCourseManager();
+        }
+      );
+    }
+
+    function addLesson() {
+      const title = document.getElementById('new-lesson-title').value.trim();
+      const dur   = document.getElementById('new-lesson-dur').value.trim() || '10 min';
+      const video = document.getElementById('new-lesson-video').value.trim();
+      if (!title) { document.getElementById('new-lesson-title').focus(); return; }
+      const cd = getCourseData(selectedCourseId);
+      cd.lessons.push({ title, duration: dur, video });
+      saveCourseData(selectedCourseId, cd);
+      document.getElementById('new-lesson-title').value = '';
+      document.getElementById('new-lesson-dur').value = '';
+      document.getElementById('new-lesson-video').value = '';
+      renderLessonEditor(selectedCourseId);
+      renderCourseManager();
+    }
+
+    function resetCourse() {
+      openModal(
+        'Reset course to defaults?',
+        'This will discard all custom lesson edits and restore the original lesson list.',
+        () => {
+          localStorage.removeItem('aiq_course_' + selectedCourseId);
+          renderLessonEditor(selectedCourseId);
+          renderCourseManager();
+        }
+      );
+    }
+
+    // ─── STUDENTS ─────────────────────────────────────────
+    function loadStudents() {
+      const students = getAllStudents();
+      const tbody = document.getElementById('students-tbody');
+      tbody.innerHTML = '';
+      if (students.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" class="empty">No registered students yet.</td></tr>';
+        return;
+      }
+      students.forEach(s => {
+        const prog = getStudentProgress(s);
+        const joined = s.joined ? new Date(s.joined).toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' }) : 'Unknown';
+        const providerMap = { google:'Google', facebook:'Facebook', email:'Email' };
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="td-name">${escHtml(s.name || 'Unknown')}</td>
+          <td>${escHtml(s.email || 'N/A')}</td>
+          <td>${providerMap[s.provider] || s.provider || 'Email'}</td>
+          <td>${joined}</td>
+          <td>${(s.enrolled || []).length}</td>
+          <td>${prog.done} / ${prog.total}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // ─── ADMINS ───────────────────────────────────────────
+    function renderAdmins() {
+      const admins = getAdmins();
+      const tbody = document.getElementById('admins-tbody');
+      tbody.innerHTML = '';
+
+      // Super admin row (always first, cannot be deleted)
+      const superRow = document.createElement('tr');
+      superRow.innerHTML = `
+        <td class="td-name">${SUPER_ADMIN_NAME}</td>
+        <td>${SUPER_ADMIN_EMAIL}</td>
+        <td><span class="badge-role badge-super">Super Admin</span></td>
+        <td>Permanent</td>
+        <td><span style="font-size:.75rem;color:rgba(255,255,235,.2)">Protected</span></td>
+      `;
+      tbody.appendChild(superRow);
+
+      if (admins.length === 0) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = '<td colspan="5" style="color:rgba(255,255,235,.25);font-size:.82rem;padding:1.25rem 1.5rem">No sub-admins added yet.</td>';
+        tbody.appendChild(tr);
+        return;
+      }
+
+      admins.forEach((a, i) => {
+        const added = a.added ? new Date(a.added).toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' }) : 'Unknown';
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="td-name">${escHtml(a.name || 'Sub-Admin')}</td>
+          <td>${escHtml(a.email)}</td>
+          <td><span class="badge-role badge-sub">Sub-Admin</span></td>
+          <td>${added}</td>
+          <td><button class="btn btn-danger" style="padding:.35rem .7rem;font-size:.75rem" onclick="removeSubAdmin(${i})">Remove</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function addSubAdmin() {
+      const email = document.getElementById('new-admin-email').value.trim().toLowerCase();
+      const name  = document.getElementById('new-admin-name').value.trim();
+      if (!email || !email.includes('@')) { document.getElementById('new-admin-email').focus(); return; }
+      if (email === SUPER_ADMIN_EMAIL.toLowerCase()) { alert('This is the super admin account and cannot be added as a sub-admin.'); return; }
+      const admins = getAdmins();
+      if (admins.some(a => a.email.toLowerCase() === email)) { alert('This email is already a sub-admin.'); return; }
+      admins.push({ email, name: name || email, added: new Date().toISOString() });
+      saveAdmins(admins);
+      document.getElementById('new-admin-email').value = '';
+      document.getElementById('new-admin-name').value = '';
+      renderAdmins();
+      renderDashboard();
+    }
+
+    function removeSubAdmin(index) {
+      openModal(
+        'Remove this sub-admin?',
+        'They will lose access to the admin dashboard immediately.',
+        () => {
+          const admins = getAdmins();
+          admins.splice(index, 1);
+          saveAdmins(admins);
+          renderAdmins();
+          renderDashboard();
+        }
+      );
+    }
+
+    // ─── MODAL ────────────────────────────────────────────
+    let modalCallback = null;
+    function openModal(title, sub, onConfirm) {
+      document.getElementById('modal-title').textContent = title;
+      document.getElementById('modal-sub').textContent = sub;
+      modalCallback = onConfirm;
+      document.getElementById('confirm-modal').classList.add('open');
+    }
+    function closeModal() { document.getElementById('confirm-modal').classList.remove('open'); modalCallback = null; }
+    document.getElementById('modal-confirm-btn').onclick = () => { if (modalCallback) modalCallback(); closeModal(); };
+    document.getElementById('confirm-modal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
+
+    // ─── SIGN OUT ─────────────────────────────────────────
+    function adminSignOut() {
+      localStorage.removeItem('aiq_admin_session');
+      window.location.href = 'admin-login.html';
+    }
+
+    // ─── UTILS ────────────────────────────────────────────
+    function escHtml(str) {
+      return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    // ─── INIT ─────────────────────────────────────────────
+    renderDashboard();
+    renderCourseManager();
+  </script>
+</body>
+</html>

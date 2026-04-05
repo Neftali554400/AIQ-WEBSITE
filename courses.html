@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Courses — AIQ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{--lumen:#ffffeb;--fathom:#034f46;--fathom-lt:#056b5e;--glow:#ffa946;--dawn:#f0d7ff;--bg:#0a0a08;--surface:rgba(255,255,235,0.04);--border:rgba(255,255,235,0.09)}
+    body{font-family:'Figtree',Arial,sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;background:var(--bg);color:var(--lumen);min-height:100vh}
+    body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:128px}
+    @keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+    @keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+    /* NAV */
+    nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:1.1rem 2.5rem;background:rgba(10,10,8,0.82);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,235,0.06)}
+    .nav-logo{font-family:'EB Garamond',Georgia,serif;font-size:1.45rem;font-weight:500;color:var(--lumen);text-decoration:none;letter-spacing:-0.01em}
+    .nav-links{display:flex;align-items:center;gap:2rem;list-style:none}
+    .nav-links a{font-size:.875rem;font-weight:500;color:rgba(255,255,235,0.55);text-decoration:none;transition:color .15s ease}
+    .nav-links a:hover,.nav-links a.active{color:var(--lumen)}
+    .btn-nav{display:inline-flex;align-items:center;gap:.4rem;background:var(--fathom);color:var(--lumen);border:none;border-radius:9999px;padding:.55rem 1.25rem;font-family:'Figtree',sans-serif;font-size:.85rem;font-weight:600;text-decoration:none;cursor:pointer;transition:background .2s ease,transform .15s ease}
+    .btn-nav:hover{background:var(--fathom-lt);transform:translateY(-1px)}
+    .btn-nav:active{transform:translateY(0)}
+    .btn-nav:focus-visible{outline:2px solid var(--glow);outline-offset:3px}
+
+    /* PAGE HERO */
+    .page-hero{padding:10rem 2rem 5rem;text-align:center;position:relative;overflow:hidden}
+    .page-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 65% 55% at 50% -10%,rgba(3,79,70,.4) 0%,transparent 65%);pointer-events:none}
+    .hero-inner{position:relative;z-index:1;max-width:780px;margin:0 auto;animation:fadeInUp .8s cubic-bezier(.16,1,.3,1) both}
+    .tag-chip{display:inline-flex;align-items:center;gap:.4rem;background:rgba(3,79,70,.22);border:1px solid rgba(3,79,70,.45);border-radius:9999px;padding:.3rem .85rem;font-size:.75rem;font-weight:600;color:#5ecfbb;letter-spacing:.03em;margin-bottom:1.25rem}
+    .tag-dot{width:5px;height:5px;border-radius:50%;background:#5ecfbb;animation:pulse-dot 2s ease-in-out infinite}
+    .page-h1{font-family:'EB Garamond',Georgia,serif;font-size:clamp(3rem,7vw,5.5rem);font-weight:500;line-height:1.05;letter-spacing:-.025em;color:var(--lumen);margin-bottom:1.25rem}
+    .page-h1 em{font-style:italic}
+    .page-sub{font-size:1.05rem;color:rgba(255,255,235,.52);line-height:1.75;max-width:540px;margin:0 auto 2.5rem}
+
+    /* SOCIAL PROOF STRIP */
+    .proof-strip{background:rgba(255,255,235,.025);border-top:1px solid rgba(255,255,235,.06);border-bottom:1px solid rgba(255,255,235,.06);padding:1.5rem 0;overflow:hidden}
+    .proof-track{display:flex;gap:3rem;width:max-content;animation:marquee 30s linear infinite}
+    .proof-item{display:flex;align-items:center;gap:.75rem;white-space:nowrap;flex-shrink:0}
+    .proof-stars{color:var(--glow);font-size:.85rem;letter-spacing:.05em}
+    .proof-text{font-size:.82rem;color:rgba(255,255,235,.5)}
+    .proof-text strong{color:rgba(255,255,235,.8);font-weight:600}
+    .proof-sep{width:4px;height:4px;border-radius:50%;background:rgba(255,255,235,.15);flex-shrink:0}
+
+    /* STAT ROW */
+    .stat-row{display:flex;align-items:center;justify-content:center;gap:3rem;flex-wrap:wrap;padding:3.5rem 2rem;border-bottom:1px solid rgba(255,255,235,.06)}
+    .stat-item{text-align:center}
+    .stat-num{font-family:'EB Garamond',Georgia,serif;font-size:2.6rem;font-weight:500;color:var(--lumen);line-height:1;margin-bottom:.2rem}
+    .stat-lbl{font-size:.78rem;color:rgba(255,255,235,.38);font-weight:500}
+    .stat-div{width:1px;height:44px;background:rgba(255,255,235,.1)}
+
+    /* COURSES GRID */
+    .courses-section{max-width:1100px;margin:0 auto;padding:4rem 2rem 6rem}
+    .section-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:2.5rem;flex-wrap:wrap;gap:1rem}
+    .section-eyebrow{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:#5ecfbb;margin-bottom:.4rem}
+    .section-h2{font-family:'EB Garamond',Georgia,serif;font-size:2rem;font-weight:500;color:var(--lumen);letter-spacing:-.02em}
+    .filter-pills{display:flex;gap:.5rem;flex-wrap:wrap}
+    .filter-pill{background:rgba(255,255,235,.05);border:1px solid rgba(255,255,235,.1);border-radius:9999px;padding:.3rem .85rem;font-size:.75rem;color:rgba(255,255,235,.5);cursor:pointer;transition:background .15s ease,border-color .15s ease,color .15s ease;font-family:'Figtree',sans-serif}
+    .filter-pill:hover,.filter-pill.active{background:rgba(3,79,70,.2);border-color:rgba(3,79,70,.5);color:#5ecfbb}
+
+    .cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
+
+    /* CARD */
+    .course-card{position:relative;border-radius:1.5rem;overflow:hidden;background:var(--surface);border:1px solid var(--border);text-decoration:none;display:flex;flex-direction:column;transition:border-color .25s ease,transform .2s ease,box-shadow .25s ease}
+    .course-card:hover{border-color:rgba(255,255,235,.2);transform:translateY(-4px);box-shadow:0 20px 60px rgba(0,0,0,.4)}
+    .course-card:focus-visible{outline:2px solid var(--glow);outline-offset:3px}
+    .course-card:active{transform:translateY(-2px)}
+    .card-coming-soon{opacity:.7;pointer-events:none}
+    .card-visual{position:relative;height:160px;overflow:hidden}
+    .card-visual-bg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+    .card-sphere{position:absolute;width:120px;height:120px;border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);filter:blur(30px);opacity:.7}
+    .card-icon-wrap{position:relative;z-index:1}
+    .card-icon-ring{width:60px;height:60px;border-radius:50%;border:1.5px solid rgba(255,255,235,.12);display:flex;align-items:center;justify-content:center;font-size:1.5rem;background:rgba(255,255,235,.06)}
+    .card-visual-fade{position:absolute;bottom:0;left:0;right:0;height:60px;background:linear-gradient(to bottom,transparent,rgba(10,10,8,.9))}
+    .card-badge{position:absolute;top:.85rem;right:.85rem;background:rgba(255,169,70,.15);border:1px solid rgba(255,169,70,.3);border-radius:9999px;padding:.2rem .65rem;font-size:.65rem;font-weight:700;color:var(--glow);text-transform:uppercase;letter-spacing:.05em}
+    .card-body{padding:1.35rem 1.5rem 1.5rem;flex:1;display:flex;flex-direction:column}
+    .card-category{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,235,.32);margin-bottom:.4rem}
+    .card-title{font-family:'EB Garamond',Georgia,serif;font-size:1.2rem;font-weight:500;color:var(--lumen);line-height:1.2;margin-bottom:.6rem;flex:1}
+    .card-desc{font-size:.8rem;color:rgba(255,255,235,.42);line-height:1.65;margin-bottom:1rem}
+    .card-footer-row{display:flex;align-items:center;justify-content:space-between;margin-top:auto}
+    .card-meta{display:flex;align-items:center;gap:.5rem;font-size:.75rem;color:rgba(255,255,235,.32)}
+    .card-meta-dot{width:3px;height:3px;border-radius:50%;background:rgba(255,255,235,.2)}
+    .card-arrow{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,235,.12);color:rgba(255,255,235,.35);transition:background .2s ease,border-color .2s ease,color .2s ease,transform .2s ease;flex-shrink:0}
+    .course-card:hover .card-arrow{background:var(--fathom);border-color:var(--fathom);color:var(--lumen);transform:translateX(3px)}
+
+    /* CARD COLOURS */
+    .card-video .card-sphere{background:radial-gradient(circle,#034f46,#0a0a08)}
+    .card-book .card-sphere{background:radial-gradient(circle,#6b21a8,#0a0a08)}
+    .card-music .card-sphere{background:radial-gradient(circle,#1d4ed8,#0a0a08)}
+    .card-motion .card-sphere{background:radial-gradient(circle,#b45309,#0a0a08)}
+    .card-games .card-sphere{background:radial-gradient(circle,#065f46,#0a0a08)}
+    .card-animate .card-sphere{background:radial-gradient(circle,#831843,#0a0a08)}
+    .card-web .card-sphere{background:radial-gradient(circle,#1e3a5f,#0a0a08)}
+    .card-auto .card-sphere{background:radial-gradient(circle,#3b1f6e,#0a0a08)}
+
+    /* CTA BANNER */
+    .cta-banner{background:rgba(3,79,70,.12);border:1px solid rgba(3,79,70,.3);border-radius:2rem;padding:4rem 3rem;text-align:center;margin:0 0 2rem;position:relative;overflow:hidden}
+    .cta-banner::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 70% at 50% 50%,rgba(3,79,70,.2) 0%,transparent 70%);pointer-events:none}
+    .cta-banner-inner{position:relative;z-index:1}
+    .cta-h2{font-family:'EB Garamond',Georgia,serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:500;color:var(--lumen);margin-bottom:.75rem;letter-spacing:-.02em}
+    .cta-h2 em{font-style:italic}
+    .cta-sub{font-size:.95rem;color:rgba(255,255,235,.5);line-height:1.7;max-width:480px;margin:0 auto 2rem}
+    .cta-btns{display:flex;justify-content:center;gap:.75rem;flex-wrap:wrap}
+    .btn-primary{display:inline-flex;align-items:center;gap:.5rem;background:var(--fathom);color:var(--lumen);border:none;border-radius:9999px;padding:.8rem 1.75rem;font-family:'Figtree',sans-serif;font-size:.95rem;font-weight:600;text-decoration:none;cursor:pointer;transition:background .2s ease,transform .15s ease;box-shadow:0 4px 20px rgba(3,79,70,.35)}
+    .btn-primary:hover{background:var(--fathom-lt);transform:translateY(-2px)}
+    .btn-primary:active{transform:translateY(0)}
+    .btn-primary:focus-visible{outline:2px solid var(--glow);outline-offset:3px}
+    .btn-ghost{display:inline-flex;align-items:center;gap:.5rem;background:transparent;color:var(--lumen);border:1.5px solid rgba(255,255,235,.2);border-radius:9999px;padding:.8rem 1.75rem;font-family:'Figtree',sans-serif;font-size:.95rem;font-weight:500;text-decoration:none;cursor:pointer;transition:border-color .2s ease,background .2s ease,transform .15s ease}
+    .btn-ghost:hover{border-color:rgba(255,255,235,.5);background:rgba(255,255,235,.05);transform:translateY(-2px)}
+    .btn-ghost:active{transform:translateY(0)}
+    .btn-ghost:focus-visible{outline:2px solid var(--glow);outline-offset:3px}
+
+    /* REVIEWS */
+    .reviews-section{border-top:1px solid rgba(255,255,235,.06);padding:5rem 2rem;background:rgba(255,255,235,.01)}
+    .reviews-inner{max-width:1080px;margin:0 auto}
+    .reviews-header{text-align:center;margin-bottom:3rem}
+    .reviews-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
+    .review-card{background:rgba(255,255,235,.04);border:1px solid rgba(255,255,235,.08);border-radius:1.5rem;padding:1.5rem}
+    .review-stars{color:var(--glow);font-size:.85rem;margin-bottom:.85rem}
+    .review-quote{font-size:.88rem;color:rgba(255,255,235,.55);line-height:1.75;margin-bottom:1.25rem}
+    .review-author{display:flex;align-items:center;gap:.75rem}
+    .review-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:#fff;flex-shrink:0}
+    .review-name{font-size:.82rem;font-weight:600;color:rgba(255,255,235,.75)}
+    .review-role{font-size:.72rem;color:rgba(255,255,235,.32)}
+
+    /* FOOTER */
+    footer{background:var(--bg);border-top:1px solid rgba(255,255,235,.06);padding:3.5rem 2.5rem 2.5rem}
+    .footer-inner{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem}
+    .footer-logo{font-family:'EB Garamond',Georgia,serif;font-size:1.3rem;font-weight:500;color:rgba(255,255,235,.85);display:block;margin-bottom:.5rem}
+    .footer-desc{font-size:.82rem;color:rgba(255,255,235,.32);line-height:1.72;max-width:240px;margin-top:.75rem}
+    .footer-col-head{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,235,.3);margin-bottom:1rem}
+    .footer-links{list-style:none;display:flex;flex-direction:column;gap:.6rem}
+    .footer-links a{font-size:.85rem;color:rgba(255,255,235,.45);text-decoration:none;transition:color .15s ease}
+    .footer-links a:hover{color:rgba(255,255,235,.85)}
+    .footer-bottom{max-width:1120px;margin:0 auto;border-top:1px solid rgba(255,255,235,.06);padding-top:1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+    .footer-bottom span{font-size:.78rem;color:rgba(255,255,235,.22)}
+
+    @media(max-width:1000px){.cards-grid{grid-template-columns:repeat(2,1fr)}.reviews-grid{grid-template-columns:1fr 1fr}.footer-inner{grid-template-columns:1fr 1fr}}
+    @media(max-width:700px){.cards-grid{grid-template-columns:1fr}.reviews-grid{grid-template-columns:1fr}.stat-div{display:none}.stat-row{gap:1.5rem}.footer-inner{grid-template-columns:1fr}}
+    @media(max-width:600px){nav{padding:1rem 1.25rem}.nav-links{display:none}}
+  </style>
+</head>
+<body>
+
+  <nav aria-label="Main navigation">
+    <a href="index.html" class="nav-logo">AIQ</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="courses.html" class="active">Courses</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="community.html">Community</a></li>
+      <li><a href="blog.html">Blog</a></li>
+    </ul>
+    <a href="signup.html" class="btn-nav">
+      Start here
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+    </a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="page-hero">
+    <div class="hero-inner">
+      <div class="tag-chip"><span class="tag-dot"></span> 7 courses · Start today</div>
+      <h1 class="page-h1">Learn to create with<br/><em>AI from scratch</em></h1>
+      <p class="page-sub">Pick a course and start building today. No prior experience needed. Just real skills, real tools, real results.</p>
+      <a href="signup.html" class="btn-primary" style="margin:0 auto">
+        Create your account
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- SOCIAL PROOF STRIP -->
+  <div class="proof-strip" aria-hidden="true">
+    <div class="proof-track">
+      <div class="proof-item"><span class="proof-stars">★★★★★</span><span class="proof-text"><strong>52,000+</strong> members learning</span></div>
+      <div class="proof-sep"></div>
+      <div class="proof-item"><span class="proof-stars">★★★★★</span><span class="proof-text"><strong>"Changed how I work"</strong> — Maya K., Dublin</span></div>
+      <div class="proof-sep"></div>
+      <div class="proof-item"><span class="proof-stars">★★★★★</span><span class="proof-text"><strong>183,000+</strong> courses taken</span></div>
+      <div class="proof-sep"></div>
+      <div class="proof-item"><span class="proof-stars">★★★★★</span><span class="proof-text"><strong>"No experience needed"</strong> — James R., Lagos</span></div>
+      <div class="proof-sep"></div>
+      <div class="proof-item"><span class="proof-stars">★★★★★</span><span class="proof-text"><strong>9,400+</strong> projects created</span></div>
+      <div class="proof-sep"></div>
+      <div class="proof-item"><span class="proof-stars">★★★★★</span><span class="proof-text"><strong>"Worth every minute"</strong> — Sophie L., Paris</span></div>
+      <div class="proof-sep"></div>
+      <!-- duplicate for seamless loop -->
+      <div class="proof-item"><span class="proof-stars">★★★★★</span><span class="proof-text"><strong>52,000+</strong> members learning</span></div>
+      <div class="proof-sep"></div>
+      <div class="proof-item"><span class="proof-stars">★★★★★</span><span class="proof-text"><strong>"Changed how I work"</strong> — Maya K., Dublin</span></div>
+      <div class="proof-sep"></div>
+      <div class="proof-item"><span class="proof-stars">★★★★★</span><span class="proof-text"><strong>183,000+</strong> courses taken</span></div>
+      <div class="proof-sep"></div>
+      <div class="proof-item"><span class="proof-stars">★★★★★</span><span class="proof-text"><strong>"No experience needed"</strong> — James R., Lagos</span></div>
+      <div class="proof-sep"></div>
+      <div class="proof-item"><span class="proof-stars">★★★★★</span><span class="proof-text"><strong>9,400+</strong> projects created</span></div>
+      <div class="proof-sep"></div>
+      <div class="proof-item"><span class="proof-stars">★★★★★</span><span class="proof-text"><strong>"Worth every minute"</strong> — Sophie L., Paris</span></div>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stat-row">
+    <div class="stat-item"><div class="stat-num">52K+</div><div class="stat-lbl">Active learners</div></div>
+    <div class="stat-div"></div>
+    <div class="stat-item"><div class="stat-num">7</div><div class="stat-lbl">Course tracks</div></div>
+    <div class="stat-div"></div>
+    <div class="stat-item"><div class="stat-num">183K+</div><div class="stat-lbl">Lessons completed</div></div>
+    <div class="stat-div"></div>
+    <div class="stat-item"><div class="stat-num">180+</div><div class="stat-lbl">Countries reached</div></div>
+  </div>
+
+  <!-- COURSES -->
+  <section class="courses-section">
+    <div class="section-header">
+      <div>
+        <div class="section-eyebrow">All courses</div>
+        <div class="section-h2">Choose your track</div>
+      </div>
+      <div class="filter-pills">
+        <button class="filter-pill active" onclick="filterCards('all', this)">All</button>
+        <button class="filter-pill" onclick="filterCards('beginner', this)">Beginner</button>
+        <button class="filter-pill" onclick="filterCards('intermediate', this)">Intermediate</button>
+      </div>
+    </div>
+
+    <div class="cards-grid" id="cards-grid">
+
+      <!-- Video -->
+      <a href="course-detail.html?id=video" class="course-card card-video" data-level="beginner">
+        <div class="card-visual">
+          <img src="https://placehold.co/600x200/0d1a2e/5ecfbb?text=AI+Video+Creation" alt="AI Video Creation" style="width:100%;height:100%;object-fit:cover;display:block" />
+          <div class="card-visual-fade"></div>
+        </div>
+        <div class="card-body">
+          <div class="card-category">Video Creation</div>
+          <h3 class="card-title">Create Videos Using AI</h3>
+          <p class="card-desc">Script to screen in hours. Learn Sora, Runway and Pika to produce cinematic videos without a camera or crew.</p>
+          <div class="card-footer-row">
+            <div class="card-meta"><span>8 lessons</span><span class="card-meta-dot"></span><span>Beginner</span></div>
+            <div class="card-arrow"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Books -->
+      <a href="course-detail.html?id=books" class="course-card card-book" data-level="all">
+        <div class="card-visual">
+          <img src="https://placehold.co/600x200/1a0d2e/c084fc?text=AI+Writing+%26+Publishing" alt="AI Writing and Publishing" style="width:100%;height:100%;object-fit:cover;display:block" />
+          <div class="card-visual-fade"></div>
+        </div>
+        <div class="card-body">
+          <div class="card-category">Writing and Publishing</div>
+          <h3 class="card-title">Write Books Using AI</h3>
+          <p class="card-desc">From first idea to published novel. Use Claude, GPT-4 and Sudowrite to outline, draft and format your book end to end.</p>
+          <div class="card-footer-row">
+            <div class="card-meta"><span>10 lessons</span><span class="card-meta-dot"></span><span>All levels</span></div>
+            <div class="card-arrow"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Music -->
+      <a href="course-detail.html?id=music" class="course-card card-music" data-level="beginner">
+        <div class="card-visual">
+          <img src="https://placehold.co/600x200/0a1525/60a5fa?text=AI+Music+%26+Audio" alt="AI Music and Audio" style="width:100%;height:100%;object-fit:cover;display:block" />
+          <div class="card-visual-fade"></div>
+        </div>
+        <div class="card-body">
+          <div class="card-category">Music and Audio</div>
+          <h3 class="card-title">Create Songs Using AI</h3>
+          <p class="card-desc">Produce full tracks with vocals, instruments and mastering. Learn Suno, Udio and ElevenLabs with no music theory required.</p>
+          <div class="card-footer-row">
+            <div class="card-meta"><span>7 lessons</span><span class="card-meta-dot"></span><span>No experience needed</span></div>
+            <div class="card-arrow"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Motion -->
+      <a href="course-detail.html?id=motion" class="course-card card-motion" data-level="intermediate">
+        <div class="card-visual">
+          <img src="https://placehold.co/600x200/1a1200/fbbf24?text=Motion+Graphics+with+AI" alt="Motion Graphics with AI" style="width:100%;height:100%;object-fit:cover;display:block" />
+          <div class="card-visual-fade"></div>
+        </div>
+        <div class="card-body">
+          <div class="card-category">Motion and Design</div>
+          <h3 class="card-title">Create Motion Graphics Using AI</h3>
+          <p class="card-desc">Animate logos, intros and visual effects with AI. Master HeyGen, Adobe Firefly and prompt-driven After Effects workflows.</p>
+          <div class="card-footer-row">
+            <div class="card-meta"><span>9 lessons</span><span class="card-meta-dot"></span><span>Intermediate</span></div>
+            <div class="card-arrow"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Games -->
+      <a href="course-detail.html?id=games" class="course-card card-games" data-level="all">
+        <div class="card-visual">
+          <img src="https://placehold.co/600x200/0d1a0d/34d399?text=AI+Game+Development" alt="AI Game Development" style="width:100%;height:100%;object-fit:cover;display:block" />
+          <div class="card-visual-fade"></div>
+        </div>
+        <div class="card-body">
+          <div class="card-category">Game Development</div>
+          <h3 class="card-title">Create Games Using AI</h3>
+          <p class="card-desc">Build and ship playable games without coding. Use Scenario, Ludo.ai and Claude to design, code and launch your game.</p>
+          <div class="card-footer-row">
+            <div class="card-meta"><span>12 lessons</span><span class="card-meta-dot"></span><span>All levels</span></div>
+            <div class="card-arrow"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Animate Images -->
+      <a href="course-detail.html?id=animate" class="course-card card-animate" data-level="beginner">
+        <div class="card-visual">
+          <img src="https://placehold.co/600x200/1a0d1a/f0abfc?text=Animate+Images+with+AI" alt="Animate Images with AI" style="width:100%;height:100%;object-fit:cover;display:block" />
+          <div class="card-visual-fade"></div>
+        </div>
+        <div class="card-body">
+          <div class="card-category">Image Animation</div>
+          <h3 class="card-title">Animate Images Using AI</h3>
+          <p class="card-desc">Bring still images to life with motion and emotion. Learn Stable Diffusion, Kling and Midjourney animation pipelines.</p>
+          <div class="card-footer-row">
+            <div class="card-meta"><span>8 lessons</span><span class="card-meta-dot"></span><span>Beginner</span></div>
+            <div class="card-arrow"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
+          </div>
+        </div>
+      </a>
+
+      <!-- Create Websites -->
+      <a href="course-detail.html?id=web" class="course-card card-web" data-level="all">
+        <div class="card-visual">
+          <img src="https://placehold.co/600x200/0d1a1a/67e8f9?text=Create+Websites+with+AI" alt="Create Websites with AI" style="width:100%;height:100%;object-fit:cover;display:block" />
+          <div class="card-visual-fade"></div>
+        </div>
+        <div class="card-body">
+          <div class="card-category">Web Design</div>
+          <h3 class="card-title">Create Websites Using AI</h3>
+          <p class="card-desc">Design and launch professional websites with AI. Learn v0, Bolt, Cursor and Framer to go from idea to live site in a day.</p>
+          <div class="card-footer-row">
+            <div class="card-meta"><span>10 lessons</span><span class="card-meta-dot"></span><span>All levels</span></div>
+            <div class="card-arrow"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
+          </div>
+        </div>
+      </a>
+
+      <!-- AI Automation — Coming Soon -->
+      <div class="course-card card-auto card-coming-soon" role="article">
+        <div class="card-visual">
+          <img src="https://placehold.co/600x200/1a0a2e/a78bfa?text=AI+Automation" alt="AI Automation" style="width:100%;height:100%;object-fit:cover;display:block" />
+          <div class="card-visual-fade"></div>
+          <div class="card-badge">Coming Soon</div>
+        </div>
+        <div class="card-body">
+          <div class="card-category">Automation</div>
+          <h3 class="card-title">AI Automation</h3>
+          <p class="card-desc">Automate your workflows with AI. Master Make, Zapier, n8n and Claude agents to build systems that run while you sleep.</p>
+          <div class="card-footer-row">
+            <div class="card-meta"><span>In development</span><span class="card-meta-dot"></span><span>All levels</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CTA BANNER -->
+    <div class="cta-banner" style="margin-top:4rem">
+      <div class="cta-banner-inner">
+        <h2 class="cta-h2">Ready to start <em>creating</em>?</h2>
+        <p class="cta-sub">Create your account and get started today. Enrol in any course and begin building real skills with AI.</p>
+        <div class="cta-btns">
+          <a href="signup.html" class="btn-primary">
+            Create your account
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+          </a>
+          <a href="about.html" class="btn-ghost">Learn about AIQ</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REVIEWS -->
+  <section class="reviews-section">
+    <div class="reviews-inner">
+      <div class="reviews-header">
+        <div class="section-eyebrow" style="margin-bottom:.4rem">What students say</div>
+        <div class="section-h2">Trusted by <em style="font-family:'EB Garamond',Georgia,serif;font-style:italic">50,000+ creators</em></div>
+      </div>
+      <div class="reviews-grid">
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-quote">"I published my first AI-assisted novel in 3 months. The writing course gave me a clear system. I went from blank page to 80,000 words."</p>
+          <div class="review-author">
+            <div class="review-avatar" style="background:linear-gradient(135deg,#6b21a8,#a855f7)">AO</div>
+            <div><div class="review-name">Adaeze Okonkwo</div><div class="review-role">Aspiring author, Enugu</div></div>
+          </div>
+        </div>
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-quote">"Released my first EP using only Suno and ElevenLabs. No music background, no studio. Just the AIQ music course and a lot of experimenting."</p>
+          <div class="review-author">
+            <div class="review-avatar" style="background:linear-gradient(135deg,#065f46,#34d399)">CE</div>
+            <div><div class="review-name">Chukwuemeka Nwosu</div><div class="review-role">Music producer, Lagos</div></div>
+          </div>
+        </div>
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-quote">"My YouTube channel went from zero to 12K subscribers in 2 months. The AI video track taught me to produce content 10x faster."</p>
+          <div class="review-author">
+            <div class="review-avatar" style="background:linear-gradient(135deg,#1d4ed8,#60a5fa)">FA</div>
+            <div><div class="review-name">Funmilayo Adeleke</div><div class="review-role">Content creator, Ibadan</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <span class="footer-logo">AIQ</span>
+        <p class="footer-desc">Open AI courses for curious creators. Master video, music, books, games and more with no experience required.</p>
+      </div>
+      <div>
+        <div class="footer-col-head">Courses</div>
+        <ul class="footer-links">
+          <li><a href="course-detail.html?id=video">AI Video</a></li>
+          <li><a href="course-detail.html?id=books">AI Writing</a></li>
+          <li><a href="course-detail.html?id=music">AI Music</a></li>
+          <li><a href="course-detail.html?id=games">AI Games</a></li>
+          <li><a href="course-detail.html?id=web">AI Websites</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-head">Company</div>
+        <ul class="footer-links">
+          <li><a href="about.html">About</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="community.html">Community</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-head">Legal</div>
+        <ul class="footer-links">
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="terms.html">Terms of Use</a></li>
+          <li><a href="privacy.html#cookies">Cookie Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 AIQ. All rights reserved.</span>
+      <span>Made for curious creators</span>
+    </div>
+  </footer>
+
+  <script>
+    function filterCards(level, btn) {
+      document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('#cards-grid .course-card, #cards-grid [role="article"]').forEach(card => {
+        const cardLevel = card.dataset.level || 'all';
+        if (level === 'all') {
+          card.style.display = '';
+        } else if (level === 'beginner') {
+          card.style.display = cardLevel === 'beginner' ? '' : 'none';
+        } else if (level === 'intermediate') {
+          card.style.display = cardLevel === 'intermediate' ? '' : 'none';
+        }
+      });
+    }
+  </script>
+</body>
+</html>

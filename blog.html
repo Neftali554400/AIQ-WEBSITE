@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog — AIQ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{--lumen:#ffffeb;--fathom:#034f46;--fathom-lt:#056b5e;--glow:#ffa946;--dawn:#f0d7ff;--bg:#0a0a08;--surface:rgba(255,255,235,0.04);--border:rgba(255,255,235,0.09)}
+    body{font-family:'Figtree',Arial,sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;background:var(--bg);color:var(--lumen);min-height:100vh}
+    body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:128px}
+
+    nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:1.1rem 2.5rem;background:rgba(10,10,8,0.82);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,235,0.06)}
+    .nav-logo{font-family:'EB Garamond',Georgia,serif;font-size:1.45rem;font-weight:500;color:var(--lumen);text-decoration:none;letter-spacing:-0.01em}
+    .nav-links{display:flex;align-items:center;gap:2rem;list-style:none}
+    .nav-links a{font-size:.875rem;font-weight:500;color:rgba(255,255,235,0.55);text-decoration:none;transition:color .15s ease}
+    .nav-links a:hover,.nav-links a.active{color:var(--lumen)}
+    .btn-nav{display:inline-flex;align-items:center;gap:.4rem;background:var(--fathom);color:var(--lumen);border:none;border-radius:9999px;padding:.55rem 1.25rem;font-family:'Figtree',sans-serif;font-size:.85rem;font-weight:600;text-decoration:none;cursor:pointer;transition:background .2s ease,transform .15s ease}
+    .btn-nav:hover{background:var(--fathom-lt);transform:translateY(-1px)}
+    .btn-nav:focus-visible{outline:2px solid var(--glow);outline-offset:3px}
+
+    .page-hero{padding:10rem 2rem 5rem;text-align:center;position:relative;overflow:hidden}
+    .page-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 65% 55% at 50% -10%,rgba(3,79,70,.4) 0%,transparent 65%);pointer-events:none}
+    .page-hero::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 40% 35% at 85% 60%,rgba(240,215,255,.1) 0%,transparent 60%);pointer-events:none}
+    .page-hero-inner{position:relative;z-index:1;max-width:720px;margin:0 auto}
+    .tag-chip{display:inline-flex;align-items:center;gap:.4rem;background:rgba(3,79,70,.22);border:1px solid rgba(3,79,70,.45);border-radius:9999px;padding:.3rem .85rem;font-size:.75rem;font-weight:600;color:#5ecfbb;letter-spacing:.03em;margin-bottom:1.25rem}
+    .tag-chip-dot{width:5px;height:5px;border-radius:50%;background:#5ecfbb}
+    .page-h1{font-family:'EB Garamond',Georgia,serif;font-size:clamp(3rem,6vw,5.5rem);font-weight:500;line-height:1.05;letter-spacing:-.025em;color:var(--lumen);margin-bottom:1.5rem}
+    .page-h1 em{font-style:italic}
+    .page-sub{font-size:1.1rem;color:rgba(255,255,235,.52);line-height:1.75;max-width:520px;margin:0 auto}
+
+    /* FILTERS */
+    .filter-bar{max-width:1080px;margin:0 auto;padding:0 2rem 4rem;display:flex;align-items:center;gap:.65rem;flex-wrap:wrap}
+    .filter-btn{display:inline-flex;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:9999px;padding:.4rem .95rem;font-size:.8rem;font-weight:500;color:rgba(255,255,235,.5);cursor:pointer;transition:background .15s ease,border-color .15s ease,color .15s ease}
+    .filter-btn:hover,.filter-btn.active{background:rgba(3,79,70,.25);border-color:rgba(3,79,70,.5);color:#5ecfbb}
+    .filter-btn:focus-visible{outline:2px solid var(--glow);outline-offset:3px}
+
+    /* FEATURED POST */
+    .featured-section{max-width:1080px;margin:0 auto;padding:0 2rem 3rem}
+    .featured-card{display:grid;grid-template-columns:1fr 1fr;gap:0;background:var(--surface);border:1px solid var(--border);border-radius:2rem;overflow:hidden;transition:border-color .2s ease,transform .2s ease;text-decoration:none;cursor:pointer}
+    .featured-card:hover{border-color:rgba(255,255,235,.2);transform:translateY(-3px)}
+    .featured-card:focus-visible{outline:2px solid var(--glow);outline-offset:3px}
+    .featured-visual{aspect-ratio:4/3;background:linear-gradient(135deg,#0d1a2e 0%,#034f46 60%,#0a2a1e 100%);display:flex;align-items:center;justify-content:center;font-size:4rem;position:relative;overflow:hidden}
+    .featured-visual::after{content:'';position:absolute;inset:0;background:linear-gradient(to right,transparent 60%,rgba(10,10,8,.6) 100%)}
+    .featured-body{padding:2.5rem}
+    .post-tag{display:inline-block;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#5ecfbb;margin-bottom:.75rem}
+    .featured-title{font-family:'EB Garamond',Georgia,serif;font-size:1.75rem;font-weight:500;line-height:1.2;color:var(--lumen);margin-bottom:1rem}
+    .featured-excerpt{font-size:.88rem;color:rgba(255,255,235,.48);line-height:1.7;margin-bottom:1.5rem}
+    .post-meta{display:flex;align-items:center;gap:.6rem;font-size:.75rem;color:rgba(255,255,235,.32)}
+    .meta-dot{width:3px;height:3px;border-radius:50%;background:rgba(255,255,235,.2)}
+
+    /* POSTS GRID */
+    .posts-section{max-width:1080px;margin:0 auto;padding:0 2rem}
+    .posts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
+    .post-card{background:var(--surface);border:1px solid var(--border);border-radius:1.5rem;overflow:hidden;transition:border-color .2s ease,transform .2s ease;cursor:pointer;text-decoration:none;display:block}
+    .post-card:hover{border-color:rgba(255,255,235,.18);transform:translateY(-3px)}
+    .post-card:focus-visible{outline:2px solid var(--glow);outline-offset:3px}
+    .post-visual{aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;font-size:2.5rem}
+    .post-body{padding:1.25rem 1.35rem 1.5rem}
+    .post-title{font-family:'EB Garamond',Georgia,serif;font-size:1.15rem;font-weight:500;line-height:1.25;color:var(--lumen);margin-bottom:.5rem}
+    .post-excerpt{font-size:.8rem;color:rgba(255,255,235,.4);line-height:1.65;margin-bottom:1rem}
+    .post-footer{display:flex;align-items:center;justify-content:space-between}
+    .post-read-time{font-size:.73rem;color:rgba(255,255,235,.28)}
+    .post-arrow{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,235,.1);color:rgba(255,255,235,.3);transition:background .2s ease,border-color .2s ease,color .2s ease,transform .2s ease}
+    .post-card:hover .post-arrow{background:var(--fathom);border-color:var(--fathom);color:var(--lumen);transform:translateX(2px)}
+
+    /* ADMIN EDITOR */
+    .admin-fab{position:fixed;bottom:2rem;right:2rem;z-index:100;display:flex;align-items:center;gap:.6rem;background:var(--fathom);color:var(--lumen);border:none;border-radius:9999px;padding:.75rem 1.4rem;font-family:'Figtree',sans-serif;font-size:.85rem;font-weight:600;cursor:pointer;box-shadow:0 8px 24px rgba(3,79,70,.4);transition:background .2s ease,transform .15s ease}
+    .admin-fab:hover{background:var(--fathom-lt);transform:translateY(-2px)}
+    .admin-fab:focus-visible{outline:2px solid var(--glow);outline-offset:3px}
+    .editor-overlay{position:fixed;inset:0;z-index:150;background:rgba(10,10,8,.8);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;padding:1.5rem}
+    .editor-modal{background:#111110;border:1px solid rgba(255,255,235,.1);border-radius:2rem;padding:2.5rem;width:100%;max-width:600px;max-height:90vh;overflow-y:auto;position:relative}
+    .editor-modal h3{font-family:'EB Garamond',Georgia,serif;font-size:1.5rem;font-weight:500;color:var(--lumen);margin-bottom:1.5rem}
+    .editor-field{margin-bottom:1.25rem}
+    .editor-label{display:block;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:rgba(255,255,235,.35);margin-bottom:.4rem}
+    .editor-input,.editor-textarea,.editor-select{width:100%;background:rgba(255,255,235,.06);border:1px solid rgba(255,255,235,.1);border-radius:.75rem;padding:.75rem 1rem;font-family:'Figtree',sans-serif;font-size:.9rem;color:var(--lumen);outline:none;transition:border-color .2s ease}
+    .editor-input::placeholder,.editor-textarea::placeholder{color:rgba(255,255,235,.25)}
+    .editor-input:focus,.editor-textarea:focus,.editor-select:focus{border-color:rgba(255,255,235,.28)}
+    .editor-textarea{resize:vertical;min-height:120px;line-height:1.6}
+    .editor-select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(255,255,235,.3)' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 1rem center;padding-right:2.5rem}
+    .editor-select option{background:#111110;color:var(--lumen)}
+    .editor-actions{display:flex;gap:.75rem;justify-content:flex-end;margin-top:.5rem}
+    .btn-publish{background:var(--fathom);color:var(--lumen);border:none;border-radius:.75rem;padding:.75rem 1.5rem;font-family:'Figtree',sans-serif;font-size:.9rem;font-weight:600;cursor:pointer;transition:background .2s ease}
+    .btn-publish:hover{background:var(--fathom-lt)}
+    .btn-cancel{background:rgba(255,255,235,.06);color:rgba(255,255,235,.5);border:1px solid rgba(255,255,235,.1);border-radius:.75rem;padding:.75rem 1.25rem;font-family:'Figtree',sans-serif;font-size:.9rem;font-weight:600;cursor:pointer;transition:background .2s ease,color .2s ease}
+    .btn-cancel:hover{background:rgba(255,255,235,.1);color:var(--lumen)}
+    .editor-close{position:absolute;top:1.25rem;right:1.25rem;background:none;border:none;color:rgba(255,255,235,.25);cursor:pointer;padding:.35rem;border-radius:.5rem;transition:color .15s ease,background .15s ease;display:flex}
+    .editor-close:hover{color:var(--lumen);background:rgba(255,255,235,.06)}
+    .post-admin-actions{display:flex;gap:.4rem;margin-top:.5rem}
+    .btn-edit-post,.btn-delete-post{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;background:none;border:1px solid rgba(255,255,235,.12);border-radius:9999px;padding:.2rem .65rem;cursor:pointer;transition:background .15s ease,border-color .15s ease}
+    .btn-edit-post{color:#5ecfbb;border-color:rgba(94,207,187,.3)}
+    .btn-edit-post:hover{background:rgba(94,207,187,.1)}
+    .btn-delete-post{color:rgba(255,100,100,.7);border-color:rgba(255,100,100,.2)}
+    .btn-delete-post:hover{background:rgba(255,100,100,.1)}
+    .dynamic-posts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;max-width:1080px;margin:0 auto;padding:0 2rem 2rem}
+    @media(max-width:900px){.dynamic-posts-grid{grid-template-columns:1fr 1fr}}
+    @media(max-width:600px){.dynamic-posts-grid{grid-template-columns:1fr}}
+
+    /* NEWSLETTER */
+    .newsletter-section{border-top:1px solid var(--border);margin-top:5rem;padding:5rem 2rem;text-align:center}
+    .newsletter-inner{max-width:520px;margin:0 auto}
+    .nl-h2{font-family:'EB Garamond',Georgia,serif;font-size:clamp(1.8rem,3.5vw,2.75rem);font-weight:500;color:var(--lumen);margin-bottom:.85rem}
+    .nl-h2 em{font-style:italic}
+    .nl-sub{font-size:.9rem;color:rgba(255,255,235,.45);line-height:1.7;margin-bottom:1.75rem}
+    .nl-form{display:flex;gap:.65rem;max-width:420px;margin:0 auto}
+    .nl-input{flex:1;background:rgba(255,255,235,.06);border:1px solid rgba(255,255,235,.12);border-radius:.75rem;padding:.8rem 1.1rem;font-family:'Figtree',sans-serif;font-size:.9rem;color:var(--lumen);outline:none;transition:border-color .2s ease}
+    .nl-input::placeholder{color:rgba(255,255,235,.28)}
+    .nl-input:focus{border-color:rgba(255,255,235,.28)}
+    .nl-btn{background:var(--fathom);color:var(--lumen);border:none;border-radius:.75rem;padding:.8rem 1.4rem;font-family:'Figtree',sans-serif;font-size:.9rem;font-weight:600;cursor:pointer;transition:background .2s ease,transform .15s ease;white-space:nowrap}
+    .nl-btn:hover{background:var(--fathom-lt);transform:translateY(-1px)}
+    .nl-btn:focus-visible{outline:2px solid var(--glow);outline-offset:3px}
+    .nl-note{font-size:.72rem;color:rgba(255,255,235,.25);margin-top:1rem}
+
+    /* FOOTER */
+    footer{background:var(--bg);border-top:1px solid rgba(255,255,235,.06);padding:3.5rem 2.5rem 2.5rem}
+    .footer-inner{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem}
+    .footer-logo{font-family:'EB Garamond',Georgia,serif;font-size:1.3rem;font-weight:500;color:rgba(255,255,235,.85);display:block;margin-bottom:.5rem}
+    .footer-desc{font-size:.82rem;color:rgba(255,255,235,.32);line-height:1.72;max-width:240px;margin-top:.75rem}
+    .footer-col-head{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,235,.3);margin-bottom:1rem}
+    .footer-links{list-style:none;display:flex;flex-direction:column;gap:.6rem}
+    .footer-links a{font-size:.85rem;color:rgba(255,255,235,.45);text-decoration:none;transition:color .15s ease}
+    .footer-links a:hover{color:rgba(255,255,235,.85)}
+    .footer-bottom{max-width:1120px;margin:0 auto;border-top:1px solid rgba(255,255,235,.06);padding-top:1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+    .footer-bottom span{font-size:.78rem;color:rgba(255,255,235,.22)}
+
+    @media(max-width:900px){.featured-card{grid-template-columns:1fr}.featured-visual{aspect-ratio:16/9}.posts-grid{grid-template-columns:1fr 1fr}.footer-inner{grid-template-columns:1fr 1fr}}
+    @media(max-width:600px){nav{padding:1rem 1.25rem}.nav-links{display:none}.posts-grid{grid-template-columns:1fr}.nl-form{flex-direction:column}.footer-inner{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+
+  <nav aria-label="Main navigation">
+    <a href="index.html" class="nav-logo">AIQ</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="courses.html">Courses</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="community.html">Community</a></li>
+      <li><a href="blog.html" class="active">Blog</a></li>
+    </ul>
+    <a href="signup.html" class="btn-nav">
+      Start here
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
+    </a>
+  </nav>
+
+  <section class="page-hero" aria-labelledby="blog-heading">
+    <div class="page-hero-inner">
+      <div class="tag-chip"><span class="tag-chip-dot" aria-hidden="true"></span>Ideas and insights</div>
+      <h1 class="page-h1" id="blog-heading">The AIQ<br/><em>Journal</em></h1>
+      <p class="page-sub">Practical guides, tool breakdowns and stories from creators who are building the future with AI.</p>
+    </div>
+  </section>
+
+  <!-- FILTERS -->
+  <div class="filter-bar" role="group" aria-label="Filter posts by category">
+    <button class="filter-btn active" onclick="setFilter(this,'all')" aria-pressed="true">All posts</button>
+    <button class="filter-btn" onclick="setFilter(this,'video')" aria-pressed="false">Video</button>
+    <button class="filter-btn" onclick="setFilter(this,'music')" aria-pressed="false">Music</button>
+    <button class="filter-btn" onclick="setFilter(this,'writing')" aria-pressed="false">Writing</button>
+    <button class="filter-btn" onclick="setFilter(this,'games')" aria-pressed="false">Games</button>
+    <button class="filter-btn" onclick="setFilter(this,'tools')" aria-pressed="false">Tools</button>
+    <button class="filter-btn" onclick="setFilter(this,'automation')" aria-pressed="false">Automation</button>
+  </div>
+
+  <!-- FEATURED -->
+  <div class="featured-section">
+    <a href="blog-post.html?slug=sora-creators" class="featured-card" aria-labelledby="featured-title">
+      <div class="featured-visual" aria-hidden="true">🎬</div>
+      <div class="featured-body">
+        <div class="post-tag">Featured · AI Video</div>
+        <h2 class="featured-title" id="featured-title">Sora is here. Here is what it actually means for creators</h2>
+        <p class="featured-excerpt">We spent two weeks using Sora for real projects, not demos. Here is what it can genuinely do, what it still gets wrong and which creators will benefit most.</p>
+        <div class="post-meta">
+          <span>Tom Nguyen</span>
+          <span class="meta-dot" aria-hidden="true"></span>
+          <span>April 2, 2026</span>
+          <span class="meta-dot" aria-hidden="true"></span>
+          <span>8 min read</span>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <!-- POSTS GRID -->
+  <div class="posts-section" aria-label="Blog posts">
+    <div class="posts-grid">
+
+      <a href="blog-post.html?slug=suno-vs-udio" class="post-card" aria-labelledby="post1-title">
+        <div class="post-visual" style="background:linear-gradient(135deg,#0d1a0d,#1a2a0d)" aria-hidden="true">🎵</div>
+        <div class="post-body">
+          <div class="post-tag">AI Music</div>
+          <h3 class="post-title" id="post1-title">Suno vs Udio in 2026: which one should you use?</h3>
+          <p class="post-excerpt">We ran 50 identical prompts through both tools and scored the results. Here is what we found.</p>
+          <div class="post-footer">
+            <span class="post-read-time">6 min read</span>
+            <div class="post-arrow" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
+          </div>
+        </div>
+      </a>
+
+      <a href="blog-post.html?slug=write-novel-ai" class="post-card" aria-labelledby="post2-title">
+        <div class="post-visual" style="background:linear-gradient(135deg,#1a0d2e,#2e0d1a)" aria-hidden="true">📖</div>
+        <div class="post-body">
+          <div class="post-tag">AI Writing</div>
+          <h3 class="post-title" id="post2-title">How to write a novel with AI without losing your voice</h3>
+          <p class="post-excerpt">AI can help you write faster. But keeping your creative identity requires a different workflow than most people use.</p>
+          <div class="post-footer">
+            <span class="post-read-time">10 min read</span>
+            <div class="post-arrow" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
+          </div>
+        </div>
+      </a>
+
+      <a href="blog-post.html?slug=game-claude-cursor" class="post-card" aria-labelledby="post3-title">
+        <div class="post-visual" style="background:linear-gradient(135deg,#0d0d1a,#1a0d2a)" aria-hidden="true">🎮</div>
+        <div class="post-body">
+          <div class="post-tag">AI Games</div>
+          <h3 class="post-title" id="post3-title">I shipped a game using only Claude and Cursor. Here is the full story</h3>
+          <p class="post-excerpt">No prior coding experience. Just an idea, two AI tools and 10 days. This is how it went.</p>
+          <div class="post-footer">
+            <span class="post-read-time">12 min read</span>
+            <div class="post-arrow" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
+          </div>
+        </div>
+      </a>
+
+      <a href="blog-post.html?slug=ai-motion-tools" class="post-card" aria-labelledby="post4-title">
+        <div class="post-visual" style="background:linear-gradient(135deg,#1a1a0d,#2a1a0d)" aria-hidden="true">✨</div>
+        <div class="post-body">
+          <div class="post-tag">Motion Graphics</div>
+          <h3 class="post-title" id="post4-title">The 5 best AI motion tools for non-designers in 2026</h3>
+          <p class="post-excerpt">You do not need After Effects experience. These tools let anyone create professional motion graphics with a prompt.</p>
+          <div class="post-footer">
+            <span class="post-read-time">7 min read</span>
+            <div class="post-arrow" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
+          </div>
+        </div>
+      </a>
+
+      <a href="blog-post.html?slug=content-machine-make-claude" class="post-card" aria-labelledby="post5-title">
+        <div class="post-visual" style="background:linear-gradient(135deg,#0d1a1a,#0a1a2e)" aria-hidden="true">⚡</div>
+        <div class="post-body">
+          <div class="post-tag">Automation</div>
+          <h3 class="post-title" id="post5-title">Build a content machine with Make and Claude in one afternoon</h3>
+          <p class="post-excerpt">A step-by-step walkthrough for setting up an AI workflow that plans, writes and schedules your content automatically.</p>
+          <div class="post-footer">
+            <span class="post-read-time">9 min read</span>
+            <div class="post-arrow" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
+          </div>
+        </div>
+      </a>
+
+      <a href="blog-post.html?slug=v0-bolt-cursor" class="post-card" aria-labelledby="post6-title">
+        <div class="post-visual" style="background:linear-gradient(135deg,#1a150d,#2a1a0a)" aria-hidden="true">🌐</div>
+        <div class="post-body">
+          <div class="post-tag">AI Websites</div>
+          <h3 class="post-title" id="post6-title">v0 vs Bolt vs Cursor: which AI builder wins for non-coders?</h3>
+          <p class="post-excerpt">Three tools, three projects, honest results. We tested each one building the same landing page from scratch.</p>
+          <div class="post-footer">
+            <span class="post-read-time">8 min read</span>
+            <div class="post-arrow" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
+          </div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+
+  <!-- DYNAMIC POSTS (admin-created) -->
+  <div id="dynamic-posts-wrap" style="display:none">
+    <div class="posts-section" style="padding-bottom:0">
+      <div class="section-divider" style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:rgba(255,255,235,.25);padding-bottom:1.25rem">Recent Posts</div>
+    </div>
+    <div class="dynamic-posts-grid" id="dynamic-posts-grid"></div>
+  </div>
+
+  <!-- ADMIN FAB -->
+  <button class="admin-fab" id="admin-fab" style="display:none" onclick="openEditor(null)" aria-label="Write new blog post">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+    New Post
+  </button>
+
+  <!-- ADMIN EDITOR MODAL -->
+  <div id="editor-overlay" class="editor-overlay" style="display:none" role="dialog" aria-modal="true" aria-labelledby="editor-heading">
+    <div class="editor-modal">
+      <button class="editor-close" onclick="closeEditor()" aria-label="Close editor">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+      </button>
+      <h3 id="editor-heading">Write a blog post</h3>
+      <input type="hidden" id="edit-post-id" />
+      <div class="editor-field">
+        <label class="editor-label" for="post-title-input">Post title</label>
+        <input class="editor-input" type="text" id="post-title-input" placeholder="Enter post title..." />
+      </div>
+      <div class="editor-field">
+        <label class="editor-label" for="post-category-select">Category</label>
+        <select class="editor-select" id="post-category-select">
+          <option value="AI Video">AI Video</option>
+          <option value="AI Music">AI Music</option>
+          <option value="AI Writing">AI Writing</option>
+          <option value="AI Games">AI Games</option>
+          <option value="Motion Graphics">Motion Graphics</option>
+          <option value="Automation">Automation</option>
+          <option value="AI Websites">AI Websites</option>
+          <option value="Tools">Tools</option>
+        </select>
+      </div>
+      <div class="editor-field">
+        <label class="editor-label" for="post-excerpt-input">Excerpt (short summary)</label>
+        <input class="editor-input" type="text" id="post-excerpt-input" placeholder="One or two sentence summary..." />
+      </div>
+      <div class="editor-field">
+        <label class="editor-label" for="post-body-input">Article body</label>
+        <textarea class="editor-textarea" id="post-body-input" placeholder="Write your full article here..." rows="6"></textarea>
+      </div>
+      <div class="editor-field">
+        <label class="editor-label" for="post-emoji-input">Visual emoji (used as post thumbnail)</label>
+        <input class="editor-input" type="text" id="post-emoji-input" placeholder="e.g. 🤖" maxlength="4" style="max-width:120px" />
+      </div>
+      <div class="editor-field">
+        <label class="editor-label" for="post-readtime-input">Read time</label>
+        <input class="editor-input" type="text" id="post-readtime-input" placeholder="e.g. 5 min read" style="max-width:160px" />
+      </div>
+      <div class="editor-actions">
+        <button class="btn-cancel" onclick="closeEditor()">Cancel</button>
+        <button class="btn-publish" onclick="publishPost()">Publish Post</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEWSLETTER -->
+  <div class="newsletter-section">
+    <div class="newsletter-inner">
+      <h2 class="nl-h2">Stay in the <em>loop</em></h2>
+      <p class="nl-sub">New posts every week. AI tool reviews, course updates and creator spotlights. No spam, unsubscribe anytime.</p>
+      <form class="nl-form" onsubmit="handleNewsletter(event)" novalidate>
+        <input class="nl-input" type="email" placeholder="your@email.com" autocomplete="email" aria-label="Email address for newsletter" required />
+        <button class="nl-btn" type="submit">Subscribe</button>
+      </form>
+      <p class="nl-note">We respect your inbox. One email per week, unsubscribe anytime.</p>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <span class="footer-logo">AIQ</span>
+        <p class="footer-desc">Open AI courses for curious creators. Master video, music, books, games and more.</p>
+      </div>
+      <div>
+        <div class="footer-col-head">Courses</div>
+        <ul class="footer-links">
+          <li><a href="course-detail.html?id=video">AI Video</a></li>
+          <li><a href="course-detail.html?id=books">AI Writing</a></li>
+          <li><a href="course-detail.html?id=music">AI Music</a></li>
+          <li><a href="course-detail.html?id=games">AI Games</a></li>
+          <li><a href="course-detail.html?id=web">AI Websites</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-head">Company</div>
+        <ul class="footer-links">
+          <li><a href="about.html">About AIQ</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="community.html">Community</a></li>
+          <li><a href="about.html#careers">Careers</a></li>
+          <li><a href="about.html#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-head">Legal</div>
+        <ul class="footer-links">
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="terms.html">Terms of Use</a></li>
+          <li><a href="privacy.html#cookies">Cookie Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 AIQ. All rights reserved.</span>
+      <span>Made for curious creators</span>
+    </div>
+  </footer>
+
+  <script>
+    const BLOG_STORAGE_KEY = 'aiq_blog_posts';
+    const SUPER_ADMIN_EMAIL = 'michael.neftali@gmail.com';
+    let editingPostId = null;
+
+    function getAdminSession() {
+      try { return JSON.parse(localStorage.getItem('aiq_admin_session')); } catch(e) { return null; }
+    }
+    function isAdmin() {
+      const s = getAdminSession();
+      return s && (s.role === 'super_admin' || s.role === 'sub_admin');
+    }
+    function getPosts() {
+      try { return JSON.parse(localStorage.getItem(BLOG_STORAGE_KEY)) || []; } catch(e) { return []; }
+    }
+    function savePosts(posts) {
+      localStorage.setItem(BLOG_STORAGE_KEY, JSON.stringify(posts));
+    }
+
+    function renderDynamicPosts() {
+      const posts = getPosts();
+      const wrap = document.getElementById('dynamic-posts-wrap');
+      const grid = document.getElementById('dynamic-posts-grid');
+      if (!posts.length) { wrap.style.display = 'none'; return; }
+      wrap.style.display = 'block';
+      grid.innerHTML = '';
+      posts.forEach(p => {
+        const card = document.createElement('a');
+        card.href = 'blog-post.html?id=' + p.id;
+        card.className = 'post-card';
+        card.setAttribute('aria-labelledby', 'dpost-' + p.id);
+        const bgMap = { 'AI Video':'#0d1a2e,#034f46','AI Music':'#0d1a0d,#1a2a0d','AI Writing':'#1a0d2e,#2e0d1a','AI Games':'#0d0d1a,#1a0d2a','Motion Graphics':'#1a1a0d,#2a1a0d','Automation':'#0d1a1a,#0a1a2e','AI Websites':'#1a150d,#2a1a0a','Tools':'#0a1a2e,#1a0d2e' };
+        const bg = bgMap[p.category] || '0d0d0d,1a1a1a';
+        card.innerHTML = `
+          <div class="post-visual" style="background:linear-gradient(135deg,#${bg})" aria-hidden="true">${p.emoji || '📝'}</div>
+          <div class="post-body">
+            <div class="post-tag">${p.category}</div>
+            <h3 class="post-title" id="dpost-${p.id}">${p.title}</h3>
+            <p class="post-excerpt">${p.excerpt}</p>
+            <div class="post-footer">
+              <span class="post-read-time">${p.readtime || '5 min read'}</span>
+              <div class="post-arrow" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
+            </div>
+            ${isAdmin() ? `<div class="post-admin-actions" onclick="event.preventDefault()"><button class="btn-edit-post" onclick="openEditor('${p.id}')">Edit</button><button class="btn-delete-post" onclick="deletePost('${p.id}')">Delete</button></div>` : ''}
+          </div>`;
+        grid.appendChild(card);
+      });
+    }
+
+    function openEditor(postId) {
+      editingPostId = postId;
+      const heading = document.getElementById('editor-heading');
+      const publishBtn = document.querySelector('.btn-publish');
+      if (postId) {
+        const post = getPosts().find(p => p.id === postId);
+        if (post) {
+          heading.textContent = 'Edit post';
+          publishBtn.textContent = 'Save Changes';
+          document.getElementById('post-title-input').value = post.title;
+          document.getElementById('post-category-select').value = post.category;
+          document.getElementById('post-excerpt-input').value = post.excerpt;
+          document.getElementById('post-body-input').value = post.body;
+          document.getElementById('post-emoji-input').value = post.emoji || '';
+          document.getElementById('post-readtime-input').value = post.readtime || '';
+        }
+      } else {
+        heading.textContent = 'Write a blog post';
+        publishBtn.textContent = 'Publish Post';
+        document.getElementById('post-title-input').value = '';
+        document.getElementById('post-category-select').value = 'AI Video';
+        document.getElementById('post-excerpt-input').value = '';
+        document.getElementById('post-body-input').value = '';
+        document.getElementById('post-emoji-input').value = '';
+        document.getElementById('post-readtime-input').value = '';
+      }
+      document.getElementById('editor-overlay').style.display = 'flex';
+      document.getElementById('post-title-input').focus();
+    }
+
+    function closeEditor() {
+      document.getElementById('editor-overlay').style.display = 'none';
+      editingPostId = null;
+    }
+
+    function publishPost() {
+      const title = document.getElementById('post-title-input').value.trim();
+      const excerpt = document.getElementById('post-excerpt-input').value.trim();
+      const body = document.getElementById('post-body-input').value.trim();
+      if (!title) { document.getElementById('post-title-input').focus(); return; }
+      const posts = getPosts();
+      if (editingPostId) {
+        const idx = posts.findIndex(p => p.id === editingPostId);
+        if (idx > -1) {
+          posts[idx] = { ...posts[idx], title, category: document.getElementById('post-category-select').value, excerpt, body, emoji: document.getElementById('post-emoji-input').value.trim() || '📝', readtime: document.getElementById('post-readtime-input').value.trim() || '5 min read', updated: new Date().toISOString() };
+        }
+      } else {
+        const session = getAdminSession();
+        posts.unshift({ id: 'p' + Date.now(), title, category: document.getElementById('post-category-select').value, excerpt, body, emoji: document.getElementById('post-emoji-input').value.trim() || '📝', readtime: document.getElementById('post-readtime-input').value.trim() || '5 min read', author: session && session.name ? session.name : 'AIQ Team', date: new Date().toLocaleDateString('en-GB', {day:'numeric',month:'long',year:'numeric'}), created: new Date().toISOString() });
+      }
+      savePosts(posts);
+      closeEditor();
+      renderDynamicPosts();
+    }
+
+    function deletePost(postId) {
+      if (!confirm('Delete this post? This cannot be undone.')) return;
+      const posts = getPosts().filter(p => p.id !== postId);
+      savePosts(posts);
+      renderDynamicPosts();
+    }
+
+    function setFilter(btn, cat) {
+      document.querySelectorAll('.filter-btn').forEach(b => {
+        b.classList.remove('active');
+        b.setAttribute('aria-pressed','false');
+      });
+      btn.classList.add('active');
+      btn.setAttribute('aria-pressed','true');
+    }
+
+    function handleNewsletter(e) {
+      e.preventDefault();
+      const btn = e.target.querySelector('button');
+      btn.textContent = 'Subscribed!';
+      btn.style.background = '#056b5e';
+      btn.disabled = true;
+    }
+
+    // Init
+    if (isAdmin()) {
+      document.getElementById('admin-fab').style.display = 'flex';
+    }
+    renderDynamicPosts();
+    document.getElementById('editor-overlay').addEventListener('click', function(e) { if (e.target === this) closeEditor(); });
+
+    // Secret admin shortcut
+    document.addEventListener('keydown', e => { if (e.ctrlKey && e.shiftKey && e.key === 'A') window.location.href = 'admin-login.html'; });
+  </script>
+
+</body>
+</html>

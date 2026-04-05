@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog — AIQ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{--lumen:#ffffeb;--fathom:#034f46;--fathom-lt:#056b5e;--glow:#ffa946;--bg:#0a0a08;--surface:rgba(255,255,235,0.04);--border:rgba(255,255,235,0.09)}
+    body{font-family:'Figtree',Arial,sans-serif;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;background:var(--bg);color:var(--lumen);min-height:100vh}
+    body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:128px}
+
+    nav{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:1.1rem 2.5rem;background:rgba(10,10,8,0.92);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,235,0.06)}
+    .nav-logo{font-family:'EB Garamond',Georgia,serif;font-size:1.45rem;font-weight:500;color:var(--lumen);text-decoration:none;letter-spacing:-0.01em}
+    .nav-right{display:flex;align-items:center;gap:1.5rem}
+    .nav-back{display:inline-flex;align-items:center;gap:.4rem;font-size:.85rem;color:rgba(255,255,235,.5);text-decoration:none;transition:color .15s ease}
+    .nav-back:hover{color:var(--lumen)}
+    .nav-links{display:flex;align-items:center;gap:1.5rem;list-style:none}
+    .nav-links a{font-size:.875rem;font-weight:500;color:rgba(255,255,235,.5);text-decoration:none;transition:color .15s ease}
+    .nav-links a:hover,.nav-links a.active{color:var(--lumen)}
+
+    /* ARTICLE LAYOUT */
+    .article-wrap{max-width:720px;margin:0 auto;padding:5rem 2rem 6rem}
+    .back-link{display:inline-flex;align-items:center;gap:.4rem;font-size:.8rem;color:rgba(255,255,235,.35);text-decoration:none;margin-bottom:2.5rem;transition:color .15s ease}
+    .back-link:hover{color:rgba(255,255,235,.7)}
+    .back-link svg{flex-shrink:0}
+    .post-eyebrow{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#5ecfbb;margin-bottom:1rem}
+    .post-h1{font-family:'EB Garamond',Georgia,serif;font-size:clamp(2.2rem,5vw,3.75rem);font-weight:500;line-height:1.08;letter-spacing:-.025em;color:var(--lumen);margin-bottom:1.25rem}
+    .post-h1 em{font-style:italic}
+    .article-meta{display:flex;align-items:center;gap:.75rem;font-size:.8rem;color:rgba(255,255,235,.3);margin-bottom:2.5rem;flex-wrap:wrap}
+    .meta-sep{width:3px;height:3px;border-radius:50%;background:rgba(255,255,235,.18)}
+    .article-hero{border-radius:1.5rem;aspect-ratio:16/7;overflow:hidden;margin-bottom:3rem;display:flex;align-items:center;justify-content:center;font-size:5rem;position:relative}
+    .article-hero-glow{position:absolute;inset:0;pointer-events:none}
+
+    /* ARTICLE BODY */
+    .article-body{font-size:1.05rem;line-height:1.82;color:rgba(255,255,235,.72)}
+    .article-body h2{font-family:'EB Garamond',Georgia,serif;font-size:1.75rem;font-weight:500;color:var(--lumen);line-height:1.2;margin:2.5rem 0 1rem;letter-spacing:-.015em}
+    .article-body h3{font-family:'EB Garamond',Georgia,serif;font-size:1.35rem;font-weight:500;color:var(--lumen);margin:2rem 0 .75rem}
+    .article-body p{margin-bottom:1.5rem}
+    .article-body p:last-child{margin-bottom:0}
+    .article-body strong{color:rgba(255,255,235,.92);font-weight:600}
+    .article-body em{font-style:italic;color:rgba(255,255,235,.85)}
+    .article-body a{color:#5ecfbb;text-decoration:none;border-bottom:1px solid rgba(94,207,187,.3);transition:border-color .15s ease}
+    .article-body a:hover{border-color:#5ecfbb}
+    .article-body ul,.article-body ol{padding-left:1.5rem;margin-bottom:1.5rem}
+    .article-body li{margin-bottom:.6rem}
+    .article-body blockquote{border-left:3px solid var(--fathom);padding-left:1.25rem;margin:2rem 0;color:rgba(255,255,235,.55);font-family:'EB Garamond',Georgia,serif;font-size:1.2rem;font-style:italic;line-height:1.6}
+    .article-body hr{border:none;border-top:1px solid rgba(255,255,235,.08);margin:2.5rem 0}
+
+    /* AUTHOR CARD */
+    .author-card{margin-top:4rem;padding:2rem;background:var(--surface);border:1px solid var(--border);border-radius:1.5rem;display:flex;align-items:center;gap:1.25rem}
+    .author-avatar{width:52px;height:52px;border-radius:50%;background:var(--fathom);display:flex;align-items:center;justify-content:center;font-family:'EB Garamond',Georgia,serif;font-size:1.4rem;font-weight:500;color:var(--lumen);flex-shrink:0}
+    .author-name{font-weight:600;font-size:.95rem;color:var(--lumen);margin-bottom:.2rem}
+    .author-role{font-size:.8rem;color:rgba(255,255,235,.35)}
+
+    /* RELATED */
+    .related-section{max-width:1080px;margin:0 auto;padding:0 2rem 6rem}
+    .section-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:rgba(255,255,235,.3);margin-bottom:1.5rem}
+    .related-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem}
+    .post-card{background:var(--surface);border:1px solid var(--border);border-radius:1.5rem;overflow:hidden;transition:border-color .2s ease,transform .2s ease;cursor:pointer;text-decoration:none;display:block}
+    .post-card:hover{border-color:rgba(255,255,235,.18);transform:translateY(-3px)}
+    .post-card:focus-visible{outline:2px solid var(--glow);outline-offset:3px}
+    .post-visual{aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;font-size:2.5rem}
+    .post-body{padding:1.25rem 1.35rem 1.5rem}
+    .post-tag{display:inline-block;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:#5ecfbb;margin-bottom:.75rem}
+    .post-title{font-family:'EB Garamond',Georgia,serif;font-size:1.15rem;font-weight:500;line-height:1.25;color:var(--lumen);margin-bottom:.5rem}
+    .post-excerpt{font-size:.8rem;color:rgba(255,255,235,.4);line-height:1.65;margin-bottom:1rem}
+    .post-footer{display:flex;align-items:center;justify-content:space-between}
+    .post-read-time{font-size:.73rem;color:rgba(255,255,235,.28)}
+    .post-arrow{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,235,.1);color:rgba(255,255,235,.3);transition:background .2s ease,border-color .2s ease,color .2s ease,transform .2s ease}
+    .post-card:hover .post-arrow{background:var(--fathom);border-color:var(--fathom);color:var(--lumen);transform:translateX(2px)}
+
+    /* FOOTER */
+    footer{background:var(--bg);border-top:1px solid rgba(255,255,235,.06);padding:3.5rem 2.5rem 2.5rem}
+    .footer-inner{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem}
+    .footer-logo{font-family:'EB Garamond',Georgia,serif;font-size:1.3rem;font-weight:500;color:rgba(255,255,235,.85);display:block;margin-bottom:.5rem}
+    .footer-desc{font-size:.82rem;color:rgba(255,255,235,.32);line-height:1.72;max-width:240px;margin-top:.75rem}
+    .footer-col-head{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,235,.3);margin-bottom:1rem}
+    .footer-links{list-style:none;display:flex;flex-direction:column;gap:.6rem}
+    .footer-links a{font-size:.85rem;color:rgba(255,255,235,.45);text-decoration:none;transition:color .15s ease}
+    .footer-links a:hover{color:rgba(255,255,235,.85)}
+    .footer-bottom{max-width:1120px;margin:0 auto;border-top:1px solid rgba(255,255,235,.06);padding-top:1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+    .footer-bottom span{font-size:.78rem;color:rgba(255,255,235,.22)}
+
+    /* ADMIN EDIT BAR */
+    .admin-edit-bar{background:rgba(255,169,70,.08);border:1px solid rgba(255,169,70,.2);border-radius:1rem;padding:.85rem 1.25rem;margin-bottom:2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+    .admin-edit-bar span{font-size:.82rem;color:#ffa946;font-weight:500}
+    .btn-edit-article{background:rgba(255,169,70,.15);color:#ffa946;border:1px solid rgba(255,169,70,.3);border-radius:9999px;padding:.4rem 1rem;font-family:'Figtree',sans-serif;font-size:.78rem;font-weight:600;cursor:pointer;transition:background .15s ease}
+    .btn-edit-article:hover{background:rgba(255,169,70,.25)}
+
+    @media(max-width:900px){.related-grid{grid-template-columns:1fr 1fr}.footer-inner{grid-template-columns:1fr 1fr}}
+    @media(max-width:600px){nav{padding:1rem 1.25rem}.nav-links{display:none}.related-grid{grid-template-columns:1fr}.footer-inner{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+
+  <nav aria-label="Main navigation">
+    <a href="index.html" class="nav-logo">AIQ</a>
+    <div class="nav-right">
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="courses.html">Courses</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="community.html">Community</a></li>
+        <li><a href="blog.html" class="active">Blog</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="article-wrap">
+    <a href="blog.html" class="back-link">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
+      Back to Blog
+    </a>
+
+    <!-- Admin edit bar (shown to admins only) -->
+    <div class="admin-edit-bar" id="admin-edit-bar" style="display:none">
+      <span>You are viewing this post as an admin.</span>
+      <button class="btn-edit-article" onclick="goEditPost()">Edit this post</button>
+    </div>
+
+    <div class="post-eyebrow" id="post-category">Loading...</div>
+    <h1 class="post-h1" id="post-title">Loading...</h1>
+    <div class="article-meta">
+      <span id="post-author">AIQ Team</span>
+      <span class="meta-sep" aria-hidden="true"></span>
+      <span id="post-date">2026</span>
+      <span class="meta-sep" aria-hidden="true"></span>
+      <span id="post-readtime">5 min read</span>
+    </div>
+
+    <div class="article-hero" id="post-hero" style="background:linear-gradient(135deg,#0d1a2e,#034f46,#0a2a1e)">
+      <div class="article-hero-glow" style="background:radial-gradient(ellipse 60% 60% at 50% 40%,rgba(94,207,187,.12) 0%,transparent 70%)"></div>
+      <div id="post-emoji" style="position:relative;z-index:1;font-size:5rem">📝</div>
+    </div>
+
+    <div class="article-body" id="post-body"></div>
+
+    <div class="author-card">
+      <div class="author-avatar" id="author-initial">M</div>
+      <div>
+        <div class="author-name" id="author-name">Michael Neftali</div>
+        <div class="author-role">Founder, AIQ — Teaching AI to curious creators</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RELATED POSTS -->
+  <div class="related-section">
+    <div class="section-label">More from the journal</div>
+    <div class="related-grid">
+      <a href="blog-post.html?slug=suno-vs-udio" class="post-card">
+        <div class="post-visual" style="background:linear-gradient(135deg,#0d1a0d,#1a2a0d)">🎵</div>
+        <div class="post-body">
+          <div class="post-tag">AI Music</div>
+          <h3 class="post-title">Suno vs Udio in 2026: which one should you use?</h3>
+          <div class="post-footer">
+            <span class="post-read-time">6 min read</span>
+            <div class="post-arrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
+          </div>
+        </div>
+      </a>
+      <a href="blog-post.html?slug=write-novel-ai" class="post-card">
+        <div class="post-visual" style="background:linear-gradient(135deg,#1a0d2e,#2e0d1a)">📖</div>
+        <div class="post-body">
+          <div class="post-tag">AI Writing</div>
+          <h3 class="post-title">How to write a novel with AI without losing your voice</h3>
+          <div class="post-footer">
+            <span class="post-read-time">10 min read</span>
+            <div class="post-arrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
+          </div>
+        </div>
+      </a>
+      <a href="blog-post.html?slug=v0-bolt-cursor" class="post-card">
+        <div class="post-visual" style="background:linear-gradient(135deg,#1a150d,#2a1a0a)">🌐</div>
+        <div class="post-body">
+          <div class="post-tag">AI Websites</div>
+          <h3 class="post-title">v0 vs Bolt vs Cursor: which AI builder wins for non-coders?</h3>
+          <div class="post-footer">
+            <span class="post-read-time">8 min read</span>
+            <div class="post-arrow"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <span class="footer-logo">AIQ</span>
+        <p class="footer-desc">AI courses for curious creators. Master video, music, books, games and more.</p>
+      </div>
+      <div>
+        <div class="footer-col-head">Courses</div>
+        <ul class="footer-links">
+          <li><a href="course-detail.html?id=video">AI Video</a></li>
+          <li><a href="course-detail.html?id=books">AI Writing</a></li>
+          <li><a href="course-detail.html?id=music">AI Music</a></li>
+          <li><a href="course-detail.html?id=games">AI Games</a></li>
+          <li><a href="course-detail.html?id=web">AI Websites</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-head">Company</div>
+        <ul class="footer-links">
+          <li><a href="about.html">About AIQ</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="community.html">Community</a></li>
+          <li><a href="about.html#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-head">Legal</div>
+        <ul class="footer-links">
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="terms.html">Terms of Use</a></li>
+          <li><a href="privacy.html#cookies">Cookie Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 AIQ. All rights reserved.</span>
+      <span>Made for curious creators</span>
+    </div>
+  </footer>
+
+  <script>
+    // Static post data keyed by slug
+    const STATIC_POSTS = {
+      'sora-creators': {
+        title: 'Sora is here. Here is what it actually means for creators',
+        category: 'AI Video',
+        author: 'Michael Neftali',
+        date: 'April 2, 2026',
+        readtime: '8 min read',
+        emoji: '🎬',
+        heroBg: 'linear-gradient(135deg,#0d1a2e,#034f46,#0a2a1e)',
+        body: `
+          <p>OpenAI's Sora landed with the kind of hype that makes you deeply suspicious. A text-to-video model that creates "cinema-quality" footage from a prompt? We have heard that before. So we spent two weeks using it for real projects — not demos, not cherry-picked outputs — and here is what we found.</p>
+          <h2>What Sora actually gets right</h2>
+          <p>Temporal consistency is the thing that makes Sora feel genuinely different. When you ask for a scene where a woman walks across a market and the camera follows her, Sora mostly holds together. The lighting stays coherent. The character's face doesn't morph. Earlier models failed catastrophically at exactly this kind of continuity.</p>
+          <p>It also handles <strong>complex scene compositions</strong> better than anything we tested previously. Multiple characters in the same frame. Background depth. A crowd with movement. These used to be nightmare territory for generative video. Sora handles them imperfectly but usably.</p>
+          <h2>Where it still struggles</h2>
+          <p>Physics. Sora does not understand how objects behave in the real world, and it shows. Liquids pour in the wrong direction. Hands have the usual generative horror. Anything involving precise physical contact — a handshake, picking up an object — often breaks in subtle ways that are immediately obvious to any viewer.</p>
+          <blockquote>The output looks cinematic until you look closely. Then you see the cracks. The craft is in knowing what to prompt and what to avoid.</blockquote>
+          <p>Duration is also a real constraint. You are working in short segments. Anything narrative — a story with a beginning, middle and end — requires careful editing and stitching that adds hours to your workflow.</p>
+          <h2>Who benefits most right now</h2>
+          <p>Creators making <strong>abstract or atmospheric content</strong> — mood videos, art pieces, visual essays — will get the most from Sora today. The looser the real-world physics requirements, the better the output. Content creators who need B-roll footage will also find genuine value here.</p>
+          <p>Filmmakers expecting to replace traditional production are not there yet. That moment is coming. It is probably two or three years away, not six months.</p>
+          <h2>The workflow that works</h2>
+          <p>We settled on treating Sora as a <strong>texture layer</strong>, not a primary storytelling tool. Generate atmospheric backgrounds, transition clips, and environmental footage with Sora. Build your narrative in a traditional edit. Use Runway or CapCut for refinement. This hybrid approach produces genuinely usable results today.</p>
+          <p>The tools are moving fast. What is true today may be obsolete next month. Stay close to the updates, build your prompting intuition, and keep your expectations calibrated. Sora is real progress. It is not magic.</p>
+        `
+      },
+      'suno-vs-udio': {
+        title: 'Suno vs Udio in 2026: which one should you use?',
+        category: 'AI Music',
+        author: 'Michael Neftali',
+        date: 'March 28, 2026',
+        readtime: '6 min read',
+        emoji: '🎵',
+        heroBg: 'linear-gradient(135deg,#0d1a0d,#1a2a0d,#0a1a0a)',
+        body: `
+          <p>We ran 50 identical prompts through both Suno and Udio and scored every output across five dimensions: production quality, lyrical coherence, genre accuracy, originality, and consistency across runs. Here is the honest breakdown.</p>
+          <h2>Suno: easier to start, faster to finish</h2>
+          <p>Suno remains the better entry point. The interface is clean, the prompt interpretation is generous, and you get usable music quickly. It forgives vague prompts in a way that Udio does not. For someone who just wants a background track for a video or a jingle for a brand post, Suno delivers faster with less friction.</p>
+          <p>Its weakness is ceiling. The top of Suno's output range sits slightly below Udio's. If you care about the final 10% of production quality, you will feel it.</p>
+          <h2>Udio: harder to master, higher output quality</h2>
+          <p>Udio rewards specificity. The more precisely you describe what you want — instrumentation, tempo, emotional arc, era — the better the results. It handles <strong>genre blending</strong> more naturally, and its stereo imaging on the best outputs is noticeably superior.</p>
+          <p>But it punishes vague prompts. Generic inputs produce generic music. You need to put in the work on your prompts to get the output you want, which means understanding music vocabulary that not everyone has.</p>
+          <h2>The numbers from our test</h2>
+          <ul>
+            <li>Genre accuracy: Udio 84%, Suno 79%</li>
+            <li>Lyrical coherence: Suno 81%, Udio 73%</li>
+            <li>Production quality (top quartile): Udio leads by ~12%</li>
+            <li>Consistency (same prompt, 5 runs): Suno more consistent</li>
+          </ul>
+          <h2>The verdict</h2>
+          <p><strong>Use Suno</strong> if you are new to AI music, working quickly, or need lyrics that actually make sense. <strong>Use Udio</strong> if you have musical knowledge, time to iterate, and care about production quality above everything else. Many serious creators use both — Suno for drafting, Udio for finishing.</p>
+        `
+      },
+      'write-novel-ai': {
+        title: 'How to write a novel with AI without losing your voice',
+        category: 'AI Writing',
+        author: 'Michael Neftali',
+        date: 'March 20, 2026',
+        readtime: '10 min read',
+        emoji: '📖',
+        heroBg: 'linear-gradient(135deg,#1a0d2e,#2e0d1a,#1a0d0d)',
+        body: `
+          <p>The fear is real: hand your story to an AI and get back something that sounds like everyone and no one at the same time. A perfectly grammatical, structurally sound, utterly soulless book. We have seen it. We have done it by accident. Here is how to avoid it.</p>
+          <h2>Understand what AI is good for in writing</h2>
+          <p>AI excels at <strong>scaffolding and acceleration</strong>, not voice. It can generate an outline in minutes that would take you an afternoon. It can help you get unstuck when a chapter isn't moving. It can rewrite a scene from a different angle so you can see which version works better.</p>
+          <p>It should not write the parts that make your book yours. The specific memories you embed in a character. The way your protagonist processes grief. The particular rhythm of how your sentences breathe.</p>
+          <blockquote>Voice is accumulated experience filtered through a specific nervous system. AI doesn't have one. You do. That is the division of labour.</blockquote>
+          <h2>The workflow that preserves your voice</h2>
+          <p>Start every session by writing a rough paragraph in your own voice — stream of consciousness, no editing. This primes your internal voice before you involve AI. Then use AI to expand, restructure or suggest — but always rewrite the output in your own words before it goes into your draft.</p>
+          <p>Never copy-paste AI output directly into your manuscript. Even good AI output needs to be re-filtered through your voice. Read it, absorb the ideas, then write your version from memory.</p>
+          <h2>Where to use AI vs where to protect your space</h2>
+          <ul>
+            <li><strong>Use AI for:</strong> outlines, character backstory dumps, world-building databases, research summaries, structural feedback on drafts</li>
+            <li><strong>Protect from AI:</strong> opening chapters, emotional climaxes, character voice in dialogue, your narrator's interiority, the ending</li>
+          </ul>
+          <h2>The tools that work best</h2>
+          <p>For outlining: Claude, because its reasoning about story structure is strong. For drafting assistance: Sudowrite, which is built specifically for fiction and understands narrative context better than general-purpose tools. For editing feedback: ChatGPT with a carefully constructed style guide prompt that locks in your specific stylistic choices.</p>
+          <p>The writers who use AI well treat it like a very fast, very well-read research assistant who cannot feel anything. Use that. Compensate for what it lacks. Write the book only you can write.</p>
+        `
+      },
+      'game-claude-cursor': {
+        title: 'I shipped a game using only Claude and Cursor. Here is the full story',
+        category: 'AI Games',
+        author: 'Michael Neftali',
+        date: 'March 14, 2026',
+        readtime: '12 min read',
+        emoji: '🎮',
+        heroBg: 'linear-gradient(135deg,#0d0d1a,#1a0d2a,#0d0d0a)',
+        body: `
+          <p>I have no formal coding experience. I built software for years using trial, error and StackOverflow. When Claude and Cursor came along, I wanted to test the outer limits of what a non-programmer could actually ship. Ten days later, I had a working game on Itch.io with 200 downloads in its first week.</p>
+          <h2>Day 1–2: The idea and the architecture</h2>
+          <p>I decided on a simple concept: a puzzle game where you rearrange words to form working code that the computer then executes. Accessible, short sessions, no complicated physics. I spent the first two days prompting Claude to design the full architecture. Not write code — design it. What files do I need? What does each one do? How does the data flow?</p>
+          <p>This step was critical. Going in blind and just writing code is how you end up with a mess that falls apart after day four. The architecture conversations gave me a mental model to work from.</p>
+          <h2>Day 3–6: Building with Cursor</h2>
+          <p>Cursor was the workhorse. I would write what I wanted in plain English, Cursor would generate the code, and I would test it. When things broke — and they broke constantly — I would paste the error back into Cursor and ask it to fix the problem.</p>
+          <blockquote>The key insight: treat the AI like a very capable junior developer who needs extremely precise briefs. Vague requests produce vague code.</blockquote>
+          <p>I learned to write bug reports before I learned to write code. Describing exactly what I expected to happen versus what actually happened got me fixes dramatically faster than just pasting error messages.</p>
+          <h2>Day 7–9: Polish and the wall</h2>
+          <p>Around day seven, I hit the wall every solo developer hits. The core was working but the experience was rough. Sound was missing. The UI was functional but ugly. I had 40 levels designed but only 15 were actually fun.</p>
+          <p>I used Claude for the sound design brief — it helped me write the specifications I then used with ElevenLabs and some royalty-free libraries. For the UI, I described what I wanted and Cursor rebuilt it three times before I had something I was happy with.</p>
+          <h2>Day 10: Ship it</h2>
+          <p>I uploaded to Itch.io with a page Claude helped me write and a trailer I made in Runway. Nothing magical happened immediately. But it worked. People played it. People finished it. That felt genuinely remarkable.</p>
+          <p>The tools are real. The ceiling for what a non-programmer can ship with AI assistance is now somewhere most people have not yet found. Go find it.</p>
+        `
+      },
+      'ai-motion-tools': {
+        title: 'The 5 best AI motion tools for non-designers in 2026',
+        category: 'Motion Graphics',
+        author: 'Michael Neftali',
+        date: 'March 7, 2026',
+        readtime: '7 min read',
+        emoji: '✨',
+        heroBg: 'linear-gradient(135deg,#1a1a0d,#2a1a0d,#0a1a0d)',
+        body: `
+          <p>You do not need to spend years in After Effects to produce motion graphics that look professional. These five tools handle the complexity so you can focus on the creative decisions. Each one has a different strength — pick the one that matches what you are building.</p>
+          <h2>1. HeyGen — for presenter-driven content</h2>
+          <p>If you need an animated presenter — a human avatar that speaks your script — HeyGen is the clear leader. The avatar quality has crossed a threshold where, in a properly produced video, most viewers will not immediately identify it as synthetic. It supports over 40 languages and lets you clone your own voice.</p>
+          <h2>2. Runway — for cinematic effects and transitions</h2>
+          <p>Runway's motion brush and video-to-video features are genuinely powerful. You can animate specific elements of a still image, apply cinematic treatments to existing footage, and create smooth transitions that would require compositing software to do manually. The learning curve is low for basic use, high for advanced outputs.</p>
+          <h2>3. Adobe Firefly (in Premiere) — for integrated post-production</h2>
+          <p>If you are already working in Adobe's ecosystem, Firefly's integration into Premiere Pro is the least disruptive path to AI-assisted motion work. Generative extend (filling gaps in footage), B-roll generation, and colour matching are all now accessible without leaving your edit.</p>
+          <h2>4. Canva Magic Studio — for quick social content</h2>
+          <p>For social-first content, Canva's AI motion features win on speed. The animation suggestions, background removal with motion, and AI-generated video clips get you from idea to post in under 20 minutes. Not the place for premium outputs — the place for volume and consistency.</p>
+          <h2>5. Pika 2.0 — for image-to-video with fine control</h2>
+          <p>Pika's latest release added precise camera control and scene modification that makes it genuinely useful for product motion work. You can animate your own illustrations, control the direction and speed of motion, and generate subtle looping animations that look premium on web and app UIs.</p>
+          <p>The right choice depends on your workflow, your output format, and your budget. Start with one, learn it properly, then expand. Trying all five at once is the fastest way to not actually learn any of them.</p>
+        `
+      },
+      'content-machine-make-claude': {
+        title: 'Build a content machine with Make and Claude in one afternoon',
+        category: 'Automation',
+        author: 'Michael Neftali',
+        date: 'February 28, 2026',
+        readtime: '9 min read',
+        emoji: '⚡',
+        heroBg: 'linear-gradient(135deg,#0d1a1a,#0a1a2e,#0a0d1a)',
+        body: `
+          <p>Content is a volume game with a quality floor. You need enough of it that you stay visible, good enough that it earns attention. The problem is that creating content at volume manually is soul-destroying. Here is the automation that solved it for me.</p>
+          <h2>What the workflow does</h2>
+          <p>Every Monday morning, an automated workflow: pulls trending topics in my niche from RSS feeds, generates 7 content ideas using Claude, drafts a post for each idea, schedules them across the week in Buffer, and sends me a summary email. I review and approve on Monday, publish runs automatically for the rest of the week.</p>
+          <h2>The Make setup (no code required)</h2>
+          <p>Make (formerly Integromat) is the connection layer. The scenario has five modules: an RSS aggregator pulling from 8 sources, a Claude HTTP module for idea generation, a second Claude module for drafting, a Buffer scheduler, and a Gmail notifier. Total build time on a first attempt: about 3 hours. Once the template exists, replicating it for a new account takes 20 minutes.</p>
+          <blockquote>Automation that works quietly in the background and occasionally emails you a summary is the best kind of automation. You feel in control without doing the repetitive work.</blockquote>
+          <h2>The Claude prompts that make it work</h2>
+          <p>Prompt engineering is the real work here. The idea generation prompt includes a style guide, example posts, target audience description, and tone instructions. It also includes a "avoid these topics" list that prevents the model from returning ideas you have already covered extensively.</p>
+          <p>The drafting prompt is even more specific. It includes your average post length, your sentence structure preferences, your typical use of questions, and your call-to-action style. Getting this right took me three iterations over two weeks — but once it was working, the drafts required minimal editing.</p>
+          <h2>The part you still need to do</h2>
+          <p>Review. The automation is a first draft, not a final product. Set aside 30 minutes on Monday to read through the seven drafts, make edits, and approve. Occasionally a draft will be off in ways the prompt cannot anticipate — a reference that feels tone-deaf, a fact that needs verifying, a framing that doesn't match the week's mood. Your judgment is the quality gate.</p>
+          <p>The goal is not to remove yourself from the process. It is to remove the parts that do not require you so you can focus entirely on the parts that do.</p>
+        `
+      },
+      'v0-bolt-cursor': {
+        title: 'v0 vs Bolt vs Cursor: which AI builder wins for non-coders?',
+        category: 'AI Websites',
+        author: 'Michael Neftali',
+        date: 'February 20, 2026',
+        readtime: '8 min read',
+        emoji: '🌐',
+        heroBg: 'linear-gradient(135deg,#1a150d,#2a1a0a,#1a0a0d)',
+        body: `
+          <p>We gave the same brief to three AI website builders — build a landing page for a fictional productivity app, include a pricing section, a testimonials row, and a working contact form — and documented everything. Here is the honest comparison.</p>
+          <h2>v0 by Vercel: best output quality, highest ceiling</h2>
+          <p>v0 produced the best-looking page. Its design sense is calibrated to modern SaaS aesthetics — clean, purposeful, not generic. The component library it draws from is polished and the code it outputs is production-quality React. The contact form worked correctly on the first attempt.</p>
+          <p>The constraint is that deploying v0 output properly assumes some familiarity with Vercel and React. You can deploy to Vercel in clicks, but customising the output deeply requires understanding what you are looking at. For pure visual quality and ceiling: v0 wins.</p>
+          <h2>Bolt: fastest from idea to deployed link</h2>
+          <p>Bolt got us to a live URL in 8 minutes from a blank prompt. No deployment configuration, no build steps — you describe, it builds, you click deploy. The output quality sits slightly below v0 but for many use cases, especially internal tools and MVPs, it is genuinely good enough.</p>
+          <p>Bolt also handles full-stack features — database connections, auth, API integrations — in a way v0 does not. If your site needs to actually do things (process forms, store data), Bolt is the faster path.</p>
+          <h2>Cursor: most powerful but requires the most from you</h2>
+          <p>Cursor is a code editor, not a site builder. You write prompts, it writes code, you review it in an IDE. The ceiling is highest because you have full control over everything. But that control requires you to understand at least conceptually what the code is doing. Errors require diagnosis, not just re-prompting.</p>
+          <blockquote>If you want to become someone who can build anything, start with Cursor and accept the steeper learning curve. If you want something live this week, start with Bolt.</blockquote>
+          <h2>The verdict for non-coders</h2>
+          <p>For marketing pages and simple sites: <strong>v0</strong>. For full-stack apps and MVPs: <strong>Bolt</strong>. For a long-term investment in building skills: <strong>Cursor</strong>. The good news is that switching between them is easy once you have used one — the prompting skills transfer.</p>
+        `
+      }
+    };
+
+    function getAdminSession() {
+      try { return JSON.parse(localStorage.getItem('aiq_admin_session')); } catch(e) { return null; }
+    }
+    function isAdmin() {
+      const s = getAdminSession();
+      return s && (s.role === 'super_admin' || s.role === 'sub_admin');
+    }
+    function getDynamicPost(id) {
+      try {
+        const posts = JSON.parse(localStorage.getItem('aiq_blog_posts')) || [];
+        return posts.find(p => p.id === id) || null;
+      } catch(e) { return null; }
+    }
+
+    function renderPost(post) {
+      document.title = post.title + ' — AIQ Blog';
+      document.getElementById('post-category').textContent = post.category;
+      document.getElementById('post-title').textContent = post.title;
+      document.getElementById('post-author').textContent = post.author || 'AIQ Team';
+      document.getElementById('post-date').textContent = post.date || '2026';
+      document.getElementById('post-readtime').textContent = post.readtime || '5 min read';
+      document.getElementById('post-emoji').textContent = post.emoji || '📝';
+      if (post.heroBg) document.getElementById('post-hero').style.background = post.heroBg;
+      const authorInitial = document.getElementById('author-initial');
+      const authorName = document.getElementById('author-name');
+      authorInitial.textContent = (post.author || 'A')[0].toUpperCase();
+      authorName.textContent = post.author || 'AIQ Team';
+      const bodyEl = document.getElementById('post-body');
+      if (post.body) {
+        // Static posts have pre-formatted HTML body
+        bodyEl.innerHTML = post.body;
+      } else {
+        // Dynamic posts have plain text body
+        bodyEl.innerHTML = (post.body || '').split('\n\n').map(para => `<p>${para}</p>`).join('');
+      }
+    }
+
+    function goEditPost() {
+      window.location.href = 'blog.html';
+    }
+
+    // Load post
+    const params = new URLSearchParams(window.location.search);
+    const slug = params.get('slug');
+    const dynamicId = params.get('id');
+
+    let post = null;
+    if (slug && STATIC_POSTS[slug]) {
+      post = STATIC_POSTS[slug];
+    } else if (dynamicId) {
+      post = getDynamicPost(dynamicId);
+    }
+
+    if (post) {
+      renderPost(post);
+    } else {
+      document.getElementById('post-title').textContent = 'Post not found';
+      document.getElementById('post-body').innerHTML = '<p>This post could not be found. <a href="blog.html">Return to the blog.</a></p>';
+    }
+
+    // Show admin edit bar
+    if (isAdmin() && (dynamicId || slug)) {
+      document.getElementById('admin-edit-bar').style.display = 'flex';
+    }
+
+    // Secret admin shortcut
+    document.addEventListener('keydown', e => { if (e.ctrlKey && e.shiftKey && e.key === 'A') window.location.href = 'admin-login.html'; });
+  </script>
+</body>
+</html>

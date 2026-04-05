@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Course — AIQ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{--lumen:#ffffeb;--fathom:#034f46;--fathom-lt:#056b5e;--glow:#ffa946;--bg:#0a0a08;--surface:rgba(255,255,235,0.04);--border:rgba(255,255,235,0.09)}
+    body{font-family:'Figtree',Arial,sans-serif;-webkit-font-smoothing:antialiased;background:var(--bg);color:var(--lumen);min-height:100vh}
+    body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:128px}
+
+    /* NAV */
+    nav{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:1rem 2.5rem;background:rgba(10,10,8,0.92);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,235,0.06)}
+    .nav-logo{font-family:'EB Garamond',Georgia,serif;font-size:1.45rem;font-weight:500;color:var(--lumen);text-decoration:none;letter-spacing:-0.01em}
+    .nav-right{display:flex;align-items:center;gap:1.25rem}
+    .nav-back{display:inline-flex;align-items:center;gap:.4rem;font-size:.85rem;color:rgba(255,255,235,.5);text-decoration:none;transition:color .15s ease}
+    .nav-back:hover{color:var(--lumen)}
+    .nav-avatar{width:34px;height:34px;border-radius:50%;border:2px solid rgba(255,255,235,.15);cursor:pointer;overflow:hidden;flex-shrink:0;text-decoration:none;display:flex;align-items:center;justify-content:center;background:var(--fathom);font-size:.85rem;font-weight:600;color:var(--lumen)}
+    .nav-avatar img{width:100%;height:100%;object-fit:cover}
+
+    /* LAYOUT */
+    .layout{max-width:1100px;margin:0 auto;padding:3rem 2rem 6rem;display:grid;grid-template-columns:1fr 320px;gap:3rem;align-items:start}
+    @media(max-width:900px){.layout{grid-template-columns:1fr}}
+
+    /* COURSE HEADER */
+    .course-eyebrow{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:#5ecfbb;margin-bottom:.75rem}
+    .course-title{font-family:'EB Garamond',Georgia,serif;font-size:clamp(2.2rem,5vw,3.6rem);font-weight:500;line-height:1.05;letter-spacing:-.02em;color:var(--lumen);margin-bottom:1rem}
+    .course-desc{font-size:.97rem;color:rgba(255,255,235,.55);line-height:1.8;margin-bottom:1.75rem;max-width:580px}
+    .course-meta{display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap;margin-bottom:2.5rem}
+    .meta-pill{display:inline-flex;align-items:center;gap:.4rem;background:rgba(255,255,235,.06);border:1px solid rgba(255,255,235,.1);border-radius:9999px;padding:.3rem .85rem;font-size:.78rem;color:rgba(255,255,235,.6);font-weight:500}
+    .meta-pill svg{opacity:.6}
+
+    /* PROGRESS BAR */
+    .progress-wrap{margin-bottom:2.5rem}
+    .progress-label{display:flex;justify-content:space-between;font-size:.78rem;color:rgba(255,255,235,.4);margin-bottom:.5rem}
+    .progress-bar{height:4px;background:rgba(255,255,235,.08);border-radius:9999px;overflow:hidden}
+    .progress-fill{height:100%;background:linear-gradient(90deg,var(--fathom),#5ecfbb);border-radius:9999px;transition:width .6s cubic-bezier(.16,1,.3,1)}
+
+    /* LESSONS */
+    .section-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:rgba(255,255,235,.3);margin-bottom:1rem}
+    .lesson-list{display:flex;flex-direction:column;gap:.6rem}
+    .lesson-item{display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem;background:rgba(255,255,235,.04);border:1px solid rgba(255,255,235,.08);border-radius:1rem;cursor:pointer;transition:border-color .2s ease,background .2s ease;text-decoration:none;color:inherit}
+    .lesson-item:hover{border-color:rgba(255,255,235,.18);background:rgba(255,255,235,.07)}
+    .lesson-item.active{border-color:rgba(3,79,70,.6);background:rgba(3,79,70,.12)}
+    .lesson-item.completed .lesson-num{background:var(--fathom);color:var(--lumen);border-color:var(--fathom)}
+    .lesson-num{width:32px;height:32px;border-radius:50%;border:1.5px solid rgba(255,255,235,.15);display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:600;color:rgba(255,255,235,.4);flex-shrink:0;transition:background .2s ease,border-color .2s ease}
+    .lesson-info{flex:1;min-width:0}
+    .lesson-title{font-size:.9rem;font-weight:600;color:rgba(255,255,235,.85);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .lesson-item.completed .lesson-title{color:rgba(255,255,235,.5)}
+    .lesson-duration{font-size:.75rem;color:rgba(255,255,235,.32);margin-top:.15rem}
+    .lesson-status{font-size:.72rem;flex-shrink:0}
+
+    /* VIDEO PLAYER AREA */
+    .player-wrap{background:rgba(255,255,235,.03);border:1px solid rgba(255,255,235,.08);border-radius:1.5rem;overflow:hidden;margin-bottom:1.5rem}
+    .player-thumb{position:relative;aspect-ratio:16/9;background:rgba(255,255,235,.04);display:flex;align-items:center;justify-content:center;cursor:pointer}
+    .player-icon{width:64px;height:64px;border-radius:50%;background:rgba(3,79,70,.8);display:flex;align-items:center;justify-content:center;transition:transform .2s ease,background .2s ease}
+    .player-thumb:hover .player-icon{transform:scale(1.1);background:var(--fathom-lt)}
+    .player-label{position:absolute;bottom:1rem;left:1rem;font-size:.75rem;color:rgba(255,255,235,.4);background:rgba(0,0,0,.5);padding:.25rem .6rem;border-radius:9999px}
+    .player-info{padding:1.25rem 1.5rem}
+    .player-lesson-title{font-size:1rem;font-weight:600;color:var(--lumen);margin-bottom:.25rem}
+    .player-lesson-meta{font-size:.78rem;color:rgba(255,255,235,.35)}
+
+    /* SIDEBAR */
+    .sidebar{position:sticky;top:5rem}
+    .sidebar-card{background:rgba(255,255,235,.04);border:1px solid rgba(255,255,235,.09);border-radius:1.5rem;padding:1.75rem;margin-bottom:1.25rem}
+    .sidebar-title{font-family:'EB Garamond',Georgia,serif;font-size:1.1rem;font-weight:500;color:var(--lumen);margin-bottom:1rem}
+    .sidebar-stat{display:flex;justify-content:space-between;align-items:center;padding:.6rem 0;border-bottom:1px solid rgba(255,255,235,.06);font-size:.85rem}
+    .sidebar-stat:last-child{border-bottom:none}
+    .sidebar-stat-label{color:rgba(255,255,235,.4)}
+    .sidebar-stat-val{color:var(--lumen);font-weight:600}
+    .btn-enroll{width:100%;background:var(--fathom);color:var(--lumen);border:none;border-radius:.875rem;padding:.9rem 1.25rem;font-family:'Figtree',sans-serif;font-size:.95rem;font-weight:600;cursor:pointer;transition:background .2s ease,transform .15s ease;margin-bottom:.75rem}
+    .btn-enroll:hover{background:var(--fathom-lt);transform:translateY(-1px)}
+    .btn-enroll:active{transform:translateY(0)}
+    .btn-enroll:focus-visible{outline:2px solid var(--glow);outline-offset:3px}
+    .btn-enroll.enrolled{background:rgba(255,255,235,.08);color:rgba(255,255,235,.5);cursor:default}
+    .btn-enroll.enrolled:hover{transform:none;background:rgba(255,255,235,.08)}
+    .enroll-note{font-size:.72rem;color:rgba(255,255,235,.28);text-align:center;line-height:1.5}
+
+    /* TOOLS */
+    .tools-list{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.5rem}
+    .tool-tag{background:rgba(255,255,235,.06);border:1px solid rgba(255,255,235,.1);border-radius:9999px;padding:.25rem .75rem;font-size:.72rem;color:rgba(255,255,235,.55);font-weight:500}
+
+    /* PAYWALL */
+    @keyframes paywallIn{from{opacity:0;transform:translateY(16px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+    @keyframes paywallOut{from{opacity:1;transform:translateY(0) scale(1)}to{opacity:0;transform:translateY(12px) scale(.97)}}
+    @keyframes overlayIn{from{opacity:0}to{opacity:1}}
+    @keyframes overlayOut{from{opacity:1}to{opacity:0}}
+    .paywall-overlay{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:1.5rem;background:rgba(10,10,8,.82);backdrop-filter:blur(12px);animation:overlayIn .25s ease both}
+    .paywall-overlay.closing{animation:overlayOut .22s ease forwards}
+    .paywall-overlay.closing .paywall-modal{animation:paywallOut .22s cubic-bezier(.4,0,1,1) forwards}
+    .paywall-modal{background:#111110;border:1px solid rgba(255,255,235,.1);border-radius:2rem;padding:2.5rem;max-width:460px;width:100%;box-shadow:0 32px 80px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,235,.04);position:relative;animation:paywallIn .3s cubic-bezier(.16,1,.3,1) both}
+    .paywall-badge{display:inline-flex;align-items:center;gap:.5rem;background:rgba(255,169,70,.1);border:1px solid rgba(255,169,70,.25);border-radius:9999px;padding:.3rem .85rem;font-size:.72rem;font-weight:700;color:#ffa946;letter-spacing:.04em;text-transform:uppercase;margin-bottom:1.25rem}
+    .paywall-title{font-family:'EB Garamond',Georgia,serif;font-size:2rem;font-weight:500;line-height:1.1;color:var(--lumen);margin-bottom:.65rem}
+    .paywall-sub{font-size:.88rem;color:rgba(255,255,235,.45);line-height:1.7;margin-bottom:1.75rem}
+    .paywall-features{list-style:none;display:flex;flex-direction:column;gap:.6rem;margin-bottom:2rem}
+    .paywall-features li{display:flex;align-items:center;gap:.75rem;font-size:.85rem;color:rgba(255,255,235,.65)}
+    .paywall-check{width:18px;height:18px;border-radius:50%;background:rgba(3,79,70,.5);border:1px solid rgba(94,207,187,.4);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .btn-paywall{width:100%;background:var(--fathom);color:var(--lumen);border:none;border-radius:.875rem;padding:1rem 1.25rem;font-family:'Figtree',sans-serif;font-size:.98rem;font-weight:600;cursor:pointer;transition:background .2s ease,transform .15s ease;margin-bottom:.85rem}
+    .btn-paywall:hover{background:var(--fathom-lt);transform:translateY(-1px)}
+    .btn-paywall:active{transform:translateY(0)}
+    .btn-paywall:focus-visible{outline:2px solid var(--glow);outline-offset:3px}
+    .paywall-signin{font-size:.78rem;color:rgba(255,255,235,.35);text-align:center}
+    .paywall-signin a{color:#5ecfbb;text-decoration:none}
+    .paywall-signin a:hover{text-decoration:underline}
+    .paywall-close{position:absolute;top:1.25rem;right:1.25rem;background:none;border:none;color:rgba(255,255,235,.25);cursor:pointer;padding:.35rem;border-radius:.5rem;transition:color .15s ease,background .15s ease;display:flex;align-items:center;justify-content:center}
+    .paywall-close:hover{color:var(--lumen);background:rgba(255,255,235,.06)}
+    .paywall-close:focus-visible{outline:2px solid var(--glow);outline-offset:3px}
+    .lesson-item.locked .lesson-num::after{content:'🔒';font-size:.65rem;position:absolute}
+    .superadmin-badge{display:inline-flex;align-items:center;gap:.4rem;background:rgba(255,169,70,.1);border:1px solid rgba(255,169,70,.25);border-radius:9999px;padding:.3rem .85rem;font-size:.72rem;font-weight:600;color:#ffa946;margin-top:.5rem}
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-logo">AIQ</a>
+    <div class="nav-right" style="display:flex;align-items:center;gap:1.5rem">
+      <a href="courses.html" style="font-size:.85rem;color:rgba(255,255,235,.5);text-decoration:none;transition:color .15s ease" onmouseover="this.style.color='#ffffeb'" onmouseout="this.style.color='rgba(255,255,235,.5)'">All Courses</a>
+      <a href="community.html" style="font-size:.85rem;color:rgba(255,255,235,.5);text-decoration:none;transition:color .15s ease" onmouseover="this.style.color='#ffffeb'" onmouseout="this.style.color='rgba(255,255,235,.5)'">Community</a>
+      <a href="javascript:history.back()" class="nav-back">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
+        Back
+      </a>
+      <a href="account.html" class="nav-avatar" id="nav-avatar" aria-label="My account"></a>
+    </div>
+  </nav>
+
+  <div class="layout">
+    <!-- MAIN -->
+    <main>
+      <div class="course-eyebrow" id="course-category">Loading...</div>
+      <h1 class="course-title" id="course-title">Loading...</h1>
+      <p class="course-desc" id="course-desc"></p>
+      <div class="course-meta" id="course-meta"></div>
+
+      <div class="progress-wrap" id="progress-wrap" style="display:none">
+        <div class="progress-label">
+          <span>Your progress</span>
+          <span id="progress-text">0%</span>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+      </div>
+
+      <!-- VIDEO PLAYER -->
+      <div class="player-wrap" id="player-wrap">
+        <div class="player-thumb" id="player-thumb" onclick="playLesson()">
+          <div style="position:absolute;inset:0;background:radial-gradient(ellipse 80% 70% at 50% 40%,rgba(3,79,70,.3) 0%,transparent 70%)"></div>
+          <div class="player-icon">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="#ffffeb"><path d="M8 5v14l11-7z"/></svg>
+          </div>
+          <span class="player-label" id="player-label">Select a lesson to begin</span>
+        </div>
+        <div class="player-info">
+          <div class="player-lesson-title" id="player-lesson-title">Welcome to the course</div>
+          <div class="player-lesson-meta" id="player-lesson-meta">Click a lesson below to start watching</div>
+        </div>
+      </div>
+
+      <div class="section-label">Course Lessons</div>
+      <div class="lesson-list" id="lesson-list"></div>
+    </main>
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-card">
+        <div class="sidebar-title">Course details</div>
+        <div class="sidebar-stat"><span class="sidebar-stat-label">Lessons</span><span class="sidebar-stat-val" id="s-lessons">—</span></div>
+        <div class="sidebar-stat"><span class="sidebar-stat-label">Level</span><span class="sidebar-stat-val" id="s-level">—</span></div>
+        <div class="sidebar-stat"><span class="sidebar-stat-label">Duration</span><span class="sidebar-stat-val" id="s-duration">—</span></div>
+        <div class="sidebar-stat"><span class="sidebar-stat-label">Certificate</span><span class="sidebar-stat-val">Yes</span></div>
+      </div>
+
+      <div class="sidebar-card">
+        <button class="btn-enroll" id="btn-enroll" onclick="toggleEnroll()">Enrol in this course</button>
+        <p class="enroll-note" id="enroll-note">Enrol once. Access all lessons and earn your certificate.</p>
+        <div id="superadmin-access" style="display:none" class="superadmin-badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+          Super admin access
+        </div>
+      </div>
+
+      <div class="sidebar-card">
+        <div class="sidebar-title">Tools you will use</div>
+        <div class="tools-list" id="tools-list"></div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- PAYWALL MODAL -->
+  <div id="paywall-overlay" class="paywall-overlay" style="display:none" role="dialog" aria-modal="true" aria-labelledby="paywall-heading">
+    <div class="paywall-modal">
+      <button class="paywall-close" onclick="closePaywall()" aria-label="Close paywall">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+      </button>
+      <div class="paywall-badge">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+        Premium Course
+      </div>
+      <h2 class="paywall-title" id="paywall-heading">Unlock <span id="paywall-course-title">this course</span></h2>
+      <p class="paywall-sub">Get full access to all lessons, resources, and your completion certificate.</p>
+      <ul class="paywall-features">
+        <li><span class="paywall-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="#5ecfbb"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>All lessons and future content updates</li>
+        <li><span class="paywall-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="#5ecfbb"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>Downloadable resources and templates</li>
+        <li><span class="paywall-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="#5ecfbb"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>Completion certificate</li>
+        <li><span class="paywall-check"><svg width="10" height="10" viewBox="0 0 24 24" fill="#5ecfbb"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>Community access and peer support</li>
+      </ul>
+      <button class="btn-paywall" onclick="initiatePayment()">Enrol Now</button>
+      <p class="paywall-signin">Already have an account? <a href="signup.html" id="paywall-signin-link">Sign in to continue</a></p>
+    </div>
+  </div>
+
+  <script>
+    const COURSES = {
+      video: {
+        title: 'Create Videos Using AI',
+        category: 'Video Creation',
+        icon: '🎬',
+        level: 'Beginner',
+        duration: '2h 40min',
+        desc: 'Script to screen in hours. Learn Sora, Runway and Pika to produce cinematic videos without a camera or crew.',
+        tools: ['Sora', 'Runway', 'Pika', 'CapCut', 'ElevenLabs'],
+        lessons: [
+          { title: 'Introduction to AI Video', duration: '8 min' },
+          { title: 'Prompting for Cinematic Results', duration: '14 min' },
+          { title: 'Getting Started with Sora', duration: '22 min' },
+          { title: 'Runway Gen-3 Masterclass', duration: '25 min' },
+          { title: 'Pika Studio Essentials', duration: '18 min' },
+          { title: 'Building a Scene from Scratch', duration: '20 min' },
+          { title: 'Editing and Polishing AI Footage', duration: '16 min' },
+          { title: 'Publishing and Distributing Your Video', duration: '12 min' },
+        ]
+      },
+      books: {
+        title: 'Write Books Using AI',
+        category: 'Writing and Publishing',
+        icon: '📖',
+        level: 'All levels',
+        duration: '3h 20min',
+        desc: 'From first idea to published novel. Use Claude, GPT-4 and Sudowrite to outline, draft, edit and format your book end to end.',
+        tools: ['Claude', 'GPT-4', 'Sudowrite', 'Notion', 'Kindle Direct'],
+        lessons: [
+          { title: 'Introduction to AI Writing', duration: '10 min' },
+          { title: 'Brainstorming and Ideation with AI', duration: '15 min' },
+          { title: 'Outlining Your Book', duration: '18 min' },
+          { title: 'Chapter Drafting Techniques', duration: '22 min' },
+          { title: 'Developing Characters with AI', duration: '20 min' },
+          { title: 'Dialogue, Voice and Style', duration: '18 min' },
+          { title: 'Self-Editing with AI Assistance', duration: '16 min' },
+          { title: 'Formatting for eBook and Print', duration: '14 min' },
+          { title: 'Designing Your Book Cover', duration: '12 min' },
+          { title: 'Publishing on Amazon KDP', duration: '15 min' },
+        ]
+      },
+      music: {
+        title: 'Create Songs Using AI',
+        category: 'Music and Audio',
+        icon: '🎵',
+        level: 'No experience needed',
+        duration: '2h 10min',
+        desc: 'Produce full tracks with vocals, instruments and mastering. Learn Suno, Udio and ElevenLabs with no music theory required.',
+        tools: ['Suno', 'Udio', 'ElevenLabs', 'Loudme', 'DistroKid'],
+        lessons: [
+          { title: 'Introduction to AI Music Creation', duration: '10 min' },
+          { title: 'Writing Songs with Suno', duration: '22 min' },
+          { title: 'Advanced Tracks in Udio', duration: '20 min' },
+          { title: 'Custom Vocals with ElevenLabs', duration: '18 min' },
+          { title: 'Mixing and Mastering with AI', duration: '16 min' },
+          { title: 'Creating Playlists and Collections', duration: '12 min' },
+          { title: 'Releasing Your Music Independently', duration: '14 min' },
+        ]
+      },
+      motion: {
+        title: 'Create Motion Graphics Using AI',
+        category: 'Motion and Design',
+        icon: '✨',
+        level: 'Intermediate',
+        duration: '2h 55min',
+        desc: 'Animate logos, intros and visual effects with AI. Master HeyGen, Adobe Firefly and prompt-driven After Effects workflows.',
+        tools: ['HeyGen', 'Adobe Firefly', 'Runway', 'Canva', 'After Effects'],
+        lessons: [
+          { title: 'Introduction to AI Motion Graphics', duration: '10 min' },
+          { title: 'HeyGen for Animated Presenters', duration: '20 min' },
+          { title: 'Adobe Firefly Generative Effects', duration: '18 min' },
+          { title: 'Animating with Text Prompts', duration: '22 min' },
+          { title: 'Logo and Brand Animation', duration: '20 min' },
+          { title: 'Title Sequences and Lower Thirds', duration: '18 min' },
+          { title: 'Visual Effects and Transitions', duration: '16 min' },
+          { title: 'Colour Grading AI Footage', duration: '14 min' },
+          { title: 'Exporting for Social and Web', duration: '12 min' },
+        ]
+      },
+      games: {
+        title: 'Create Games Using AI',
+        category: 'Game Development',
+        icon: '🎮',
+        level: 'All levels',
+        duration: '4h 10min',
+        desc: 'Build and ship playable games without coding. Use Scenario, Ludo.ai and Claude to design, code and launch your game.',
+        tools: ['Scenario', 'Ludo.ai', 'Claude', 'Unity', 'Itch.io'],
+        lessons: [
+          { title: 'Introduction to AI Game Development', duration: '12 min' },
+          { title: 'Game Design and Concept with AI', duration: '18 min' },
+          { title: 'Creating Game Art in Scenario', duration: '20 min' },
+          { title: 'Planning Your Game with Ludo.ai', duration: '16 min' },
+          { title: 'Using Claude to Write Game Code', duration: '25 min' },
+          { title: 'Building Core Game Mechanics', duration: '22 min' },
+          { title: 'Level Design and World Building', duration: '20 min' },
+          { title: 'Sound Design with AI', duration: '14 min' },
+          { title: 'UI and HUD Design', duration: '16 min' },
+          { title: 'Testing and Bug Fixing', duration: '14 min' },
+          { title: 'Submitting to App Stores and Itch.io', duration: '18 min' },
+          { title: 'Marketing Your Game with AI', duration: '15 min' },
+        ]
+      },
+      animate: {
+        title: 'Animate Images Using AI',
+        category: 'Image Animation',
+        icon: '🖼️',
+        level: 'Beginner',
+        duration: '2h 20min',
+        desc: 'Bring still images to life with motion and emotion. Learn Stable Diffusion, Kling and Midjourney animation pipelines from scratch.',
+        tools: ['Stable Diffusion', 'Kling', 'Midjourney', 'Runway', 'Canva'],
+        lessons: [
+          { title: 'Introduction to Image Animation', duration: '10 min' },
+          { title: 'Stable Diffusion Animation Basics', duration: '20 min' },
+          { title: 'Midjourney to Motion Pipeline', duration: '18 min' },
+          { title: 'Using Kling for Realistic Motion', duration: '22 min' },
+          { title: 'Adding Effects and Overlays', duration: '16 min' },
+          { title: 'Lip Sync and Portrait Animation', duration: '18 min' },
+          { title: 'Creating Seamless Loops', duration: '14 min' },
+          { title: 'Exporting and Sharing Your Work', duration: '12 min' },
+        ]
+      },
+      web: {
+        title: 'Create Websites Using AI',
+        category: 'Web Design',
+        icon: '🌐',
+        level: 'All levels',
+        duration: '3h 10min',
+        desc: 'Design and launch professional websites with AI. Learn v0, Bolt, Cursor and Framer to go from idea to live site in a day.',
+        tools: ['v0', 'Bolt', 'Cursor', 'Framer', 'Vercel'],
+        lessons: [
+          { title: 'Introduction to AI Web Design', duration: '10 min' },
+          { title: 'Building with v0 by Vercel', duration: '20 min' },
+          { title: 'Rapid Prototyping with Bolt', duration: '18 min' },
+          { title: 'Setting Up Cursor for Web Dev', duration: '16 min' },
+          { title: 'Framer Masterclass', duration: '22 min' },
+          { title: 'Designing Layouts and Components', duration: '20 min' },
+          { title: 'Adding Interactivity and Animations', duration: '18 min' },
+          { title: 'SEO and Performance with AI', duration: '14 min' },
+          { title: 'Deploying to a Live Domain', duration: '16 min' },
+          { title: 'Maintaining and Updating Your Site', duration: '12 min' },
+        ]
+      }
+    };
+
+    // Read URL param
+    const params = new URLSearchParams(window.location.search);
+    const courseId = params.get('id') || 'video';
+    const course = COURSES[courseId] || COURSES.video;
+
+    // Active lesson tracking
+    let activeLesson = 0;
+
+    // Super admin
+    const SUPER_ADMIN_EMAIL = 'michael.neftali@gmail.com';
+
+    // Load user data
+    function getUser() {
+      try { return JSON.parse(localStorage.getItem('aiq_user')); } catch(e) { return null; }
+    }
+    function isSuperAdmin() {
+      const u = getUser();
+      return !!(u && u.email && u.email.toLowerCase() === SUPER_ADMIN_EMAIL);
+    }
+    function hasPaid() {
+      const u = getUser();
+      return u && u.paid === true;
+    }
+    function canAccessContent() {
+      return isSuperAdmin() || hasPaid();
+    }
+    function showPaywall() {
+      document.getElementById('paywall-course-title').textContent = '"' + course.title + '"';
+      const overlay = document.getElementById('paywall-overlay');
+      overlay.style.display = 'flex';
+      // Update the sign-in link based on auth state
+      const u = getUser();
+      const signinLink = document.getElementById('paywall-signin-link');
+      if (!u) {
+        signinLink.href = 'signup.html?next=' + encodeURIComponent(window.location.href);
+        signinLink.textContent = 'Sign in or create an account';
+      } else {
+        signinLink.href = 'account.html';
+        signinLink.textContent = 'Go to my account';
+      }
+    }
+    function closePaywall() {
+      const overlay = document.getElementById('paywall-overlay');
+      overlay.classList.add('closing');
+      setTimeout(() => {
+        overlay.style.display = 'none';
+        overlay.classList.remove('closing');
+      }, 220);
+    }
+    function initiatePayment() {
+      // Payment gateway will be wired here
+    }
+    // Close paywall when clicking outside the modal
+    document.getElementById('paywall-overlay').addEventListener('click', function(e) {
+      if (e.target === this) closePaywall();
+    });
+    function getProgress() {
+      try { return JSON.parse(localStorage.getItem('aiq_progress_' + courseId)) || {}; } catch(e) { return {}; }
+    }
+    function saveProgress(data) {
+      localStorage.setItem('aiq_progress_' + courseId, JSON.stringify(data));
+    }
+    function isEnrolled() {
+      try {
+        const u = getUser();
+        return u && u.enrolled && u.enrolled.includes(courseId);
+      } catch(e) { return false; }
+    }
+
+    // Render page
+    document.title = course.title + ' — AIQ';
+    document.getElementById('course-category').textContent = course.category;
+    document.getElementById('course-title').textContent = course.title;
+    document.getElementById('course-desc').textContent = course.desc;
+    document.getElementById('s-lessons').textContent = course.lessons.length + ' lessons';
+    document.getElementById('s-level').textContent = course.level;
+    document.getElementById('s-duration').textContent = course.duration;
+
+    // Meta pills
+    const meta = document.getElementById('course-meta');
+    [
+      { icon: '📚', label: course.lessons.length + ' lessons' },
+      { icon: '⏱', label: course.duration },
+      { icon: '📊', label: course.level },
+    ].forEach(m => {
+      const p = document.createElement('div');
+      p.className = 'meta-pill';
+      p.textContent = m.icon + ' ' + m.label;
+      meta.appendChild(p);
+    });
+
+    // Tools
+    const toolsEl = document.getElementById('tools-list');
+    course.tools.forEach(t => {
+      const el = document.createElement('span');
+      el.className = 'tool-tag';
+      el.textContent = t;
+      toolsEl.appendChild(el);
+    });
+
+    // Lessons
+    function renderLessons() {
+      const progress = getProgress();
+      const locked = !canAccessContent();
+      const list = document.getElementById('lesson-list');
+      list.innerHTML = '';
+      let completed = 0;
+      course.lessons.forEach((l, i) => {
+        const done = !locked && progress[i] === true;
+        if (done) completed++;
+        const item = document.createElement('div');
+        item.className = 'lesson-item' + (i === activeLesson && !locked ? ' active' : '') + (done ? ' completed' : '');
+        item.setAttribute('role', 'button');
+        item.setAttribute('tabindex', '0');
+        item.onclick = () => selectLesson(i);
+        item.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') selectLesson(i); };
+        const lockIcon = locked && i > 0 ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="opacity:.4"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>' : (done ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>' : '');
+        item.innerHTML = `
+          <div class="lesson-num" style="${locked && i > 0 ? 'opacity:.4' : ''}">${done ? '<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>' : (i + 1)}</div>
+          <div class="lesson-info">
+            <div class="lesson-title" style="${locked && i > 0 ? 'opacity:.4' : ''}">${l.title}</div>
+            <div class="lesson-duration" style="${locked && i > 0 ? 'opacity:.3' : ''}">${l.duration}</div>
+          </div>
+          <div class="lesson-status">${lockIcon}</div>
+        `;
+        list.appendChild(item);
+      });
+
+      // Progress
+      const pct = Math.round((completed / course.lessons.length) * 100);
+      if (isEnrolled() && !locked) {
+        document.getElementById('progress-wrap').style.display = 'block';
+        document.getElementById('progress-text').textContent = pct + '%';
+        document.getElementById('progress-fill').style.width = pct + '%';
+      }
+    }
+
+    // Called on init only — just sets up display without paywall gate
+    function initPlayer() {
+      const l = course.lessons[0];
+      if (canAccessContent()) {
+        document.getElementById('player-lesson-title').textContent = l.title;
+        document.getElementById('player-lesson-meta').textContent = 'Lesson 1 of ' + course.lessons.length + ' · ' + l.duration;
+        document.getElementById('player-label').textContent = 'Lesson 1 · ' + l.title;
+      }
+      renderLessons();
+    }
+
+    // Called when user clicks a lesson item — always gated
+    function selectLesson(i) {
+      if (!canAccessContent()) {
+        const u = getUser();
+        if (!u) { window.location.href = 'signup.html'; return; }
+        showPaywall();
+        return;
+      }
+      activeLesson = i;
+      const l = course.lessons[i];
+      document.getElementById('player-lesson-title').textContent = l.title;
+      document.getElementById('player-lesson-meta').textContent = 'Lesson ' + (i + 1) + ' of ' + course.lessons.length + ' · ' + l.duration;
+      document.getElementById('player-label').textContent = 'Lesson ' + (i + 1) + ' · ' + l.title;
+      renderLessons();
+    }
+
+    function playLesson() {
+      if (!canAccessContent()) {
+        const u = getUser();
+        if (!u) { window.location.href = 'signup.html?next=' + encodeURIComponent(window.location.href); return; }
+        showPaywall();
+        return;
+      }
+      // Ensure enrolled
+      if (!isEnrolled()) { enrollUser(); }
+      // Mark as completed (placeholder — fires when video ends in production)
+      const progress = getProgress();
+      progress[activeLesson] = true;
+      saveProgress(progress);
+      renderLessons();
+      // Auto-advance
+      if (activeLesson < course.lessons.length - 1) {
+        setTimeout(() => selectLesson(activeLesson + 1), 300);
+      }
+    }
+
+    function enrollUser() {
+      const u = getUser();
+      if (!u) return;
+      const enrolled = u.enrolled || [];
+      if (!enrolled.includes(courseId)) {
+        enrolled.push(courseId);
+        u.enrolled = enrolled;
+        localStorage.setItem('aiq_user', JSON.stringify(u));
+        document.getElementById('progress-wrap').style.display = 'block';
+        renderLessons();
+      }
+    }
+
+    function toggleEnroll() {
+      const u = getUser();
+      if (!u) { window.location.href = 'signup.html'; return; }
+      if (!canAccessContent()) {
+        showPaywall();
+        return;
+      }
+      enrollUser();
+      updateEnrollBtn();
+    }
+
+    function updateEnrollBtn() {
+      const btn = document.getElementById('btn-enroll');
+      const note = document.getElementById('enroll-note');
+      const badge = document.getElementById('superadmin-access');
+      if (isSuperAdmin()) {
+        badge.style.display = 'inline-flex';
+        btn.textContent = 'Full Access Granted';
+        btn.classList.add('enrolled');
+        if (note) note.style.display = 'none';
+      } else if (isEnrolled()) {
+        btn.textContent = 'Enrolled ✓';
+        btn.classList.add('enrolled');
+      } else {
+        btn.textContent = 'Enrol in this course';
+        btn.classList.remove('enrolled');
+      }
+    }
+
+    // Nav avatar
+    function renderNavAvatar() {
+      const u = getUser();
+      const el = document.getElementById('nav-avatar');
+      if (u) {
+        if (u.picture) {
+          el.innerHTML = '<img src="' + u.picture + '" alt="' + (u.name || 'Account') + '">';
+        } else {
+          el.textContent = (u.name || 'A')[0].toUpperCase();
+        }
+      } else {
+        el.textContent = '?';
+        el.href = 'signup.html';
+      }
+    }
+
+    // Init
+    initPlayer();
+    updateEnrollBtn();
+    renderNavAvatar();
+
+    // Gate access immediately on page load — do not wait for a click
+    if (!canAccessContent()) {
+      showPaywall();
+    }
+
+    // Secret admin shortcut
+    document.addEventListener('keydown', e => { if (e.ctrlKey && e.shiftKey && e.key === 'A') window.location.href = 'admin-login.html'; });
+  </script>
+</body>
+</html>
