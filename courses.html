@@ -17,7 +17,7 @@
     @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
     /* NAV */
-    nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:1.1rem 2.5rem;background:rgba(10,10,8,0.82);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,235,0.06)}
+    nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:1.1rem 2.5rem;background:rgba(10,10,8,0.97);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,235,0.06);transform:translate3d(0,0,0);-webkit-transform:translate3d(0,0,0)}
     .nav-logo{font-family:'EB Garamond',Georgia,serif;font-size:1.45rem;font-weight:500;color:var(--lumen);text-decoration:none;letter-spacing:-0.01em}
     .nav-links{display:flex;align-items:center;gap:2rem;list-style:none}
     .nav-links a{font-size:.875rem;font-weight:500;color:rgba(255,255,235,0.55);text-decoration:none;transition:color .15s ease}
@@ -143,9 +143,9 @@
     @media(max-width:700px){.cards-grid{grid-template-columns:1fr}.reviews-grid{grid-template-columns:1fr}.stat-div{display:none}.stat-row{gap:1.5rem}.footer-inner{grid-template-columns:1fr}}
     @media(max-width:600px){nav{padding:1rem 1.25rem}.nav-links{display:none}}
     /* HAMBURGER */
-    .btn-ham{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:.5rem;color:var(--lumen);position:relative;z-index:60}
+    .btn-ham{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:.5rem;color:var(--lumen);position:relative;z-index:1001}
     .btn-ham .bar{display:block;width:22px;height:2px;background:currentColor;border-radius:2px;transition:transform .25s ease,opacity .2s ease}
-    .mob-nav{position:fixed;inset:0;z-index:55;background:rgba(10,10,8,.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2.5rem;opacity:0;transform:translateY(-10px);pointer-events:none;transition:opacity .25s ease,transform .25s ease}
+    .mob-nav{position:fixed;inset:0;z-index:1050;background:rgba(10,10,8,.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2.5rem;opacity:0;transform:translateY(-10px);pointer-events:none;transition:opacity .25s ease,transform .25s ease}
     .mob-nav.open{opacity:1;transform:translateY(0);pointer-events:all}
     .mob-nav a{font-family:'EB Garamond',Georgia,serif;font-size:2.4rem;font-weight:500;color:rgba(255,255,235,.6);text-decoration:none;transition:color .15s ease}
     .mob-nav a:hover,.mob-nav a.active{color:var(--lumen)}
