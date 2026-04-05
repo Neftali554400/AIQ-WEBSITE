@@ -84,6 +84,7 @@
     .card-footer-row{display:flex;align-items:center;justify-content:space-between;margin-top:auto}
     .card-meta{display:flex;align-items:center;gap:.5rem;font-size:.75rem;color:rgba(255,255,235,.32)}
     .card-meta-dot{width:3px;height:3px;border-radius:50%;background:rgba(255,255,235,.2)}
+    .card-price{font-family:'EB Garamond',Georgia,serif;font-size:1rem;font-weight:600;color:var(--lumen);letter-spacing:-.01em;margin-left:auto;margin-right:.5rem}
     .card-arrow{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,235,.12);color:rgba(255,255,235,.35);transition:background .2s ease,border-color .2s ease,color .2s ease,transform .2s ease;flex-shrink:0}
     .course-card:hover .card-arrow{background:var(--fathom);border-color:var(--fathom);color:var(--lumen);transform:translateX(3px)}
 
@@ -256,6 +257,7 @@
           <p class="card-desc">Script to screen in hours. Learn Sora, Runway and Pika to produce cinematic videos without a camera or crew.</p>
           <div class="card-footer-row">
             <div class="card-meta"><span>8 lessons</span><span class="card-meta-dot"></span><span>Beginner</span></div>
+            <div class="card-price">₦9,999</div>
             <div class="card-arrow"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
           </div>
         </div>
@@ -273,6 +275,7 @@
           <p class="card-desc">From first idea to published novel. Use Claude, GPT-4 and Sudowrite to outline, draft and format your book end to end.</p>
           <div class="card-footer-row">
             <div class="card-meta"><span>10 lessons</span><span class="card-meta-dot"></span><span>All levels</span></div>
+            <div class="card-price">₦9,999</div>
             <div class="card-arrow"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
           </div>
         </div>
@@ -290,6 +293,7 @@
           <p class="card-desc">Produce full tracks with vocals, instruments and mastering. Learn Suno, Udio and ElevenLabs with no music theory required.</p>
           <div class="card-footer-row">
             <div class="card-meta"><span>7 lessons</span><span class="card-meta-dot"></span><span>No experience needed</span></div>
+            <div class="card-price">₦24,999</div>
             <div class="card-arrow"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
           </div>
         </div>
@@ -307,6 +311,7 @@
           <p class="card-desc">Animate logos, intros and visual effects with AI. Master HeyGen, Adobe Firefly and prompt-driven After Effects workflows.</p>
           <div class="card-footer-row">
             <div class="card-meta"><span>9 lessons</span><span class="card-meta-dot"></span><span>Intermediate</span></div>
+            <div class="card-price">₦19,999</div>
             <div class="card-arrow"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
           </div>
         </div>
@@ -324,6 +329,7 @@
           <p class="card-desc">Build and ship playable games without coding. Use Scenario, Ludo.ai and Claude to design, code and launch your game.</p>
           <div class="card-footer-row">
             <div class="card-meta"><span>12 lessons</span><span class="card-meta-dot"></span><span>All levels</span></div>
+            <div class="card-price">₦29,999</div>
             <div class="card-arrow"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
           </div>
         </div>
@@ -341,6 +347,7 @@
           <p class="card-desc">Bring still images to life with motion and emotion. Learn Stable Diffusion, Kling and Midjourney animation pipelines.</p>
           <div class="card-footer-row">
             <div class="card-meta"><span>8 lessons</span><span class="card-meta-dot"></span><span>Beginner</span></div>
+            <div class="card-price">₦4,999</div>
             <div class="card-arrow"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
           </div>
         </div>
@@ -358,27 +365,29 @@
           <p class="card-desc">Design and launch professional websites with AI. Learn v0, Bolt, Cursor and Framer to go from idea to live site in a day.</p>
           <div class="card-footer-row">
             <div class="card-meta"><span>10 lessons</span><span class="card-meta-dot"></span><span>All levels</span></div>
+            <div class="card-price">₦24,999</div>
             <div class="card-arrow"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
           </div>
         </div>
       </a>
 
-      <!-- AI Automation — Coming Soon -->
-      <div class="course-card card-auto card-coming-soon" role="article">
+      <!-- AI Automation -->
+      <a href="course-detail.html?id=automation" class="course-card card-auto" data-level="intermediate">
         <div class="card-visual">
           <img src="thumb-automation.svg" alt="AI Automation" style="width:100%;height:100%;object-fit:cover;display:block" />
           <div class="card-visual-fade"></div>
-          <div class="card-badge">Coming Soon</div>
         </div>
         <div class="card-body">
           <div class="card-category">Automation</div>
           <h3 class="card-title">AI Automation</h3>
           <p class="card-desc">Automate your workflows with AI. Master Make, Zapier, n8n and Claude agents to build systems that run while you sleep.</p>
           <div class="card-footer-row">
-            <div class="card-meta"><span>In development</span><span class="card-meta-dot"></span><span>All levels</span></div>
+            <div class="card-meta"><span>10 lessons</span><span class="card-meta-dot"></span><span>Intermediate</span></div>
+            <div class="card-price">₦34,999</div>
+            <div class="card-arrow"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg></div>
           </div>
         </div>
-      </div>
+      </a>
 
     </div>
 
