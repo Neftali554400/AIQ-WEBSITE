@@ -43,6 +43,29 @@ async function sendOtpEmail(to, name, otp) {
   if (result.error) throw new Error(result.error.message || JSON.stringify(result.error));
 }
 
+async function sendWelcomeEmail(to, name) {
+  const coursesUrl = `${SITE_URL}/courses`;
+  await getResend().emails.send({
+    from: 'AIQ <hello@aiq-courses.com>',
+    to,
+    subject: 'Welcome to AIQ — start your learning journey',
+    html: `
+      <div style="font-family:system-ui,Arial,sans-serif;max-width:520px;margin:0 auto;background:#0a0a08;color:#ffffeb;border-radius:12px;overflow:hidden">
+        <div style="background:#034f46;padding:32px 40px;text-align:center">
+          <span style="font-family:Georgia,serif;font-size:28px;font-weight:500;color:#ffffeb;letter-spacing:-0.02em">AIQ</span>
+        </div>
+        <div style="padding:40px">
+          <h1 style="font-family:Georgia,serif;font-size:24px;font-weight:500;margin:0 0 12px;color:#ffffeb">Welcome to AIQ Courses, ${name}!</h1>
+          <p style="color:rgba(255,255,235,0.7);line-height:1.7;margin:0 0 8px">Your account is ready. Start your learning journey today — pick a course, learn at your own pace, and build real AI skills.</p>
+          <div style="margin:32px 0;text-align:center">
+            <a href="${coursesUrl}" style="display:inline-block;padding:14px 32px;background:#034f46;color:#ffffeb;border-radius:9999px;text-decoration:none;font-weight:600;font-size:15px">Explore Courses</a>
+          </div>
+          <p style="color:rgba(255,255,235,0.35);font-size:12px;line-height:1.6;margin:0">You're receiving this because you created an AIQ account. If this wasn't you, please ignore this email.</p>
+        </div>
+      </div>`,
+  });
+}
+
 async function sendResetEmail(to, name, token) {
   const url = `${SITE_URL}/reset-password?token=${token}`;
   await getResend().emails.send({
@@ -134,6 +157,7 @@ router.post('/verify-otp', async (req, res) => {
     issueToken(res, user.id, user.token_version);
     const { token_version, ...safeUser } = user;
     res.json({ ok: true, user: safeUser });
+    sendWelcomeEmail(user.email, user.name).catch(e => console.error('[welcome-email]', e.message));
   } catch (err) {
     console.error('[verify-otp]', err.message);
     res.status(500).json({ error: 'Server error. Please try again.' });
@@ -296,8 +320,10 @@ router.post('/google', async (req, res) => {
     const profile = await gRes.json();
     if (!profile.email) return res.status(400).json({ error: 'Google did not return an email address.' });
 
+    let isNewUser = false;
     let user = db.prepare('SELECT * FROM users WHERE email = ?').get(profile.email.toLowerCase());
     if (!user) {
+      isNewUser = true;
       const r = db.prepare(
         'INSERT INTO users (name, email, provider, picture, verified, joined) VALUES (?, ?, ?, ?, 1, ?)'
       ).run(profile.name || profile.email, profile.email.toLowerCase(), 'google', profile.picture || null, new Date().toISOString().split('T')[0]);
@@ -312,6 +338,7 @@ router.post('/google', async (req, res) => {
     issueToken(res, user.id, user.token_version || 0);
     const { password_hash, token_version, ...safeUser } = user;
     res.json({ ok: true, user: safeUser });
+    if (isNewUser) sendWelcomeEmail(user.email, user.name).catch(e => console.error('[welcome-email]', e.message));
   } catch(err) {
     console.error('[google]', err.message);
     res.status(500).json({ error: 'Google sign-in failed. Please try again.' });
