@@ -237,8 +237,9 @@
       try { return JSON.parse(localStorage.getItem('aiq_progress_' + id)) || {}; } catch(e) { return {}; }
     }
 
-    const user = getUser();
-    if (!user) return; // auth gate handles this
+    function renderProfile() {
+    let user = getUser();
+    if (!user) return;
 
     // Avatar
     const avatarEl = document.getElementById('avatar');
@@ -313,6 +314,8 @@
       section.appendChild(grid);
     }
 
+    } // end renderProfile
+
     // Settings actions
     function editName() {
       const n = prompt('Enter your display name:', user.name || '');
@@ -360,27 +363,30 @@
   </div><!-- /#page-content -->
 
   <script>
-    // Check auth via backend before showing page
+    // Check auth via backend, store user, then render page
     (async function() {
       try {
         const res = await fetch('/api/auth/me', { credentials: 'include' });
         if (res.ok) {
+          const { user } = await res.json();
+          // Sync to localStorage so page scripts can read it
+          localStorage.setItem('aiq_user', JSON.stringify(user));
           document.getElementById('page-content').classList.add('visible');
+          renderProfile();
         } else {
-          // Clear stale cookie/localStorage and show gate
           localStorage.removeItem('aiq_user');
           document.getElementById('auth-gate').classList.add('visible');
         }
       } catch(e) {
-        // Server unreachable — fall back to localStorage
         const u = localStorage.getItem('aiq_user');
         if (u) {
           document.getElementById('page-content').classList.add('visible');
+          renderProfile();
         } else {
           document.getElementById('auth-gate').classList.add('visible');
         }
       }
-      document.body.style.visibility = 'visible';
+      document.documentElement.style.visibility = 'visible';
     })();
   </script>
   <script src="auth.js"></script>

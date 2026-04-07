@@ -317,7 +317,7 @@
               placeholder="000000"
               autocomplete="one-time-code"
               aria-label="6-digit verification code"
-              oninput="this.value=this.value.replace(/\D/g,'').slice(0,6);clearBanner('verify-banner')"
+              oninput="this.value=this.value.replace(/\D/g,'').slice(0,6);clearBanner('verify-banner');if(this.value.length===6)this.closest('form').requestSubmit()"
             />
             <span class="field-error" id="otp-error"></span>
           </div>
