@@ -17,7 +17,7 @@ function getResend() {
 async function sendOtpEmail(to, name, otp) {
   console.log('[sendOtpEmail] Sending to:', to);
   const result = await getResend().emails.send({
-    from: 'AIQ <onboarding@resend.dev>',
+    from: 'AIQ <noreply@aiq-courses.com>',
     to,
     subject: `${otp} — your AIQ verification code`,
     html: `
@@ -36,7 +36,7 @@ async function sendOtpEmail(to, name, otp) {
 async function sendResetEmail(to, name, token) {
   const url = `${SITE_URL}/reset-password.html?token=${token}`;
   await getResend().emails.send({
-    from: 'AIQ <onboarding@resend.dev>',
+    from: 'AIQ <noreply@aiq-courses.com>',
     to,
     subject: 'Reset your AIQ password',
     html: `
