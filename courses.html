@@ -545,5 +545,6 @@
     (function(){try{var u=JSON.parse(localStorage.getItem("aiq_user"));if(!u)return;var s=document.getElementById("nav-start-btn"),a=document.getElementById("nav-avatar"),m=document.getElementById("mob-nav-cta");if(s)s.style.display="none";if(a){a.style.display="flex";a.innerHTML=u.picture?"<img src=\""+u.picture+"\" alt=\"My account\">":(u.name||u.email||"A")[0].toUpperCase();}if(m){m.textContent="My Account";m.href="/account";}}catch(e){}})();
 </script>
   <script src="auth.js"></script>
+  <script src="social-proof.js"></script>
 </body>
 </html>
