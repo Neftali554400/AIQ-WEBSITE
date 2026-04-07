@@ -48,10 +48,9 @@ app.use('/api/auth', require('./routes/auth'));
 // ── 404 for unknown API calls ───────────────────────────────────────────────
 app.use('/api', (req, res) => res.status(404).json({ error: 'Not found.' }));
 
-// ── Serve index.html for any non-file route (client-side nav) ───────────────
-app.get('/{*path}', (req, res) => {
-  if (path.extname(req.path)) return res.status(404).send('Not found.');
-  res.sendFile(path.join(__dirname, 'index.html'));
+// ── 404 for any unmatched route ─────────────────────────────────────────────
+app.use((_req, res) => {
+  res.status(404).sendFile(path.join(__dirname, '404.html'));
 });
 
 const server = app.listen(PORT, () => {

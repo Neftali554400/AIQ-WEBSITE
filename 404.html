@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 — Page Not Found · AIQ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{--lumen:#ffffeb;--fathom:#034f46;--fathom-lt:#056b5e;--glow:#ffa946;--bg:#0a0a08}
+    html,body{height:100%}
+    body{font-family:'Figtree',Arial,sans-serif;-webkit-font-smoothing:antialiased;background:var(--bg);color:var(--lumen);min-height:100vh;display:flex;flex-direction:column}
+    body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:128px}
+
+    nav{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 2.5rem;border-bottom:1px solid rgba(255,255,235,0.06)}
+    .nav-logo{font-family:'EB Garamond',Georgia,serif;font-size:1.45rem;font-weight:500;color:var(--lumen);text-decoration:none;letter-spacing:-0.01em}
+
+    main{flex:1;display:flex;align-items:center;justify-content:center;padding:4rem 2rem;position:relative;overflow:hidden;text-align:center}
+    .glow{position:absolute;inset:0;background:radial-gradient(ellipse 55% 45% at 50% 40%,rgba(3,79,70,.3) 0%,transparent 65%);pointer-events:none}
+
+    .content{position:relative;z-index:1;max-width:520px}
+    .code{font-family:'EB Garamond',Georgia,serif;font-size:8rem;font-weight:500;line-height:1;letter-spacing:-.04em;color:var(--fathom);margin-bottom:1.5rem;opacity:.8}
+    h1{font-family:'EB Garamond',Georgia,serif;font-size:2.4rem;font-weight:500;letter-spacing:-.02em;color:var(--lumen);margin-bottom:.75rem;line-height:1.15}
+    h1 em{font-style:italic}
+    p{font-size:.95rem;color:rgba(255,255,235,.45);line-height:1.7;margin-bottom:2.5rem}
+
+    .actions{display:flex;align-items:center;justify-content:center;gap:1rem;flex-wrap:wrap}
+    .btn-primary{display:inline-flex;align-items:center;gap:.45rem;background:var(--fathom);color:var(--lumen);border:none;border-radius:9999px;padding:.75rem 1.75rem;font-family:'Figtree',sans-serif;font-size:.9rem;font-weight:600;text-decoration:none;cursor:pointer;transition:background .2s ease,transform .15s ease}
+    .btn-primary:hover{background:var(--fathom-lt);transform:translateY(-1px)}
+    .btn-primary:active{transform:translateY(0)}
+    .btn-primary:focus-visible{outline:2px solid var(--glow);outline-offset:3px}
+    .btn-ghost{display:inline-flex;align-items:center;gap:.45rem;background:none;color:rgba(255,255,235,.5);border:1px solid rgba(255,255,235,.12);border-radius:9999px;padding:.75rem 1.75rem;font-family:'Figtree',sans-serif;font-size:.9rem;font-weight:500;text-decoration:none;cursor:pointer;transition:color .15s ease,border-color .15s ease}
+    .btn-ghost:hover{color:rgba(255,255,235,.85);border-color:rgba(255,255,235,.3)}
+    .btn-ghost:focus-visible{outline:2px solid var(--glow);outline-offset:3px}
+
+    footer{padding:1.5rem 2.5rem;border-top:1px solid rgba(255,255,235,.06);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+    footer span{font-size:.78rem;color:rgba(255,255,235,.2)}
+    footer a{font-size:.78rem;color:rgba(255,255,235,.35);text-decoration:none}
+    footer a:hover{color:rgba(255,255,235,.7)}
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html" class="nav-logo">AIQ</a>
+  </nav>
+
+  <main>
+    <div class="glow" aria-hidden="true"></div>
+    <div class="content">
+      <div class="code" aria-hidden="true">404</div>
+      <h1>This page <em>doesn't exist</em></h1>
+      <p>The page you're looking for may have been moved, deleted, or never existed. Check the URL or head back home.</p>
+      <div class="actions">
+        <a href="index.html" class="btn-primary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+          Back to home
+        </a>
+        <a href="courses.html" class="btn-ghost">Browse courses</a>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <span>© 2026 AIQ</span>
+    <div style="display:flex;gap:1.5rem">
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+    </div>
+  </footer>
+</body>
+</html>
