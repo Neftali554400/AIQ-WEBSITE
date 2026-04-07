@@ -44,7 +44,7 @@ async function sendOtpEmail(to, name, otp) {
 }
 
 async function sendResetEmail(to, name, token) {
-  const url = `${SITE_URL}/reset-password.html?token=${token}`;
+  const url = `${SITE_URL}/reset-password?token=${token}`;
   await getResend().emails.send({
     from: 'AIQ <noreply@aiq-courses.com>',
     to,

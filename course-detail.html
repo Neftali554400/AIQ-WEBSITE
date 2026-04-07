@@ -126,15 +126,15 @@
 </head>
 <body>
   <nav>
-    <a href="index.html" class="nav-logo">AIQ</a>
+    <a href="/" class="nav-logo">AIQ</a>
     <div class="nav-right" style="display:flex;align-items:center;gap:1.5rem">
-      <a href="courses.html" class="nav-hide-mob" style="font-size:.85rem;color:rgba(255,255,235,.5);text-decoration:none;transition:color .15s ease" onmouseover="this.style.color='#ffffeb'" onmouseout="this.style.color='rgba(255,255,235,.5)'">All Courses</a>
-      <a href="community.html" class="nav-hide-mob" style="font-size:.85rem;color:rgba(255,255,235,.5);text-decoration:none;transition:color .15s ease" onmouseover="this.style.color='#ffffeb'" onmouseout="this.style.color='rgba(255,255,235,.5)'">Community</a>
+      <a href="/courses" class="nav-hide-mob" style="font-size:.85rem;color:rgba(255,255,235,.5);text-decoration:none;transition:color .15s ease" onmouseover="this.style.color='#ffffeb'" onmouseout="this.style.color='rgba(255,255,235,.5)'">All Courses</a>
+      <a href="/community" class="nav-hide-mob" style="font-size:.85rem;color:rgba(255,255,235,.5);text-decoration:none;transition:color .15s ease" onmouseover="this.style.color='#ffffeb'" onmouseout="this.style.color='rgba(255,255,235,.5)'">Community</a>
       <a href="javascript:history.back()" class="nav-back nav-hide-mob">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
         Back
       </a>
-      <a href="account.html" class="nav-avatar" id="nav-avatar" aria-label="My account"></a>
+      <a href="/account" class="nav-avatar" id="nav-avatar" aria-label="My account"></a>
       <button class="btn-ham" id="btn-ham" aria-label="Open menu" aria-expanded="false"><span class="bar"></span><span class="bar"></span><span class="bar"></span></button>
     </div>
   </nav>
@@ -149,8 +149,8 @@
 
   <div class="mob-nav" id="mob-nav" role="dialog" aria-label="Mobile navigation">
     <button class="mob-nav-close" onclick="document.getElementById('btn-ham').click()" aria-label="Close menu"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
-    <a href="index.html">Home</a><a href="courses.html" class="active">Courses</a><a href="about.html">About</a><a href="community.html">Community</a><a href="blog.html">Blog</a>
-    <a href="account.html" class="mob-cta">My Account</a>
+    <a href="/">Home</a><a href="/courses" class="active">Courses</a><a href="/about">About</a><a href="/community">Community</a><a href="/blog">Blog</a>
+    <a href="/account" class="mob-cta">My Account</a>
   </div>
 
   <div class="layout">
@@ -426,10 +426,10 @@
     function initiatePayment() {
       const u = getUser();
       if (!u) {
-        window.location.href = 'signup.html?next=' + encodeURIComponent(window.location.href);
+        window.location.href = '/signup?next=' + encodeURIComponent(window.location.href);
         return;
       }
-      window.location.href = 'payment.html?course=' + courseId;
+      window.location.href = '/payment?course=' + courseId;
     }
     function getProgress() {
       try { return JSON.parse(localStorage.getItem('aiq_progress_' + courseId)) || {}; } catch(e) { return {}; }
@@ -528,7 +528,7 @@
     function selectLesson(i) {
       if (!canAccessContent()) {
         const u = getUser();
-        if (!u) { window.location.href = 'signup.html'; return; }
+        if (!u) { window.location.href = '/signup'; return; }
         initiatePayment();
         return;
       }
@@ -543,7 +543,7 @@
     function playLesson() {
       if (!canAccessContent()) {
         const u = getUser();
-        if (!u) { window.location.href = 'signup.html?next=' + encodeURIComponent(window.location.href); return; }
+        if (!u) { window.location.href = '/signup?next=' + encodeURIComponent(window.location.href); return; }
         initiatePayment();
         return;
       }
@@ -575,7 +575,7 @@
 
     function toggleEnroll() {
       const u = getUser();
-      if (!u) { window.location.href = 'signup.html'; return; }
+      if (!u) { window.location.href = '/signup'; return; }
       if (!canAccessContent()) {
         initiatePayment();
         return;
@@ -622,7 +622,7 @@
         }
       } else {
         el.textContent = '?';
-        el.href = 'signup.html';
+        el.href = '/signup';
       }
     }
 
@@ -632,7 +632,7 @@
     renderNavAvatar();
 
     // Secret admin shortcut
-    document.addEventListener('keydown', e => { if (e.ctrlKey && e.shiftKey && e.key === 'A') window.location.href = 'admin-login.html'; });
+    document.addEventListener('keydown', e => { if (e.ctrlKey && e.shiftKey && e.key === 'A') window.location.href = '/admin-login'; });
       (function(){var btn=document.getElementById("btn-ham"),menu=document.getElementById("mob-nav"),bars=btn.querySelectorAll(".bar");btn.addEventListener("click",function(){var open=menu.classList.toggle("open");btn.setAttribute("aria-expanded",open);if(open){bars[0].style.transform="translateY(7px) rotate(45deg)";bars[1].style.opacity="0";bars[2].style.transform="translateY(-7px) rotate(-45deg)";}else{bars[0].style.transform="";bars[1].style.opacity="";bars[2].style.transform="";}});menu.querySelectorAll("a").forEach(function(a){a.addEventListener("click",function(){menu.classList.remove("open");btn.setAttribute("aria-expanded","false");bars[0].style.transform="";bars[1].style.opacity="";bars[2].style.transform="";});});})();
 </script>
 </body>

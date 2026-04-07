@@ -39,7 +39,7 @@ function updateNav(user) {
   const avatar = document.getElementById('nav-avatar');
   if (avatar) {
     avatar.style.display = 'flex';
-    avatar.href = 'account.html';
+    avatar.href = '/account';
     if (user.picture) {
       avatar.innerHTML = `<img src="${user.picture}" alt="${user.name || 'Account'}" style="width:32px;height:32px;border-radius:50%;object-fit:cover">`;
     } else {
@@ -54,5 +54,5 @@ async function signOut() {
     await fetch('/api/auth/signout', { method: 'POST', credentials: 'include' });
   } catch (e) { /* continue even if request fails */ }
   clearLocalUser();
-  window.location.href = 'index.html';
+  window.location.href = '/';
 }

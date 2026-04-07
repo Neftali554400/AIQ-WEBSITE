@@ -113,26 +113,26 @@
     <div class="gate-icon">🔒</div>
     <h1 class="gate-title">Sign in to continue</h1>
     <p class="gate-sub">You need to be signed in to view your account.</p>
-    <a href="signup.html" class="gate-btn">Sign in to AIQ</a>
+    <a href="/signup" class="gate-btn">Sign in to AIQ</a>
   </div>
 
   <!-- Page content — hidden until auth confirmed -->
   <div id="page-content">
   <nav>
-    <a href="index.html" class="nav-logo">AIQ</a>
+    <a href="/" class="nav-logo">AIQ</a>
     <div class="nav-right">
-      <a href="index.html" class="nav-link">Home</a>
-      <a href="courses.html" class="nav-link">Courses</a>
-      <a href="about.html" class="nav-link">About</a>
-      <a href="community.html" class="nav-link">Community</a>
-      <a href="blog.html" class="nav-link">Blog</a>
+      <a href="/" class="nav-link">Home</a>
+      <a href="/courses" class="nav-link">Courses</a>
+      <a href="/about" class="nav-link">About</a>
+      <a href="/community" class="nav-link">Community</a>
+      <a href="/blog" class="nav-link">Blog</a>
       <button class="btn-signout" onclick="signOut()">Sign out</button>
       <button class="btn-ham" id="btn-ham" aria-label="Open menu" aria-expanded="false"><span class="bar"></span><span class="bar"></span><span class="bar"></span></button>
     </div>
   </nav>
   <div class="mob-nav" id="mob-nav" role="dialog" aria-label="Mobile navigation">
     <button class="mob-nav-close" onclick="document.getElementById('btn-ham').click()" aria-label="Close menu"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
-    <a href="index.html">Home</a><a href="courses.html">Courses</a><a href="about.html">About</a><a href="community.html">Community</a><a href="blog.html">Blog</a>
+    <a href="/">Home</a><a href="/courses">Courses</a><a href="/about">About</a><a href="/community">Community</a><a href="/blog">Blog</a>
     <a href="#" onclick="signOut();return false;" class="mob-cta">Sign out</a>
   </div>
 
@@ -289,7 +289,7 @@
       section.innerHTML = `
         <div class="empty-state">
           <p>You have not enrolled in any courses yet.</p>
-          <a href="index.html#courses" class="btn-browse">Browse courses</a>
+          <a href="/#courses" class="btn-browse">Browse courses</a>
         </div>`;
     } else {
       const grid = document.createElement('div');
@@ -302,7 +302,7 @@
         const pct = Math.round((done / meta.lessons) * 100);
         const card = document.createElement('a');
         card.className = 'enrolled-card';
-        card.href = 'course-detail.html?id=' + id;
+        card.href = '/course-detail?id=' + id;
         card.innerHTML = `
           <div class="enrolled-icon">${meta.icon}</div>
           <div class="enrolled-course-title">${meta.title}</div>
@@ -357,7 +357,7 @@
       }
       localStorage.removeItem('aiq_user');
       Object.keys(COURSE_META).forEach(id => localStorage.removeItem('aiq_progress_' + id));
-      window.location.href = 'index.html';
+      window.location.href = '/';
     }
 
     async function signOut() {
@@ -365,7 +365,7 @@
         try { await fetch('/api/auth/signout', { method: 'POST', credentials: 'include' }); } catch(e) {}
         localStorage.removeItem('aiq_user');
         localStorage.removeItem('aiq_admin_session');
-        window.location.href = 'signup.html';
+        window.location.href = '/signup';
       }
     }
       (function(){var btn=document.getElementById("btn-ham"),menu=document.getElementById("mob-nav"),bars=btn.querySelectorAll(".bar");btn.addEventListener("click",function(){var open=menu.classList.toggle("open");btn.setAttribute("aria-expanded",open);if(open){bars[0].style.transform="translateY(7px) rotate(45deg)";bars[1].style.opacity="0";bars[2].style.transform="translateY(-7px) rotate(-45deg)";}else{bars[0].style.transform="";bars[1].style.opacity="";bars[2].style.transform="";}});menu.querySelectorAll("a").forEach(function(a){a.addEventListener("click",function(){menu.classList.remove("open");btn.setAttribute("aria-expanded","false");bars[0].style.transform="";bars[1].style.opacity="";bars[2].style.transform="";});});})();

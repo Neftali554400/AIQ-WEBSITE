@@ -119,29 +119,29 @@
 <body>
 
   <nav aria-label="Main navigation">
-    <a href="index.html" class="nav-logo">AIQ</a>
+    <a href="/" class="nav-logo">AIQ</a>
     <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="courses.html">Courses</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="community.html" class="active">Community</a></li>
-      <li><a href="blog.html">Blog</a></li>
+      <li><a href="/">Home</a></li>
+      <li><a href="/courses">Courses</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/community" class="active">Community</a></li>
+      <li><a href="/blog">Blog</a></li>
     </ul>
-    <a href="signup.html" class="btn-nav" id="nav-start-btn">
+    <a href="/signup" class="btn-nav" id="nav-start-btn">
       Start here
       <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
     </a>
-    <a href="account.html" class="nav-avatar" id="nav-avatar" aria-label="My account"></a>
+    <a href="/account" class="nav-avatar" id="nav-avatar" aria-label="My account"></a>
       <button class="btn-ham" id="btn-ham" aria-label="Open menu" aria-expanded="false"><span class="bar"></span><span class="bar"></span><span class="bar"></span></button>
   </nav>
   <div class="mob-nav" id="mob-nav" role="dialog" aria-label="Mobile navigation">
     <button class="mob-nav-close" onclick="document.getElementById('btn-ham').click()" aria-label="Close menu"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
-    <a href="index.html">Home</a>
-    <a href="courses.html">Courses</a>
-    <a href="about.html">About</a>
-    <a href="community.html" class="active">Community</a>
-    <a href="blog.html">Blog</a>
-    <a href="signup.html" class="mob-cta" id="mob-nav-cta">Start here</a>
+    <a href="/">Home</a>
+    <a href="/courses">Courses</a>
+    <a href="/about">About</a>
+    <a href="/community" class="active">Community</a>
+    <a href="/blog">Blog</a>
+    <a href="/signup" class="mob-cta" id="mob-nav-cta">Start here</a>
   </div>
 
 
@@ -150,7 +150,7 @@
       <div class="tag-chip"><span class="tag-chip-dot" aria-hidden="true"></span>Join the movement</div>
       <h1 class="page-h1" id="community-heading">Create together,<br/><em>grow faster</em></h1>
       <p class="page-sub">A global community of AI creators sharing work, giving feedback and building things that did not exist before.</p>
-      <a href="signup.html" class="btn-primary">
+      <a href="/signup" class="btn-primary">
         Join the community
         <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
       </a>
@@ -270,7 +270,7 @@
       <div class="tag-chip" style="margin-bottom:1.5rem"><span class="tag-chip-dot" aria-hidden="true"></span>It is open to everyone</div>
       <h2 class="cta-h2" id="comm-cta-heading">Ready to meet your<br/><em>people?</em></h2>
       <p class="cta-sub">Join thousands of creators building with AI. Share your work, get inspired and level up together.</p>
-      <a href="signup.html" class="btn-primary" style="font-size:1rem;padding:.9rem 2rem">
+      <a href="/signup" class="btn-primary" style="font-size:1rem;padding:.9rem 2rem">
         Create your account
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
       </a>
@@ -286,21 +286,21 @@
       <div>
         <div class="footer-col-head">Courses</div>
         <ul class="footer-links">
-          <li><a href="signup.html">AI Video</a></li>
-          <li><a href="signup.html">AI Writing</a></li>
-          <li><a href="signup.html">AI Music</a></li>
-          <li><a href="signup.html">AI Games</a></li>
-          <li><a href="signup.html">AI Websites</a></li>
+          <li><a href="/signup">AI Video</a></li>
+          <li><a href="/signup">AI Writing</a></li>
+          <li><a href="/signup">AI Music</a></li>
+          <li><a href="/signup">AI Games</a></li>
+          <li><a href="/signup">AI Websites</a></li>
         </ul>
       </div>
       <div>
         <div class="footer-col-head">Company</div>
         <ul class="footer-links">
-          <li><a href="about.html">About AIQ</a></li>
-          <li><a href="blog.html">Blog</a></li>
-          <li><a href="community.html">Community</a></li>
-          <li><a href="about.html#careers">Careers</a></li>
-          <li><a href="about.html#contact">Contact</a></li>
+          <li><a href="/about">About AIQ</a></li>
+          <li><a href="/blog">Blog</a></li>
+          <li><a href="/community">Community</a></li>
+          <li><a href="/about#careers">Careers</a></li>
+          <li><a href="/about#contact">Contact</a></li>
         </ul>
       </div>
       <div>
@@ -338,7 +338,7 @@
     });
   });
 })();
-    (function(){try{var u=JSON.parse(localStorage.getItem("aiq_user"));if(!u)return;var s=document.getElementById("nav-start-btn"),a=document.getElementById("nav-avatar"),m=document.getElementById("mob-nav-cta");if(s)s.style.display="none";if(a){a.style.display="flex";a.innerHTML=u.picture?"<img src=\""+u.picture+"\" alt=\"My account\">":(u.name||u.email||"A")[0].toUpperCase();}if(m){m.textContent="My Account";m.href="account.html";}}catch(e){}})();
+    (function(){try{var u=JSON.parse(localStorage.getItem("aiq_user"));if(!u)return;var s=document.getElementById("nav-start-btn"),a=document.getElementById("nav-avatar"),m=document.getElementById("mob-nav-cta");if(s)s.style.display="none";if(a){a.style.display="flex";a.innerHTML=u.picture?"<img src=\""+u.picture+"\" alt=\"My account\">":(u.name||u.email||"A")[0].toUpperCase();}if(m){m.textContent="My Account";m.href="/account";}}catch(e){}})();
 </script>
   <script src="auth.js"></script>
 </body>

@@ -23,24 +23,33 @@ app.use(cors({
   credentials: true,
 }));
 
-// ── Server-side guard for account page ─────────────────────────────────────
-// Checks JWT + token_version before sending the HTML.
-// This runs before static file serving so no cached HTML bypasses it.
-app.get('/account.html', (req, res) => {
+// ── Strip .html extension → redirect to clean URL ───────────────────────────
+app.use((req, res, next) => {
+  if (req.path.endsWith('.html')) {
+    let clean = req.path.slice(0, -5) || '/';
+    if (clean === '/index') clean = '/';
+    const qs = req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : '';
+    return res.redirect(301, clean + qs);
+  }
+  next();
+});
+
+// ── Server-side guard for /account ──────────────────────────────────────────
+app.get('/account', (req, res) => {
   const token = req.cookies['aiq_token'];
-  if (!token) return res.redirect('/signup.html');
+  if (!token) return res.redirect('/signup');
   try {
     const { id } = jwt.verify(token, process.env.JWT_SECRET);
     const user = db.prepare('SELECT id FROM users WHERE id = ?').get(id);
-    if (!user) return res.redirect('/signup.html');
+    if (!user) return res.redirect('/signup');
     res.sendFile(path.join(__dirname, 'account.html'));
   } catch(e) {
-    res.redirect('/signup.html');
+    res.redirect('/signup');
   }
 });
 
-// Serve all static files (HTML, CSS, images, etc.) from the project root
-app.use(express.static(path.join(__dirname)));
+// Serve static files; extensions:['html'] lets /about serve about.html
+app.use(express.static(path.join(__dirname), { extensions: ['html'] }));
 
 // ── API routes ──────────────────────────────────────────────────────────────
 app.use('/api/auth', require('./routes/auth'));

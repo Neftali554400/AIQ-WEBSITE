@@ -112,31 +112,31 @@
 <body>
 
   <nav aria-label="Main navigation">
-    <a href="index.html" class="nav-logo">AIQ</a>
+    <a href="/" class="nav-logo">AIQ</a>
     <div class="nav-right">
       <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="courses.html">Courses</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="community.html">Community</a></li>
-        <li><a href="blog.html" class="active">Blog</a></li>
+        <li><a href="/">Home</a></li>
+        <li><a href="/courses">Courses</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/community">Community</a></li>
+        <li><a href="/blog" class="active">Blog</a></li>
       </ul>
     </div>
       <button class="btn-ham" id="btn-ham" aria-label="Open menu" aria-expanded="false"><span class="bar"></span><span class="bar"></span><span class="bar"></span></button>
   </nav>
   <div class="mob-nav" id="mob-nav" role="dialog" aria-label="Mobile navigation">
     <button class="mob-nav-close" onclick="document.getElementById('btn-ham').click()" aria-label="Close menu"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
-    <a href="index.html">Home</a>
-    <a href="courses.html">Courses</a>
-    <a href="about.html">About</a>
-    <a href="community.html">Community</a>
-    <a href="blog.html" class="active">Blog</a>
-    <a href="signup.html" class="mob-cta">Start here</a>
+    <a href="/">Home</a>
+    <a href="/courses">Courses</a>
+    <a href="/about">About</a>
+    <a href="/community">Community</a>
+    <a href="/blog" class="active">Blog</a>
+    <a href="/signup" class="mob-cta">Start here</a>
   </div>
 
 
   <div class="article-wrap">
-    <a href="blog.html" class="back-link">
+    <a href="/blog" class="back-link">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
       Back to Blog
     </a>
@@ -177,7 +177,7 @@
   <div class="related-section">
     <div class="section-label">More from the journal</div>
     <div class="related-grid">
-      <a href="blog-post.html?slug=suno-vs-udio" class="post-card">
+      <a href="/blog-post?slug=suno-vs-udio" class="post-card">
         <div class="post-visual" style="background:linear-gradient(135deg,#0d1a0d,#1a2a0d)">🎵</div>
         <div class="post-body">
           <div class="post-tag">AI Music</div>
@@ -188,7 +188,7 @@
           </div>
         </div>
       </a>
-      <a href="blog-post.html?slug=write-novel-ai" class="post-card">
+      <a href="/blog-post?slug=write-novel-ai" class="post-card">
         <div class="post-visual" style="background:linear-gradient(135deg,#1a0d2e,#2e0d1a)">📖</div>
         <div class="post-body">
           <div class="post-tag">AI Writing</div>
@@ -199,7 +199,7 @@
           </div>
         </div>
       </a>
-      <a href="blog-post.html?slug=v0-bolt-cursor" class="post-card">
+      <a href="/blog-post?slug=v0-bolt-cursor" class="post-card">
         <div class="post-visual" style="background:linear-gradient(135deg,#1a150d,#2a1a0a)">🌐</div>
         <div class="post-body">
           <div class="post-tag">AI Websites</div>
@@ -222,28 +222,28 @@
       <div>
         <div class="footer-col-head">Courses</div>
         <ul class="footer-links">
-          <li><a href="course-detail.html?id=video">AI Video</a></li>
-          <li><a href="course-detail.html?id=books">AI Writing</a></li>
-          <li><a href="course-detail.html?id=music">AI Music</a></li>
-          <li><a href="course-detail.html?id=games">AI Games</a></li>
-          <li><a href="course-detail.html?id=web">AI Websites</a></li>
+          <li><a href="/course-detail?id=video">AI Video</a></li>
+          <li><a href="/course-detail?id=books">AI Writing</a></li>
+          <li><a href="/course-detail?id=music">AI Music</a></li>
+          <li><a href="/course-detail?id=games">AI Games</a></li>
+          <li><a href="/course-detail?id=web">AI Websites</a></li>
         </ul>
       </div>
       <div>
         <div class="footer-col-head">Company</div>
         <ul class="footer-links">
-          <li><a href="about.html">About AIQ</a></li>
-          <li><a href="blog.html">Blog</a></li>
-          <li><a href="community.html">Community</a></li>
-          <li><a href="about.html#contact">Contact</a></li>
+          <li><a href="/about">About AIQ</a></li>
+          <li><a href="/blog">Blog</a></li>
+          <li><a href="/community">Community</a></li>
+          <li><a href="/about#contact">Contact</a></li>
         </ul>
       </div>
       <div>
         <div class="footer-col-head">Legal</div>
         <ul class="footer-links">
-          <li><a href="privacy.html">Privacy Policy</a></li>
-          <li><a href="terms.html">Terms of Use</a></li>
-          <li><a href="privacy.html#cookies">Cookie Policy</a></li>
+          <li><a href="/privacy">Privacy Policy</a></li>
+          <li><a href="/terms">Terms of Use</a></li>
+          <li><a href="/privacy#cookies">Cookie Policy</a></li>
         </ul>
       </div>
     </div>
@@ -469,7 +469,7 @@
     }
 
     function goEditPost() {
-      window.location.href = 'blog.html';
+      window.location.href = '/blog';
     }
 
     // Load post
@@ -488,7 +488,7 @@
       renderPost(post);
     } else {
       document.getElementById('post-title').textContent = 'Post not found';
-      document.getElementById('post-body').innerHTML = '<p>This post could not be found. <a href="blog.html">Return to the blog.</a></p>';
+      document.getElementById('post-body').innerHTML = '<p>This post could not be found. <a href="/blog">Return to the blog.</a></p>';
     }
 
     // Show admin edit bar
@@ -497,7 +497,7 @@
     }
 
     // Secret admin shortcut
-    document.addEventListener('keydown', e => { if (e.ctrlKey && e.shiftKey && e.key === 'A') window.location.href = 'admin-login.html'; });
+    document.addEventListener('keydown', e => { if (e.ctrlKey && e.shiftKey && e.key === 'A') window.location.href = '/admin-login'; });
       (function(){var btn=document.getElementById("btn-ham"),menu=document.getElementById("mob-nav"),bars=btn.querySelectorAll(".bar");btn.addEventListener("click",function(){var open=menu.classList.toggle("open");btn.setAttribute("aria-expanded",open);if(open){bars[0].style.transform="translateY(7px) rotate(45deg)";bars[1].style.opacity="0";bars[2].style.transform="translateY(-7px) rotate(-45deg)";}else{bars[0].style.transform="";bars[1].style.opacity="";bars[2].style.transform="";}});menu.querySelectorAll("a").forEach(function(a){a.addEventListener("click",function(){menu.classList.remove("open");btn.setAttribute("aria-expanded","false");bars[0].style.transform="";bars[1].style.opacity="";bars[2].style.transform="";});});})();
 </script>
   <script src="auth.js"></script>

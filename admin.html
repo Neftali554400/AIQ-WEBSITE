@@ -161,7 +161,7 @@
         <span class="nav-icon">🔐</span> Admin Accounts
       </button>
       <div class="nav-section-label">Site</div>
-      <a href="index.html" class="nav-item" target="_blank">
+      <a href="/" class="nav-item" target="_blank">
         <span class="nav-icon">🌐</span> View Site
       </a>
     </nav>
@@ -422,7 +422,7 @@
     // ─── AUTH ─────────────────────────────────────────────
     let session = null;
     try { session = JSON.parse(localStorage.getItem('aiq_admin_session')); } catch(e) {}
-    if (!session || !session.email) { window.location.href = 'admin-login.html'; }
+    if (!session || !session.email) { window.location.href = '/admin-login'; }
 
     const isSuperAdmin = session.email.toLowerCase() === SUPER_ADMIN_EMAIL.toLowerCase();
 
@@ -754,7 +754,7 @@
     // ─── SIGN OUT ─────────────────────────────────────────
     function adminSignOut() {
       localStorage.removeItem('aiq_admin_session');
-      window.location.href = 'admin-login.html';
+      window.location.href = '/admin-login';
     }
 
     // ─── UTILS ────────────────────────────────────────────

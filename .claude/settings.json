@@ -26,7 +26,9 @@
       "Bash(sed -i '' 's/godson-placeholder\\\\.mp4/testimonial-placeholder.mp4/g' index.html)",
       "Bash(node -e \"console.log\\(require\\('crypto'\\).randomBytes\\(64\\).toString\\('hex'\\)\\)\")",
       "Bash(timeout 5 node server.js)",
-      "Bash(curl -s -o /dev/null -w \"%{http_code}\" https://aiq-website-production.up.railway.app/)"
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" https://aiq-website-production.up.railway.app/)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" https://aiq-courses.com/)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" https://aiq-courses.com/signup.html)"
     ]
   }
 }
