@@ -82,7 +82,7 @@ router.post('/signup', async (req, res) => {
     await sendOtpEmail(email, name, otp);
     res.json({ ok: true });
   } catch (err) {
-    console.error('[signup]', err.message);
+    console.error('[signup]', err);
     res.status(500).json({ error: 'Failed to send verification email. Check server config.' });
   }
 });
