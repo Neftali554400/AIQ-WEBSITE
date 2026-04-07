@@ -66,6 +66,7 @@ db.exec(`
 `);
 
 // Add token_version to existing databases that predate this column
-try { db.exec('ALTER TABLE users ADD COLUMN token_version INTEGER NOT NULL DEFAULT 0'); } catch(e) {}
+// Use nullable default — SQLite pre-3.37 rejects NOT NULL on ADD COLUMN
+try { db.exec('ALTER TABLE users ADD COLUMN token_version INTEGER DEFAULT 0'); } catch(e) {}
 
 module.exports = db;

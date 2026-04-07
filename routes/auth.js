@@ -203,7 +203,7 @@ router.post('/signout', (req, res) => {
   if (token) {
     try {
       const { id } = jwt.verify(token, process.env.JWT_SECRET);
-      db.prepare('UPDATE users SET token_version = token_version + 1 WHERE id = ?').run(id);
+      db.prepare('UPDATE users SET token_version = COALESCE(token_version, 0) + 1 WHERE id = ?').run(id);
     } catch(e) { /* expired/invalid token — nothing to invalidate */ }
   }
   res.clearCookie(COOKIE);
@@ -291,7 +291,7 @@ router.get('/me', (req, res) => {
     const { id, tv = 0 } = jwt.verify(token, process.env.JWT_SECRET);
     const user = db.prepare('SELECT id, name, email, picture, provider, joined, token_version FROM users WHERE id = ?').get(id);
     if (!user) return res.status(401).json({ error: 'User not found.' });
-    if (user.token_version !== tv) return res.status(401).json({ error: 'Session expired. Please sign in again.' });
+    if ((user.token_version ?? 0) !== (tv ?? 0)) return res.status(401).json({ error: 'Session expired. Please sign in again.' });
     const { token_version, ...safeUser } = user;
     res.json({ user: safeUser });
   } catch {

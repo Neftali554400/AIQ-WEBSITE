@@ -388,13 +388,9 @@
           document.getElementById('auth-gate').classList.add('visible');
         }
       } catch(e) {
-        const u = localStorage.getItem('aiq_user');
-        if (u) {
-          document.getElementById('page-content').classList.add('visible');
-          renderProfile();
-        } else {
-          document.getElementById('auth-gate').classList.add('visible');
-        }
+        // Network error — show auth gate; never trust localStorage for access decisions
+        localStorage.removeItem('aiq_user');
+        document.getElementById('auth-gate').classList.add('visible');
       }
       document.documentElement.style.visibility = 'visible';
     })();
