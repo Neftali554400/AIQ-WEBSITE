@@ -31,19 +31,7 @@
     ══════════════════════════════════════════════════════════
   -->
 
-  <!--
-    ══════════════════════════════════════════════════════════
-    EMAILJS SETUP (for email verification OTP)
-    1. Sign up free at https://www.emailjs.com/
-    2. Add an Email Service (Gmail, Outlook, etc.)
-    3. Create an Email Template with these variables:
-         Subject: Your AIQ verification code
-         Body:    Hi {{user_name}}, your code is: {{otp_code}}
-                  It expires in 10 minutes.
-    4. Copy your Public Key, Service ID, and Template ID below
-    ══════════════════════════════════════════════════════════
-  -->
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <!-- EmailJS removed — OTP emails now sent by the Express backend -->
 
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
@@ -390,9 +378,30 @@
           <button class="btn-email" type="submit">Sign in</button>
         </form>
 
-        <p style="font-size:.82rem;color:rgba(255,255,235,.35);text-align:center;margin-top:1.25rem">
+        <p style="font-size:.82rem;color:rgba(255,255,235,.35);text-align:center;margin-top:1rem">
+          <a href="#" onclick="showForgot(event)" style="color:rgba(255,255,235,.5);text-decoration:underline;text-decoration-color:rgba(255,255,235,.2);cursor:pointer">Forgot password?</a>
+        </p>
+
+        <p style="font-size:.82rem;color:rgba(255,255,235,.35);text-align:center;margin-top:.75rem">
           No account yet?
           <a href="#" onclick="showSignup(event)" style="color:rgba(255,255,235,.6);text-decoration:underline;text-decoration-color:rgba(255,255,235,.2);cursor:pointer">Create one</a>
+        </p>
+      </div>
+
+      <!-- Forgot password state -->
+      <div id="forgot-state" style="display:none">
+        <div class="card-eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span>Forgot password</div>
+        <h1 class="card-title">Reset your <em>password</em></h1>
+        <p class="card-sub">Enter your email and we'll send you a reset link.</p>
+        <form class="email-form" onsubmit="handleForgot(event)" novalidate>
+          <div class="field-group">
+            <input class="email-input" type="email" id="forgot-email" placeholder="your@email.com" autocomplete="email" required aria-label="Email address" oninput="clearBanner('forgot-banner')" />
+          </div>
+          <div class="info-banner" id="forgot-banner" role="alert"></div>
+          <button class="btn-email" type="submit" id="forgot-btn">Send reset link</button>
+        </form>
+        <p style="font-size:.82rem;color:rgba(255,255,235,.35);text-align:center;margin-top:1.25rem">
+          <a href="#" onclick="showLogin(event)" style="color:rgba(255,255,235,.6);text-decoration:underline;text-decoration-color:rgba(255,255,235,.2);cursor:pointer">← Back to sign in</a>
         </p>
       </div>
 
@@ -420,12 +429,7 @@
   </footer>
 
   <script>
-    // ══════════════════════════════════════════════════════
-    // EMAILJS CONFIG — fill in after setting up emailjs.com
-    // ══════════════════════════════════════════════════════
-    const EMAILJS_PUBLIC_KEY  = 'Cgjqr8amUiN-o8Kt6';
-    const EMAILJS_SERVICE_ID  = 'service_p0kio63';
-    const EMAILJS_TEMPLATE_ID = 'template_2jh7z7k';
+    // All auth now handled by the Express backend via /api/auth/*
 
     // ══════════════════════════════════════════════════════
     // GOOGLE SIGN-IN
@@ -515,44 +519,21 @@
     }
 
     // ══════════════════════════════════════════════════════
-    // ACCOUNTS STORE  (all registered users in localStorage)
-    // ══════════════════════════════════════════════════════
-    function getAccounts() {
-      try { return JSON.parse(localStorage.getItem('aiq_accounts')) || []; } catch(e) { return []; }
-    }
-    function saveAccounts(arr) { localStorage.setItem('aiq_accounts', JSON.stringify(arr)); }
-    function findAccount(email) {
-      return getAccounts().find(a => a.email.toLowerCase() === email.toLowerCase());
-    }
-
-    // ══════════════════════════════════════════════════════
-    // PASSWORD HASHING (SHA-256 via Web Crypto API)
-    // ══════════════════════════════════════════════════════
-    async function hashPassword(password) {
-      const data = new TextEncoder().encode(password + 'aiq_2026_salt');
-      const buf  = await crypto.subtle.digest('SHA-256', data);
-      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
-    }
-
-    // ══════════════════════════════════════════════════════
-    // OTP STATE
+    // OTP STATE (pending signup stored in memory only)
     // ══════════════════════════════════════════════════════
     let _pendingSignup = null;
-    let _otp = null, _otpExpiry = 0, _resendTimer = null;
+    let _resendTimer   = null;
 
-    function generateOtp() { return String(Math.floor(100000 + Math.random() * 900000)); }
-
-    async function sendOtp(email, otp, name) {
-      if (EMAILJS_PUBLIC_KEY === 'YOUR_EMAILJS_PUBLIC_KEY') {
-        console.log('%c[AIQ DEV] OTP: ' + otp, 'font-size:16px;color:#ffa946;font-weight:bold');
-        showBanner('signup-banner', '⚠ EmailJS not configured — OTP is in the browser console (F12 → Console).', 'warn');
-        return true;
-      }
-      try {
-        emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
-        await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, { to_email: email, user_name: name, otp_code: otp });
-        return true;
-      } catch(err) { console.error('EmailJS error:', err); return false; }
+    // ── Generic API helper ─────────────────────────────────
+    async function api(path, body) {
+      const res  = await fetch(path, {
+        method:      'POST',
+        credentials: 'include',
+        headers:     { 'Content-Type': 'application/json' },
+        body:        JSON.stringify(body),
+      });
+      const data = await res.json();
+      return { ok: res.ok, status: res.status, data };
     }
 
     // ══════════════════════════════════════════════════════
@@ -587,10 +568,9 @@
 
     async function resendOtp() {
       if (!_pendingSignup) return;
-      _otp = generateOtp(); _otpExpiry = Date.now() + 10 * 60 * 1000;
       clearBanner('verify-banner');
-      const ok = await sendOtp(_pendingSignup.email, _otp, _pendingSignup.name);
-      showBanner('verify-banner', ok ? 'A new code has been sent.' : 'Failed to send. Please try again.', ok ? 'success' : 'error');
+      const { ok, data } = await api('/api/auth/resend-otp', { name: _pendingSignup.name, email: _pendingSignup.email });
+      showBanner('verify-banner', ok ? 'A new code has been sent.' : (data.error || 'Failed to resend.'), ok ? 'success' : 'error');
       startResendCountdown();
     }
 
@@ -634,30 +614,22 @@
       ['name-error','email-error','password-error','confirm-error'].forEach(clearFieldError);
       clearBanner('signup-banner');
 
-      if (!name)                            { setFieldError('name-error',     'Please enter your full name.');            valid = false; }
-      if (!validateEmail(email))            { setFieldError('email-error',    'Please enter a valid email address.');     valid = false; }
-      if (!password || password.length < 8) { setFieldError('password-error', 'Password must be at least 8 characters.'); valid = false; }
-      if (password && confirm !== password) { setFieldError('confirm-error',  'Passwords do not match.');                 valid = false; }
+      if (!name)                            { setFieldError('name-error',     'Please enter your full name.');             valid = false; }
+      if (!validateEmail(email))            { setFieldError('email-error',    'Please enter a valid email address.');      valid = false; }
+      if (!password || password.length < 8) { setFieldError('password-error', 'Password must be at least 8 characters.');  valid = false; }
+      if (password && confirm !== password) { setFieldError('confirm-error',  'Passwords do not match.');                  valid = false; }
       if (!valid) return;
-
-      // Duplicate email check
-      if (findAccount(email)) {
-        showBanner('signup-banner', 'An account with this email already exists. Sign in instead.', 'error');
-        return;
-      }
-
-      const passwordHash = await hashPassword(password);
-      _pendingSignup = { name, email, passwordHash };
-      _otp = generateOtp();
-      _otpExpiry = Date.now() + 10 * 60 * 1000;
 
       const btn = e.target.querySelector('[type="submit"]');
       btn.textContent = 'Sending code…'; btn.disabled = true;
-      const ok = await sendOtp(email, _otp, name);
+
+      const { ok, data } = await api('/api/auth/signup', { name, email, password });
+
       btn.textContent = 'Create account'; btn.disabled = false;
 
-      if (!ok) { showBanner('signup-banner', 'Could not send verification email. Check your EmailJS config.', 'error'); return; }
+      if (!ok) { showBanner('signup-banner', data.error || 'Could not send verification email.', 'error'); return; }
 
+      _pendingSignup = { name, email, password };
       document.getElementById('verify-email-display').textContent = email;
       document.getElementById('form-state').style.display = 'none';
       document.getElementById('verify-state').classList.add('visible');
@@ -671,23 +643,30 @@
       document.getElementById('otp-error').textContent = '';
       clearBanner('verify-banner');
 
-      if (!entered || entered.length !== 6) { document.getElementById('otp-error').textContent = 'Enter the 6-digit code from your email.'; return; }
-      if (Date.now() > _otpExpiry) { showBanner('verify-banner', 'This code has expired. Click "Resend code" to get a new one.', 'error'); return; }
-      if (entered !== _otp) { document.getElementById('otp-error').textContent = 'Incorrect code. Please try again.'; return; }
+      if (!entered || entered.length !== 6) {
+        document.getElementById('otp-error').textContent = 'Enter the 6-digit code from your email.';
+        return;
+      }
 
-      // OTP matched — save account
-      const accounts = getAccounts();
-      const newAccount = {
-        name: _pendingSignup.name, email: _pendingSignup.email,
-        passwordHash: _pendingSignup.passwordHash, provider: 'email',
-        joined: new Date().toISOString().split('T')[0], enrolled: [], paidCourses: [],
-      };
-      accounts.push(newAccount);
-      saveAccounts(accounts);
-      _pendingSignup = null; _otp = null;
+      const btn = e.target.querySelector('[type="submit"]');
+      btn.textContent = 'Verifying…'; btn.disabled = true;
 
-      const { passwordHash: _ph, ...userForSession } = newAccount;
-      saveUser(userForSession);
+      const { ok, data } = await api('/api/auth/verify-otp', {
+        name:     _pendingSignup.name,
+        email:    _pendingSignup.email,
+        password: _pendingSignup.password,
+        code:     entered,
+      });
+
+      btn.textContent = 'Verify & create account'; btn.disabled = false;
+
+      if (!ok) {
+        document.getElementById('otp-error').textContent = data.error || 'Verification failed.';
+        return;
+      }
+
+      _pendingSignup = null;
+      saveUser(data.user);
     }
 
     function showSignupForm() {
@@ -697,7 +676,7 @@
     }
 
     // ══════════════════════════════════════════════════════
-    // EMAIL SIGN-IN  (checks aiq_accounts, validates password)
+    // EMAIL SIGN-IN
     // ══════════════════════════════════════════════════════
     async function handleEmailSignin(e) {
       e.preventDefault();
@@ -708,28 +687,42 @@
       if (!validateEmail(email)) { showBanner('signin-banner', 'Please enter a valid email address.', 'error'); return; }
       if (!password)             { showBanner('signin-banner', 'Please enter your password.', 'error'); return; }
 
-      const account = findAccount(email);
-      if (!account) {
-        showBanner('signin-banner', 'No account found with this email. Create one first.', 'error');
-        return;
-      }
-      if (account.provider !== 'email') {
-        showBanner('signin-banner', 'This account uses ' + account.provider + ' sign-in. Use the button above.', 'error');
-        return;
-      }
-
       const btn = e.target.querySelector('[type="submit"]');
       btn.textContent = 'Signing in…'; btn.disabled = true;
-      const hash = await hashPassword(password);
+
+      const { ok, data } = await api('/api/auth/signin', { email, password });
+
       btn.textContent = 'Sign in'; btn.disabled = false;
 
-      if (hash !== account.passwordHash) {
-        showBanner('signin-banner', 'Incorrect password. Please try again.', 'error');
-        return;
-      }
+      if (!ok) { showBanner('signin-banner', data.error || 'Sign in failed.', 'error'); return; }
 
-      const { passwordHash: _ph, ...userForSession } = account;
-      saveUser(userForSession);
+      saveUser(data.user);
+    }
+
+    // ══════════════════════════════════════════════════════
+    // FORGOT PASSWORD
+    // ══════════════════════════════════════════════════════
+    async function handleForgot(e) {
+      e.preventDefault();
+      const email = document.getElementById('forgot-email').value.trim();
+      clearBanner('forgot-banner');
+      if (!validateEmail(email)) { showBanner('forgot-banner', 'Please enter a valid email address.', 'error'); return; }
+
+      const btn = document.getElementById('forgot-btn');
+      btn.textContent = 'Sending…'; btn.disabled = true;
+
+      const { ok, data } = await api('/api/auth/forgot-password', { email });
+
+      btn.textContent = 'Send reset link'; btn.disabled = false;
+
+      if (!ok) { showBanner('forgot-banner', data.error || 'Failed to send.', 'error'); return; }
+      showBanner('forgot-banner', data.message || 'Reset link sent — check your inbox.', 'success');
+    }
+
+    function showForgot(e) {
+      e.preventDefault();
+      document.getElementById('login-state').style.display = 'none';
+      document.getElementById('forgot-state').style.display = 'block';
     }
 
     // ══════════════════════════════════════════════════════
@@ -761,8 +754,7 @@
     }
 
     function showSuccess() {
-      document.getElementById('form-state').style.display    = 'none';
-      document.getElementById('login-state').style.display   = 'none';
+      ['form-state','login-state','forgot-state'].forEach(id => document.getElementById(id).style.display = 'none');
       document.getElementById('verify-state').classList.remove('visible');
       const s = document.getElementById('success-state');
       s.classList.add('visible');
@@ -772,14 +764,14 @@
 
     function showLogin(e) {
       e.preventDefault();
-      document.getElementById('form-state').style.display = 'none';
+      ['form-state','forgot-state'].forEach(id => document.getElementById(id).style.display = 'none');
       document.getElementById('verify-state').classList.remove('visible');
       document.getElementById('login-state').style.display = 'block';
     }
 
     function showSignup(e) {
       e.preventDefault();
-      document.getElementById('login-state').style.display = 'none';
+      ['login-state','forgot-state'].forEach(id => document.getElementById(id).style.display = 'none');
       document.getElementById('form-state').style.display = 'block';
     }
   </script>

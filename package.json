@@ -1,5 +1,19 @@
 {
+  "scripts": {
+    "start": "node server.js",
+    "dev":   "node server.js"
+  },
   "devDependencies": {
     "puppeteer": "^24.40.0"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "better-sqlite3": "^12.8.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.1",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "nodemailer": "^8.0.4"
   }
 }

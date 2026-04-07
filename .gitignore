@@ -1,6 +1,14 @@
+# Environment secrets
+.env
+
+# Database
+data/
+
+# Dependencies
 node_modules/
+
+# Screenshots
 temporary screenshots/
-.claude/
-*.rtf
-package-lock.json
+
+# OS
 .DS_Store
