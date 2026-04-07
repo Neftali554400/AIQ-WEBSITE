@@ -35,6 +35,9 @@ function updateNav(user) {
   const mobCta = document.getElementById('mob-nav-cta');
   if (mobCta) mobCta.style.display = 'none';
 
+  const heroCta = document.getElementById('hero-cta-btn');
+  if (heroCta) heroCta.style.display = 'none';
+
   // Show avatar
   const avatar = document.getElementById('nav-avatar');
   if (avatar) {
