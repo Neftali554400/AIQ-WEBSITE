@@ -1,0 +1,32 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node screenshot.mjs \"http://localhost:3000/courses.html\" courses-page 1440 900)",
+      "Bash(node screenshot.mjs \"http://localhost:3000/courses.html\" cards-detail 1440 600)",
+      "Bash(node screenshot.mjs \"http://localhost:3000/courses.html\" verify-courses 1440 900)",
+      "Bash(node screenshot.mjs http://localhost:3000/courses.html courses-auto 1440 700)",
+      "Bash(node -e ':*)",
+      "Bash(ffmpeg -version)",
+      "Bash(brew install:*)",
+      "Bash(ffprobe -v quiet -print_format json -show_format -show_streams \"godson-placeholder.mov\")",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); f=d['format']; print\\('Duration:', float\\(f['duration']\\),'s'\\); [print\\('Stream:', s['codec_type'], s.get\\('codec_name','?'\\)\\) for s in d['streams']]\")",
+      "Bash(ffprobe -v quiet -print_format json -show_format -show_streams \"/Users/Apple/Downloads/Website Building/Video testimonials/godson placeholder.MOV\")",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); f=d['format']; print\\('Duration:', float\\(f['duration']\\),'s'\\); print\\('Size:', int\\(f['size']\\)//1024,'KB'\\); [print\\('Stream:', s['codec_type'], s.get\\('codec_name','?'\\), s.get\\('width',''\\), s.get\\('height',''\\)\\) for s in d['streams']]\")",
+      "Bash(ffmpeg -i 'Video testimonials/godson placeholder.MOV' -c:v libx264 -preset fast -crf 23 -c:a aac -b:a 128k -vf scale=1080:-2 -movflags +faststart -y godson-placeholder.mp4)",
+      "Bash(ffprobe -v quiet -print_format json -show_format \"/Users/Apple/Downloads/Website Building/godson-placeholder.mp4\")",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); f=d['format']; print\\('Duration:', float\\(f['duration']\\),'s'\\); print\\('Size:', int\\(f['size']\\)//1024,'KB'\\)\")",
+      "Bash(ffprobe -v quiet -print_format json -show_format \"/Users/Apple/Downloads/Website Building/Video testimonials/godson2.MOV\")",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); f=d['format']; print\\('Duration:', float\\(f['duration']\\),'s'\\); print\\('Size:', int\\(f['size']\\)//1024,'KB'\\); [print\\('Stream:', s['codec_type'], s.get\\('codec_name','?'\\)\\) for s in d['streams']]\")",
+      "Bash(ffmpeg -i 'Video testimonials/godson2.MOV' -c:v libx264 -preset fast -crf 23 -c:a aac -b:a 128k -vf scale=1080:-2 -movflags +faststart -y godson-placeholder.mp4)",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); f=d['format']; print\\('Duration:', round\\(float\\(f['duration']\\),2\\),'s | Size:', int\\(f['size']\\)//1024,'KB'\\)\")",
+      "Bash(ffprobe -v quiet -print_format json -show_format \"/Users/Apple/Downloads/Website Building/Video testimonials/WhatsApp Video 2026-04-05 at 13.43.26.mp4\")",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); f=d['format']; print\\('Duration:', round\\(float\\(f['duration']\\),2\\),'s | Size:', int\\(f['size']\\)//1024,'KB | Format:', f['format_name']\\)\")",
+      "Bash(ffmpeg -i 'Video testimonials/WhatsApp Video 2026-04-05 at 13.43.26.mp4' -c:v libx264 -preset fast -crf 26 -c:a aac -b:a 128k -vf scale=720:-2 -movflags +faststart -y godson-placeholder.mp4)",
+      "Bash(mv godson-placeholder.mp4 testimonial-placeholder.mp4)",
+      "Bash(sed -i '' 's/godson-placeholder\\\\.mp4/testimonial-placeholder.mp4/g' index.html)",
+      "Bash(node -e \"console.log\\(require\\('crypto'\\).randomBytes\\(64\\).toString\\('hex'\\)\\)\")",
+      "Bash(timeout 5 node server.js)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" https://aiq-website-production.up.railway.app/)"
+    ]
+  }
+}

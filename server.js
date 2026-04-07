@@ -36,6 +36,10 @@ app.get('/{*path}', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`\n  ✦ AIQ server →  http://localhost:${PORT}\n`);
+});
+
+server.on('error', (err) => {
+  console.error('[server error]', err);
 });

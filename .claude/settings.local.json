@@ -1,0 +1,32 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node serve.mjs)",
+      "Bash(npm list:*)",
+      "Read(//usr/local/lib/node_modules/**)",
+      "Bash(npm install:*)",
+      "Bash(node screenshot.mjs http://localhost:3000)",
+      "Bash(node -e ':*)",
+      "Bash(node screenshot.mjs http://localhost:3000 round1)",
+      "Bash(node screenshot.mjs http://localhost:3000 round2)",
+      "Bash(node screenshot.mjs http://localhost:3000 final)",
+      "Bash(node screenshot.mjs http://localhost:3000 aiq-round1)",
+      "Bash(node screenshot.mjs \"http://localhost:3000#courses\" aiq-cards)",
+      "Bash(node screenshot.mjs http://localhost:3000 aiq-round2)",
+      "Bash(node screenshot.mjs http://localhost:3000 homepage)",
+      "Bash(node screenshot.mjs http://localhost:3000/signup.html signup)",
+      "Bash(node screenshot.mjs http://localhost:3000/about.html about)",
+      "Bash(node screenshot.mjs http://localhost:3000/blog.html blog)",
+      "Bash(node screenshot.mjs http://localhost:3000 final-home)",
+      "Bash(node screenshot.mjs http://localhost:3000/signup.html final-signup)",
+      "Bash(node screenshot.mjs http://localhost:3000 qa-home)",
+      "Bash(node screenshot.mjs http://localhost:3000/signup.html qa-signup)",
+      "Bash(node screenshot.mjs http://localhost:3000/about.html qa-about)",
+      "Bash(node screenshot.mjs http://localhost:3000/community.html qa-community)",
+      "Bash(lsof -ti:3000)",
+      "Bash(node screenshot.mjs http://localhost:3000/course-detail.html?id=video course-detail)",
+      "Bash(node screenshot.mjs \"http://localhost:3000/course-detail.html?id=video\" course-detail)",
+      "Bash(node screenshot.mjs \"http://localhost:3000/blog-post.html?slug=sora-creators\" blogpost)"
+    ]
+  }
+}
