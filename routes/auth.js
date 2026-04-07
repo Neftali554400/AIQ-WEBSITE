@@ -394,6 +394,30 @@ router.get('/me', (req, res) => {
   }
 });
 
+// ─── PATCH /api/auth/update-profile ─────────────────────────────────────────
+router.patch('/update-profile', (req, res) => {
+  const token = req.cookies[COOKIE];
+  if (!token) return res.status(401).json({ error: 'Not authenticated.' });
+  try {
+    const { id } = jwt.verify(token, process.env.JWT_SECRET);
+    const { name, picture } = req.body;
+    if (!name && picture === undefined) return res.status(400).json({ error: 'Nothing to update.' });
+    if (name !== undefined) {
+      const trimmed = String(name).trim();
+      if (!trimmed) return res.status(400).json({ error: 'Name cannot be empty.' });
+      db.prepare('UPDATE users SET name = ? WHERE id = ?').run(trimmed, id);
+    }
+    if (picture !== undefined) {
+      db.prepare('UPDATE users SET picture = ? WHERE id = ?').run(picture || null, id);
+    }
+    const user = db.prepare('SELECT id, name, email, picture, provider, joined FROM users WHERE id = ?').get(id);
+    res.json({ ok: true, user });
+  } catch(err) {
+    console.error('[update-profile]', err.message);
+    res.status(500).json({ error: 'Server error.' });
+  }
+});
+
 // ─── POST /api/auth/forgot-password ─────────────────────────────────────────
 router.post('/forgot-password', async (req, res) => {
   const OK_MSG = 'If an account with that email exists, a reset link has been sent.';

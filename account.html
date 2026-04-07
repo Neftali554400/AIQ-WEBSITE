@@ -77,6 +77,21 @@
     .setting-btn.danger{color:rgba(255,80,80,.5);border-color:rgba(255,80,80,.15)}
     .setting-btn.danger:hover{color:rgba(255,80,80,.85);border-color:rgba(255,80,80,.35)}
 
+    /* INLINE EDIT */
+    .setting-inline-edit{display:flex;align-items:center;gap:.5rem;flex:1;min-width:0}
+    .setting-inline-edit input{flex:1;background:rgba(255,255,235,.07);border:1px solid rgba(255,255,235,.18);border-radius:.5rem;padding:.35rem .65rem;font-family:'Figtree',sans-serif;font-size:.85rem;color:var(--lumen);outline:none;min-width:0}
+    .setting-inline-edit input:focus{border-color:rgba(3,79,70,.8);box-shadow:0 0 0 3px rgba(3,79,70,.25)}
+    .setting-save-btn{font-size:.75rem;color:#5ecfbb;background:rgba(3,79,70,.25);border:1px solid rgba(3,79,70,.5);border-radius:9999px;padding:.28rem .7rem;cursor:pointer;font-family:'Figtree',sans-serif;white-space:nowrap;transition:background .15s ease}
+    .setting-save-btn:hover{background:rgba(3,79,70,.45)}
+    .setting-cancel-btn{font-size:.75rem;color:rgba(255,255,235,.4);background:none;border:1px solid rgba(255,255,235,.1);border-radius:9999px;padding:.28rem .7rem;cursor:pointer;font-family:'Figtree',sans-serif;white-space:nowrap;transition:color .15s ease}
+    .setting-cancel-btn:hover{color:rgba(255,255,235,.75)}
+
+    /* AVATAR UPLOAD */
+    .avatar-wrap{cursor:pointer}
+    .avatar-edit-overlay{position:absolute;inset:0;border-radius:50%;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s ease}
+    .avatar-wrap:hover .avatar-edit-overlay{opacity:1}
+    #avatar-file-input{display:none}
+
     /* MEMBER SINCE */
     .joined-note{font-size:.78rem;color:rgba(255,255,235,.22);text-align:center;margin-top:2rem}
 
@@ -151,9 +166,13 @@
 
     <!-- PROFILE HEADER -->
     <div class="profile-header">
-      <div class="avatar-wrap">
+      <div class="avatar-wrap" onclick="document.getElementById('avatar-file-input').click()" title="Change profile photo">
         <div class="avatar" id="avatar"></div>
+        <div class="avatar-edit-overlay">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="white" aria-hidden="true"><path d="M12 15.2A3.2 3.2 0 1 1 15.2 12 3.2 3.2 0 0 1 12 15.2zm6.4-10.4H19l-1.4-2H6.4L5 4.8h-.4A2.4 2.4 0 0 0 2.2 7.2v11.2A2.4 2.4 0 0 0 4.6 20.8h14.8a2.4 2.4 0 0 0 2.4-2.4V7.2a2.4 2.4 0 0 0-2.4-2.4z"/></svg>
+        </div>
         <div class="avatar-badge" title="Account active"></div>
+        <input type="file" id="avatar-file-input" accept="image/*" onchange="handleAvatarChange(event)">
       </div>
       <div class="profile-info">
         <div class="profile-name" id="profile-name">Loading...</div>
@@ -341,31 +360,131 @@
       }, 3500);
     }
 
-    // Settings actions
+    // ── Inline field editing ───────────────────────────────
     function editName() {
       const user = getUser();
-      const n = prompt('Enter your display name:', user.name || '');
-      if (n && n.trim()) {
-        user.name = n.trim();
+      const row = document.getElementById('setting-name').closest('.setting-row');
+      const valueEl = document.getElementById('setting-name');
+      const editBtn = row.querySelector('.setting-btn');
+      if (row.querySelector('.setting-inline-edit')) return; // already open
+
+      const current = user.name || '';
+      editBtn.style.display = 'none';
+      valueEl.style.display = 'none';
+
+      const wrap = document.createElement('div');
+      wrap.className = 'setting-inline-edit';
+      wrap.innerHTML = `<input type="text" value="${current.replace(/"/g,'&quot;')}" maxlength="60" id="inline-name-input">
+        <button class="setting-save-btn" onclick="saveInlineName()">Save</button>
+        <button class="setting-cancel-btn" onclick="cancelInlineEdit('setting-name')">Cancel</button>`;
+      valueEl.after(wrap);
+      const inp = document.getElementById('inline-name-input');
+      inp.focus(); inp.select();
+      inp.addEventListener('keydown', e => { if (e.key === 'Enter') saveInlineName(); if (e.key === 'Escape') cancelInlineEdit('setting-name'); });
+    }
+
+    async function saveInlineName() {
+      const inp = document.getElementById('inline-name-input');
+      if (!inp) return;
+      const val = inp.value.trim();
+      if (!val) { showToast('Name cannot be empty.', 'error'); return; }
+      try {
+        const res = await fetch('/api/auth/update-profile', { method: 'PATCH', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name: val }) });
+        const d = await res.json();
+        if (!res.ok) { showToast(d.error || 'Failed to update.', 'error'); return; }
+        const user = getUser();
+        user.name = val;
         localStorage.setItem('aiq_user', JSON.stringify(user));
-        document.getElementById('profile-name').textContent = user.name;
-        document.getElementById('setting-name').textContent = user.name;
+        document.getElementById('profile-name').textContent = val;
+        document.getElementById('setting-name').textContent = val;
         const avatarEl = document.getElementById('avatar');
-        if (!user.picture) avatarEl.textContent = user.name[0].toUpperCase();
+        if (!user.picture) avatarEl.textContent = val[0].toUpperCase();
+        cancelInlineEdit('setting-name');
         showToast('Display name updated.');
-      }
+      } catch(e) { showToast('Network error.', 'error'); }
     }
 
     function editEmail() {
       const user = getUser();
-      const e = prompt('Enter your email address:', user.email || '');
-      if (e && e.includes('@')) {
-        user.email = e.trim();
+      const row = document.getElementById('setting-email').closest('.setting-row');
+      const valueEl = document.getElementById('setting-email');
+      const editBtn = row.querySelector('.setting-btn');
+      if (row.querySelector('.setting-inline-edit')) return;
+
+      const current = user.email || '';
+      editBtn.style.display = 'none';
+      valueEl.style.display = 'none';
+
+      const wrap = document.createElement('div');
+      wrap.className = 'setting-inline-edit';
+      wrap.innerHTML = `<input type="email" value="${current.replace(/"/g,'&quot;')}" maxlength="120" id="inline-email-input">
+        <button class="setting-save-btn" onclick="saveInlineEmail()">Save</button>
+        <button class="setting-cancel-btn" onclick="cancelInlineEdit('setting-email')">Cancel</button>`;
+      valueEl.after(wrap);
+      const inp = document.getElementById('inline-email-input');
+      inp.focus(); inp.select();
+      inp.addEventListener('keydown', e => { if (e.key === 'Enter') saveInlineEmail(); if (e.key === 'Escape') cancelInlineEdit('setting-email'); });
+    }
+
+    function saveInlineEmail() {
+      const inp = document.getElementById('inline-email-input');
+      if (!inp) return;
+      const val = inp.value.trim();
+      if (!val || !val.includes('@')) { showToast('Enter a valid email address.', 'error'); return; }
+      const user = getUser();
+      user.email = val;
+      localStorage.setItem('aiq_user', JSON.stringify(user));
+      document.getElementById('profile-email').textContent = val;
+      document.getElementById('setting-email').textContent = val;
+      cancelInlineEdit('setting-email');
+      showToast('Email address updated.');
+    }
+
+    function cancelInlineEdit(valueElId) {
+      const valueEl = document.getElementById(valueElId);
+      const wrap = valueEl.parentElement.querySelector('.setting-inline-edit');
+      if (wrap) wrap.remove();
+      valueEl.style.display = '';
+      const editBtn = valueEl.closest('.setting-row').querySelector('.setting-btn');
+      if (editBtn) editBtn.style.display = '';
+    }
+
+    // ── Profile picture upload ─────────────────────────────
+    function handleAvatarChange(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          const SIZE = 200;
+          canvas.width = SIZE; canvas.height = SIZE;
+          const ctx = canvas.getContext('2d');
+          const scale = Math.max(SIZE / img.width, SIZE / img.height);
+          const sw = SIZE / scale, sh = SIZE / scale;
+          const sx = (img.width - sw) / 2, sy = (img.height - sh) / 2;
+          ctx.drawImage(img, sx, sy, sw, sh, 0, 0, SIZE, SIZE);
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+          saveAvatar(dataUrl);
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+      event.target.value = '';
+    }
+
+    async function saveAvatar(dataUrl) {
+      try {
+        const res = await fetch('/api/auth/update-profile', { method: 'PATCH', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ picture: dataUrl }) });
+        if (!res.ok) { showToast('Failed to save photo.', 'error'); return; }
+        const user = getUser();
+        user.picture = dataUrl;
         localStorage.setItem('aiq_user', JSON.stringify(user));
-        document.getElementById('profile-email').textContent = user.email;
-        document.getElementById('setting-email').textContent = user.email;
-        showToast('Email address updated.');
-      }
+        const avatarEl = document.getElementById('avatar');
+        avatarEl.innerHTML = `<img src="${dataUrl}" alt="Profile photo" style="width:100%;height:100%;object-fit:cover">`;
+        showToast('Profile photo updated.');
+      } catch(e) { showToast('Network error.', 'error'); }
     }
 
     function toggleNotifs(btn) {
