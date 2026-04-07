@@ -694,7 +694,16 @@
 
       btn.textContent = 'Sign in'; btn.disabled = false;
 
-      if (!ok) { showBanner('signin-banner', data.error || 'Sign in failed.', 'error'); return; }
+      if (!ok) {
+        const msg = data.error || 'Sign in failed.';
+        const hint = data.hint === 'forgot_password'
+          ? msg + ' <a href="#" onclick="showForgot(event)" style="color:rgba(255,120,120,.9);text-decoration:underline;margin-left:.3rem">Reset password?</a>'
+          : msg;
+        const banner = document.getElementById('signin-banner');
+        banner.innerHTML = hint;
+        banner.className = 'info-banner visible error';
+        return;
+      }
 
       saveUser(data.user);
     }

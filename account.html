@@ -92,6 +92,7 @@
     .mob-nav .mob-cta:hover{background:var(--fathom-lt);color:var(--lumen)}
     @media(max-width:640px){.btn-ham{display:flex}.btn-nav{display:none}.btn-signout{display:none}.nav-link{display:none}}
   html{overflow-x:hidden;overscroll-behavior-x:none}body{overflow-x:hidden;overscroll-behavior-x:none}
+  body{visibility:hidden}
   /* AUTH GATE */
   #auth-gate{display:none;min-height:100vh;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:2rem;gap:1.5rem}
   #auth-gate.visible{display:flex}
@@ -365,6 +366,8 @@
         if (res.ok) {
           document.getElementById('page-content').classList.add('visible');
         } else {
+          // Clear stale cookie/localStorage and show gate
+          localStorage.removeItem('aiq_user');
           document.getElementById('auth-gate').classList.add('visible');
         }
       } catch(e) {
@@ -376,6 +379,7 @@
           document.getElementById('auth-gate').classList.add('visible');
         }
       }
+      document.body.style.visibility = 'visible';
     })();
   </script>
   <script src="auth.js"></script>

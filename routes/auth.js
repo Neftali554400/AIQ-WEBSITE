@@ -9,6 +9,16 @@ const router   = express.Router();
 const COOKIE   = 'aiq_token';
 const SITE_URL = process.env.SITE_URL || 'http://localhost:3000';
 
+// ─── Failed attempt tracking (in-memory) ─────────────────────────────────────
+const failedAttempts = new Map(); // email -> { count, lastAt }
+function getAttempts(email) { return failedAttempts.get(email) || { count: 0, lastAt: 0 }; }
+function recordFail(email) {
+  const a = getAttempts(email);
+  failedAttempts.set(email, { count: a.count + 1, lastAt: Date.now() });
+  return a.count + 1;
+}
+function clearAttempts(email) { failedAttempts.delete(email); }
+
 // ─── Resend email client ──────────────────────────────────────────────────────
 function getResend() {
   return new Resend(process.env.RESEND_API_KEY);
@@ -162,9 +172,16 @@ router.post('/signin', async (req, res) => {
       return res.status(401).json({ error: `This account was created with ${user.provider}. Use that sign-in button.` });
 
     const match = await bcrypt.compare(password, user.password_hash);
-    if (!match)
-      return res.status(401).json({ error: 'Incorrect password. Please try again.' });
+    if (!match) {
+      const count = recordFail(email);
+      const hint  = count >= 2;
+      return res.status(401).json({
+        error: 'Incorrect password. Please try again.',
+        hint:  hint ? 'forgot_password' : null,
+      });
+    }
 
+    clearAttempts(email);
     issueToken(res, user.id);
     const { password_hash, ...safeUser } = user;
     res.json({ ok: true, user: safeUser });
