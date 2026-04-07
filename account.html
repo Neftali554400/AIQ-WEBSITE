@@ -89,7 +89,8 @@
     /* AVATAR UPLOAD */
     .avatar-wrap{cursor:pointer}
     .avatar-edit-overlay{position:absolute;inset:0;border-radius:50%;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s ease}
-    .avatar-wrap:hover .avatar-edit-overlay{opacity:1}
+    @media(hover:hover){.avatar-wrap:hover .avatar-edit-overlay{opacity:1}}
+    .avatar-wrap.no-photo .avatar-edit-overlay{opacity:1}
     #avatar-file-input{display:none}
 
     /* MEMBER SINCE */
@@ -273,10 +274,13 @@
 
     // Avatar
     const avatarEl = document.getElementById('avatar');
+    const avatarWrap = document.querySelector('.avatar-wrap');
     if (user.picture) {
       avatarEl.innerHTML = '<img src="' + user.picture + '" alt="' + (user.name || '') + '">';
+      avatarWrap.classList.remove('no-photo');
     } else {
       avatarEl.textContent = (user.name || user.email || 'A')[0].toUpperCase();
+      avatarWrap.classList.add('no-photo');
     }
 
     // Name and email
@@ -484,6 +488,7 @@
         localStorage.setItem('aiq_user', JSON.stringify(user));
         const avatarEl = document.getElementById('avatar');
         avatarEl.innerHTML = `<img src="${dataUrl}" alt="Profile photo" style="width:100%;height:100%;object-fit:cover">`;
+        document.querySelector('.avatar-wrap').classList.remove('no-photo');
         showToast('Profile photo updated.');
       } catch(e) { showToast('Network error.', 'error'); }
     }
