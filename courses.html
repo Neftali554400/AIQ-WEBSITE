@@ -96,12 +96,16 @@
     .card-web .card-sphere{background:radial-gradient(circle,#1e3a5f,#0a0a08)}
     .card-auto .card-sphere{background:radial-gradient(circle,#3b1f6e,#0a0a08)}
 
-    /* CTA BANNER */
-    .cta-banner{background:rgba(3,79,70,.12);border:1px solid rgba(3,79,70,.3);border-radius:2rem;padding:4rem 3rem;text-align:center;margin:0 0 2rem;position:relative;overflow:hidden}
-    .cta-banner::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 70% at 50% 50%,rgba(3,79,70,.2) 0%,transparent 70%);pointer-events:none}
-    .cta-banner-inner{position:relative;z-index:1}
-    .cta-h2{font-family:'EB Garamond',Georgia,serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:500;color:var(--lumen);margin-bottom:.75rem;letter-spacing:-.02em}
-    .cta-h2 em{font-style:italic}
+    /* FAQ */
+    .faq-wrap{margin:0 0 2rem}
+    .faq-item{border-bottom:1px solid rgba(255,255,235,.07)}
+    .faq-q{width:100%;background:none;border:none;text-align:left;color:var(--lumen);font-family:'Figtree',sans-serif;font-size:.95rem;font-weight:600;padding:1.2rem 0;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+    .faq-q:focus-visible{outline:2px solid var(--glow);outline-offset:2px;border-radius:4px}
+    .faq-icon{flex-shrink:0;width:18px;height:18px;color:rgba(255,255,235,.35);transition:transform .25s ease}
+    .faq-item.open .faq-icon{transform:rotate(45deg)}
+    .faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease}
+    .faq-item.open .faq-a{max-height:200px}
+    .faq-a p{font-size:.88rem;color:rgba(255,255,235,.5);line-height:1.75;padding-bottom:1.2rem}
     .cta-sub{font-size:.95rem;color:rgba(255,255,235,.5);line-height:1.7;max-width:480px;margin:0 auto 2rem}
     .cta-btns{display:flex;justify-content:center;gap:.75rem;flex-wrap:wrap}
     .btn-primary{display:inline-flex;align-items:center;gap:.5rem;background:var(--fathom);color:var(--lumen);border:none;border-radius:9999px;padding:.8rem 1.75rem;font-family:'Figtree',sans-serif;font-size:.95rem;font-weight:600;text-decoration:none;cursor:pointer;transition:background .2s ease,transform .15s ease;box-shadow:0 4px 20px rgba(3,79,70,.35)}
@@ -395,17 +399,30 @@
 
     </div>
 
-    <!-- CTA BANNER -->
-    <div class="cta-banner" style="margin-top:4rem">
-      <div class="cta-banner-inner">
-        <h2 class="cta-h2">Ready to start <em>creating</em>?</h2>
-        <p class="cta-sub">Create your account and get started today. Enrol in any course and begin building real skills with AI.</p>
-        <div class="cta-btns">
-          <a href="/signup" class="btn-primary">
-            Create your account
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>
-          </a>
-          <a href="/about" class="btn-ghost">Learn about AIQ</a>
+    <!-- FAQ -->
+    <div style="margin-top:4rem;border-top:1px solid rgba(255,255,235,.07);padding-top:3.5rem">
+      <div class="section-eyebrow" style="margin-bottom:.5rem">FAQ</div>
+      <div class="section-h2" style="margin-bottom:2rem">Common questions</div>
+      <div class="faq-wrap" id="faq">
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">Do I need any prior experience?<svg class="faq-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg></button>
+          <div class="faq-a"><p>No experience is needed. Every course starts from scratch and walks you through the tools step by step. If you can use a smartphone, you can take these courses.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">How long do I have access to a course?<svg class="faq-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg></button>
+          <div class="faq-a"><p>Once enrolled, you have lifetime access. Learn at your own pace — there are no deadlines or time limits. Come back anytime to revisit lessons.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">Can I access courses on my phone?<svg class="faq-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg></button>
+          <div class="faq-a"><p>Yes. All courses are fully accessible on mobile, tablet, and desktop — no app required. Just open your browser and pick up where you left off.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">What tools will I use in the courses?<svg class="faq-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg></button>
+          <div class="faq-a"><p>Courses use the best AI tools available — such as Sora, Claude, Suno, Runway, and more. Most have free tiers so you can start building without spending anything.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-q" onclick="toggleFaq(this)">Is there a refund policy?<svg class="faq-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg></button>
+          <div class="faq-a"><p>If you're not satisfied within 7 days of purchase, contact us at hello@aiq-courses.com and we'll make it right.</p></div>
         </div>
       </div>
     </div>
@@ -488,6 +505,13 @@
   </footer>
 
   <script>
+    function toggleFaq(btn) {
+      const item = btn.closest('.faq-item');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    }
+
     function filterCards(level, btn) {
       document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
       btn.classList.add('active');
