@@ -3,6 +3,8 @@ const express      = require('express');
 const cookieParser = require('cookie-parser');
 const cors         = require('cors');
 const path         = require('path');
+const jwt          = require('jsonwebtoken');
+const db           = require('./db/database');
 
 process.on('unhandledRejection', (reason) => {
   console.error('[unhandledRejection]', reason);
@@ -20,6 +22,22 @@ app.use(cors({
   origin:      process.env.SITE_URL || 'http://localhost:3000',
   credentials: true,
 }));
+
+// ── Server-side guard for account page ─────────────────────────────────────
+// Checks JWT + token_version before sending the HTML.
+// This runs before static file serving so no cached HTML bypasses it.
+app.get('/account.html', (req, res) => {
+  const token = req.cookies['aiq_token'];
+  if (!token) return res.redirect('/signup.html');
+  try {
+    const { id, tv = 0 } = jwt.verify(token, process.env.JWT_SECRET);
+    const user = db.prepare('SELECT token_version FROM users WHERE id = ?').get(id);
+    if (!user || (user.token_version ?? 0) !== tv) return res.redirect('/signup.html');
+    res.sendFile(path.join(__dirname, 'account.html'));
+  } catch(e) {
+    res.redirect('/signup.html');
+  }
+});
 
 // Serve all static files (HTML, CSS, images, etc.) from the project root
 app.use(express.static(path.join(__dirname)));
