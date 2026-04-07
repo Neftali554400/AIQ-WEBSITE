@@ -30,9 +30,9 @@ app.get('/account.html', (req, res) => {
   const token = req.cookies['aiq_token'];
   if (!token) return res.redirect('/signup.html');
   try {
-    const { id, tv = 0 } = jwt.verify(token, process.env.JWT_SECRET);
-    const user = db.prepare('SELECT token_version FROM users WHERE id = ?').get(id);
-    if (!user || (user.token_version ?? 0) !== tv) return res.redirect('/signup.html');
+    const { id } = jwt.verify(token, process.env.JWT_SECRET);
+    const user = db.prepare('SELECT id FROM users WHERE id = ?').get(id);
+    if (!user) return res.redirect('/signup.html');
     res.sendFile(path.join(__dirname, 'account.html'));
   } catch(e) {
     res.redirect('/signup.html');
