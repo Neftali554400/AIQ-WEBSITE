@@ -283,6 +283,71 @@ router.post('/delete-account', (req, res) => {
   }
 });
 
+// ─── POST /api/auth/google ───────────────────────────────────────────────────
+router.post('/google', async (req, res) => {
+  try {
+    const { accessToken } = req.body;
+    if (!accessToken) return res.status(400).json({ error: 'Access token required.' });
+
+    const gRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+      headers: { Authorization: 'Bearer ' + accessToken },
+    });
+    if (!gRes.ok) return res.status(401).json({ error: 'Invalid Google token. Please try again.' });
+    const profile = await gRes.json();
+    if (!profile.email) return res.status(400).json({ error: 'Google did not return an email address.' });
+
+    let user = db.prepare('SELECT * FROM users WHERE email = ?').get(profile.email.toLowerCase());
+    if (!user) {
+      const r = db.prepare(
+        'INSERT INTO users (name, email, provider, picture, verified, joined) VALUES (?, ?, ?, ?, 1, ?)'
+      ).run(profile.name || profile.email, profile.email.toLowerCase(), 'google', profile.picture || null, new Date().toISOString().split('T')[0]);
+      user = db.prepare('SELECT * FROM users WHERE id = ?').get(r.lastInsertRowid);
+    } else if (user.provider !== 'google') {
+      return res.status(409).json({ error: `This email is linked to a ${user.provider === 'email' ? 'password' : user.provider} account. Use that sign-in method.` });
+    }
+
+    issueToken(res, user.id, user.token_version || 0);
+    const { password_hash, token_version, ...safeUser } = user;
+    res.json({ ok: true, user: safeUser });
+  } catch(err) {
+    console.error('[google]', err.message);
+    res.status(500).json({ error: 'Google sign-in failed. Please try again.' });
+  }
+});
+
+// ─── POST /api/auth/facebook ─────────────────────────────────────────────────
+router.post('/facebook', async (req, res) => {
+  try {
+    const { accessToken } = req.body;
+    if (!accessToken) return res.status(400).json({ error: 'Access token required.' });
+
+    const fbRes = await fetch(
+      `https://graph.facebook.com/me?fields=id,name,email,picture.width(200)&access_token=${encodeURIComponent(accessToken)}`
+    );
+    if (!fbRes.ok) return res.status(401).json({ error: 'Invalid Facebook token. Please try again.' });
+    const profile = await fbRes.json();
+    if (!profile.email) return res.status(400).json({ error: 'Facebook did not share your email. Please grant email permission and try again.' });
+
+    const picture = profile.picture?.data?.url || null;
+    let user = db.prepare('SELECT * FROM users WHERE email = ?').get(profile.email.toLowerCase());
+    if (!user) {
+      const r = db.prepare(
+        'INSERT INTO users (name, email, provider, picture, verified, joined) VALUES (?, ?, ?, ?, 1, ?)'
+      ).run(profile.name || profile.email, profile.email.toLowerCase(), 'facebook', picture, new Date().toISOString().split('T')[0]);
+      user = db.prepare('SELECT * FROM users WHERE id = ?').get(r.lastInsertRowid);
+    } else if (user.provider !== 'facebook') {
+      return res.status(409).json({ error: `This email is linked to a ${user.provider === 'email' ? 'password' : user.provider} account. Use that sign-in method.` });
+    }
+
+    issueToken(res, user.id, user.token_version || 0);
+    const { password_hash, token_version, ...safeUser } = user;
+    res.json({ ok: true, user: safeUser });
+  } catch(err) {
+    console.error('[facebook]', err.message);
+    res.status(500).json({ error: 'Facebook sign-in failed. Please try again.' });
+  }
+});
+
 // ─── GET /api/auth/me ────────────────────────────────────────────────────────
 router.get('/me', (req, res) => {
   const token = req.cookies[COOKIE];

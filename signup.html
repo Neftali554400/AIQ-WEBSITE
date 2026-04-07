@@ -461,19 +461,11 @@
       client.requestAccessToken({ prompt: 'select_account' });
     }
 
-    function handleGoogleSignIn(response) {
-      if (response.error) { console.error(response); return; }
-      // Fetch basic profile using the access token
-      fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-        headers: { Authorization: 'Bearer ' + response.access_token }
-      })
-      .then(r => r.json())
-      .then(profile => {
-        saveUser({ name: profile.name, email: profile.email, picture: profile.picture, provider: 'google' });
-      })
-      .catch(() => {
-        saveUser({ provider: 'google' });
-      });
+    async function handleGoogleSignIn(response) {
+      if (response.error) { showOAuthError('Google sign-in was cancelled.'); return; }
+      const { ok, data } = await api('/api/auth/google', { accessToken: response.access_token });
+      if (!ok) { showOAuthError(data.error || 'Google sign-in failed.'); return; }
+      saveUser(data.user);
     }
 
     // ══════════════════════════════════════════════════════
@@ -505,17 +497,22 @@
 
     function handleFacebookClick() {
       if (FACEBOOK_APP_ID === 'YOUR_FACEBOOK_APP_ID') {
-        alert('Facebook Login is not yet configured.\n\nAdd your Facebook App ID to signup.html to enable this.');
+        alert('Facebook Login is not yet configured.');
         return;
       }
-      FB.login(function (response) {
-        if (response.authResponse) {
-          FB.api('/me', { fields: 'name,picture.width(200)' }, function (userData) {
-            const picture = userData.picture && userData.picture.data ? userData.picture.data.url : null;
-            saveUser({ name: userData.name, picture: picture, provider: 'facebook' });
-          });
-        }
-      }, { scope: 'public_profile' });
+      FB.login(async function (response) {
+        if (!response.authResponse) { showOAuthError('Facebook sign-in was cancelled.'); return; }
+        const { ok, data } = await api('/api/auth/facebook', { accessToken: response.authResponse.accessToken });
+        if (!ok) { showOAuthError(data.error || 'Facebook sign-in failed.'); return; }
+        saveUser(data.user);
+      }, { scope: 'public_profile,email' });
+    }
+
+    // Show OAuth error in whichever banner is currently visible
+    function showOAuthError(msg) {
+      const bannerId = document.getElementById('login-state').style.display !== 'none'
+        ? 'signin-banner' : 'signup-banner';
+      showBanner(bannerId, msg, 'error');
     }
 
     // ══════════════════════════════════════════════════════
