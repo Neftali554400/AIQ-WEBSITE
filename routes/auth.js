@@ -44,7 +44,7 @@ async function sendOtpEmail(to, name, otp) {
 }
 
 async function sendWelcomeEmail(to, name) {
-  const coursesUrl = `${SITE_URL}/courses#cards-grid`;
+  const coursesUrl = `${SITE_URL}/courses#all-courses`;
   await getResend().emails.send({
     from: 'AIQ <hello@aiq-courses.com>',
     to,
