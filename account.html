@@ -79,6 +79,16 @@
 
     /* MEMBER SINCE */
     .joined-note{font-size:.78rem;color:rgba(255,255,235,.22);text-align:center;margin-top:2rem}
+
+    /* TOAST */
+    #toast-container{position:fixed;bottom:1.75rem;right:1.75rem;z-index:9999;display:flex;flex-direction:column;gap:.6rem;pointer-events:none}
+    .toast{display:flex;align-items:center;gap:.75rem;background:#1a1a17;border:1px solid rgba(255,255,235,.12);border-radius:.875rem;padding:.85rem 1.1rem;font-size:.84rem;font-weight:500;color:var(--lumen);box-shadow:0 8px 32px rgba(0,0,0,.5),0 2px 8px rgba(0,0,0,.3);min-width:240px;max-width:340px;pointer-events:all;opacity:0;transform:translateY(12px);transition:opacity .25s ease,transform .25s ease}
+    .toast.show{opacity:1;transform:translateY(0)}
+    .toast.hide{opacity:0;transform:translateY(8px)}
+    .toast-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+    .toast.success .toast-dot{background:#22c55e}
+    .toast.warning .toast-dot{background:var(--glow)}
+    .toast.error .toast-dot{background:#f87171}
     /* HAMBURGER */
     .btn-ham{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:.5rem;color:var(--lumen);position:relative;z-index:1001}
     .btn-ham .bar{display:block;width:22px;height:2px;background:currentColor;border-radius:2px;transition:transform .25s ease,opacity .2s ease}
@@ -117,6 +127,7 @@
   </div>
 
   <!-- Page content — hidden until auth confirmed -->
+  <div id="toast-container" aria-live="polite"></div>
   <div id="page-content">
   <nav>
     <a href="/" class="nav-logo">AIQ</a>
@@ -316,43 +327,65 @@
 
     } // end renderProfile
 
+    // ── Toast notification ─────────────────────────────────
+    function showToast(msg, type = 'success') {
+      const container = document.getElementById('toast-container');
+      const t = document.createElement('div');
+      t.className = 'toast ' + type;
+      t.innerHTML = '<span class="toast-dot"></span><span>' + msg + '</span>';
+      container.appendChild(t);
+      requestAnimationFrame(() => { requestAnimationFrame(() => { t.classList.add('show'); }); });
+      setTimeout(() => {
+        t.classList.add('hide');
+        t.addEventListener('transitionend', () => t.remove(), { once: true });
+      }, 3500);
+    }
+
     // Settings actions
     function editName() {
+      const user = getUser();
       const n = prompt('Enter your display name:', user.name || '');
       if (n && n.trim()) {
         user.name = n.trim();
         localStorage.setItem('aiq_user', JSON.stringify(user));
         document.getElementById('profile-name').textContent = user.name;
         document.getElementById('setting-name').textContent = user.name;
-        avatarEl.textContent = user.picture ? avatarEl.innerHTML : user.name[0].toUpperCase();
+        const avatarEl = document.getElementById('avatar');
+        if (!user.picture) avatarEl.textContent = user.name[0].toUpperCase();
+        showToast('Display name updated.');
       }
     }
 
     function editEmail() {
+      const user = getUser();
       const e = prompt('Enter your email address:', user.email || '');
       if (e && e.includes('@')) {
         user.email = e.trim();
         localStorage.setItem('aiq_user', JSON.stringify(user));
         document.getElementById('profile-email').textContent = user.email;
         document.getElementById('setting-email').textContent = user.email;
+        showToast('Email address updated.');
       }
     }
 
     function toggleNotifs(btn) {
-      btn.textContent = btn.textContent === 'Enabled' ? 'Disabled' : 'Enabled';
+      const enabled = btn.textContent.trim() === 'Enabled';
+      btn.textContent = enabled ? 'Disabled' : 'Enabled';
+      showToast(enabled ? 'Email notifications disabled.' : 'Email notifications enabled.', enabled ? 'warning' : 'success');
     }
 
     async function deleteAccount() {
       if (!confirm('This will permanently delete your account and all data. This cannot be undone.')) return;
+      showToast('Deleting your account…', 'warning');
       try {
         const res = await fetch('/api/auth/delete-account', { method: 'POST', credentials: 'include' });
         if (!res.ok) {
           const d = await res.json();
-          alert(d.error || 'Failed to delete account. Please try again.');
+          showToast(d.error || 'Failed to delete account. Please try again.', 'error');
           return;
         }
       } catch(e) {
-        alert('Network error. Please try again.');
+        showToast('Network error. Please try again.', 'error');
         return;
       }
       localStorage.removeItem('aiq_user');
@@ -362,6 +395,7 @@
 
     async function signOut() {
       if (confirm('Sign out of your AIQ account?')) {
+        showToast('Signing out…', 'warning');
         try { await fetch('/api/auth/signout', { method: 'POST', credentials: 'include' }); } catch(e) {}
         localStorage.removeItem('aiq_user');
         localStorage.removeItem('aiq_admin_session');
