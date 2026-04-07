@@ -92,10 +92,30 @@
     .mob-nav .mob-cta:hover{background:var(--fathom-lt);color:var(--lumen)}
     @media(max-width:640px){.btn-ham{display:flex}.btn-nav{display:none}.btn-signout{display:none}.nav-link{display:none}}
   html{overflow-x:hidden;overscroll-behavior-x:none}body{overflow-x:hidden;overscroll-behavior-x:none}
+  /* AUTH GATE */
+  #auth-gate{display:none;min-height:100vh;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:2rem;gap:1.5rem}
+  #auth-gate.visible{display:flex}
+  #page-content{display:none}
+  #page-content.visible{display:block}
+  .gate-icon{font-size:3rem;margin-bottom:.5rem}
+  .gate-title{font-family:'EB Garamond',Georgia,serif;font-size:2rem;font-weight:500;color:var(--lumen)}
+  .gate-sub{font-size:.95rem;color:rgba(255,255,235,.45);max-width:340px;line-height:1.65}
+  .gate-btn{display:inline-flex;align-items:center;gap:.5rem;background:var(--fathom);color:var(--lumen);border:none;border-radius:9999px;padding:.75rem 2rem;font-family:'Figtree',sans-serif;font-size:.95rem;font-weight:600;cursor:pointer;text-decoration:none;transition:background .2s ease}
+  .gate-btn:hover{background:var(--fathom-lt)}
   </style>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
 </head>
 <body>
+  <!-- Auth gate — shown to unauthenticated users -->
+  <div id="auth-gate">
+    <div class="gate-icon">🔒</div>
+    <h1 class="gate-title">Access restricted</h1>
+    <p class="gate-sub">You need to be signed in to view your account. Please sign in or create a free account.</p>
+    <a href="signup.html" class="gate-btn">Sign in to AIQ</a>
+  </div>
+
+  <!-- Page content — hidden until auth confirmed -->
+  <div id="page-content">
   <nav>
     <a href="index.html" class="nav-logo">AIQ</a>
     <div class="nav-right">
@@ -325,8 +345,9 @@
       }
     }
 
-    function signOut() {
+    async function signOut() {
       if (confirm('Sign out of your AIQ account?')) {
+        try { await fetch('/api/auth/signout', { method: 'POST', credentials: 'include' }); } catch(e) {}
         localStorage.removeItem('aiq_user');
         localStorage.removeItem('aiq_admin_session');
         window.location.href = 'signup.html';
@@ -334,6 +355,29 @@
     }
       (function(){var btn=document.getElementById("btn-ham"),menu=document.getElementById("mob-nav"),bars=btn.querySelectorAll(".bar");btn.addEventListener("click",function(){var open=menu.classList.toggle("open");btn.setAttribute("aria-expanded",open);if(open){bars[0].style.transform="translateY(7px) rotate(45deg)";bars[1].style.opacity="0";bars[2].style.transform="translateY(-7px) rotate(-45deg)";}else{bars[0].style.transform="";bars[1].style.opacity="";bars[2].style.transform="";}});menu.querySelectorAll("a").forEach(function(a){a.addEventListener("click",function(){menu.classList.remove("open");btn.setAttribute("aria-expanded","false");bars[0].style.transform="";bars[1].style.opacity="";bars[2].style.transform="";});});})();
 </script>
+  </div><!-- /#page-content -->
+
+  <script>
+    // Check auth via backend before showing page
+    (async function() {
+      try {
+        const res = await fetch('/api/auth/me', { credentials: 'include' });
+        if (res.ok) {
+          document.getElementById('page-content').classList.add('visible');
+        } else {
+          document.getElementById('auth-gate').classList.add('visible');
+        }
+      } catch(e) {
+        // Server unreachable — fall back to localStorage
+        const u = localStorage.getItem('aiq_user');
+        if (u) {
+          document.getElementById('page-content').classList.add('visible');
+        } else {
+          document.getElementById('auth-gate').classList.add('visible');
+        }
+      }
+    })();
+  </script>
   <script src="auth.js"></script>
 </body>
 </html>
