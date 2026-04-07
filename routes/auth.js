@@ -1,28 +1,22 @@
-const express  = require('express');
-const bcrypt   = require('bcryptjs');
-const jwt      = require('jsonwebtoken');
-const crypto   = require('crypto');
-const nodemailer = require('nodemailer');
-const db       = require('../db/database');
+const express = require('express');
+const bcrypt  = require('bcryptjs');
+const jwt     = require('jsonwebtoken');
+const crypto  = require('crypto');
+const { Resend } = require('resend');
+const db      = require('../db/database');
 
-const router = express.Router();
-const COOKIE  = 'aiq_token';
+const router   = express.Router();
+const COOKIE   = 'aiq_token';
 const SITE_URL = process.env.SITE_URL || 'http://localhost:3000';
 
-// ─── Email transporter ───────────────────────────────────────────────────────
-function getTransporter() {
-  return nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: process.env.GMAIL_USER,
-      pass: process.env.GMAIL_APP_PASS,
-    },
-  });
+// ─── Resend email client ──────────────────────────────────────────────────────
+function getResend() {
+  return new Resend(process.env.RESEND_API_KEY);
 }
 
 async function sendOtpEmail(to, name, otp) {
-  await getTransporter().sendMail({
-    from: `"AIQ" <${process.env.GMAIL_USER}>`,
+  await getResend().emails.send({
+    from: 'AIQ <onboarding@resend.dev>',
     to,
     subject: `${otp} — your AIQ verification code`,
     html: `
@@ -38,8 +32,8 @@ async function sendOtpEmail(to, name, otp) {
 
 async function sendResetEmail(to, name, token) {
   const url = `${SITE_URL}/reset-password.html?token=${token}`;
-  await getTransporter().sendMail({
-    from: `"AIQ" <${process.env.GMAIL_USER}>`,
+  await getResend().emails.send({
+    from: 'AIQ <onboarding@resend.dev>',
     to,
     subject: 'Reset your AIQ password',
     html: `
