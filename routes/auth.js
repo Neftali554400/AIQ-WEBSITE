@@ -15,7 +15,8 @@ function getResend() {
 }
 
 async function sendOtpEmail(to, name, otp) {
-  await getResend().emails.send({
+  console.log('[sendOtpEmail] Sending to:', to);
+  const result = await getResend().emails.send({
     from: 'AIQ <onboarding@resend.dev>',
     to,
     subject: `${otp} — your AIQ verification code`,
@@ -28,6 +29,8 @@ async function sendOtpEmail(to, name, otp) {
         <p style="color:#aaa;font-size:12px">If you didn't create an AIQ account, you can safely ignore this email.</p>
       </div>`,
   });
+  console.log('[sendOtpEmail] Result:', JSON.stringify(result));
+  if (result.error) throw new Error(result.error.message || JSON.stringify(result.error));
 }
 
 async function sendResetEmail(to, name, token) {
