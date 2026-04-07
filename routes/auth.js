@@ -303,7 +303,10 @@ router.post('/google', async (req, res) => {
       ).run(profile.name || profile.email, profile.email.toLowerCase(), 'google', profile.picture || null, new Date().toISOString().split('T')[0]);
       user = db.prepare('SELECT * FROM users WHERE id = ?').get(r.lastInsertRowid);
     } else if (user.provider !== 'google') {
-      return res.status(409).json({ error: `This email is linked to a ${user.provider === 'email' ? 'password' : user.provider} account. Use that sign-in method.` });
+      // Link Google to existing account — update provider and picture
+      db.prepare('UPDATE users SET provider = ?, picture = ? WHERE id = ?')
+        .run('google', profile.picture || user.picture, user.id);
+      user = db.prepare('SELECT * FROM users WHERE id = ?').get(user.id);
     }
 
     issueToken(res, user.id, user.token_version || 0);
