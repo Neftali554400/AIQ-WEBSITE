@@ -24,7 +24,7 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api', (req, res) => res.status(404).json({ error: 'Not found.' }));
 
 // ── Serve index.html for any non-file route (client-side nav) ───────────────
-app.get('*', (req, res) => {
+app.get('/{*path}', (req, res) => {
   if (path.extname(req.path)) return res.status(404).send('Not found.');
   res.sendFile(path.join(__dirname, 'index.html'));
 });
