@@ -303,7 +303,7 @@
           Verify your email
         </div>
         <h1 class="card-title">Check your <em>inbox</em></h1>
-        <p class="otp-hint">We sent a 6-digit code to <strong id="verify-email-display"></strong>. Enter it below to confirm your account.</p>
+        <p class="otp-hint" id="verify-hint">We sent a 6-digit code to <strong id="verify-email-display"></strong>. Enter it below to confirm your account.</p>
 
         <form onsubmit="verifyOtp(event)" novalidate>
           <div class="field-group" style="margin-bottom:.75rem">
@@ -323,9 +323,9 @@
           </div>
           <div class="info-banner" id="verify-banner" role="alert"></div>
           <div class="otp-actions">
-            <button class="btn-email" type="submit">Verify &amp; create account</button>
+            <button class="btn-email" type="submit" id="verify-submit-btn">Verify &amp; create account</button>
             <button type="button" class="btn-resend" id="resend-btn" onclick="resendOtp()">Resend code</button>
-            <button type="button" class="btn-back-link" onclick="showSignupForm()">← Change email address</button>
+            <button type="button" class="btn-back-link" id="verify-back-btn" onclick="showBackFromOtp()">← Change email address</button>
           </div>
         </form>
       </div>
@@ -522,6 +522,7 @@
     // OTP STATE (pending signup stored in memory only)
     // ══════════════════════════════════════════════════════
     let _pendingSignup = null;
+    let _pendingSignin = null;
     let _resendTimer   = null;
 
     // ── Generic API helper ─────────────────────────────────
@@ -567,9 +568,14 @@
     }
 
     async function resendOtp() {
-      if (!_pendingSignup) return;
       clearBanner('verify-banner');
-      const { ok, data } = await api('/api/auth/resend-otp', { name: _pendingSignup.name, email: _pendingSignup.email });
+      let result;
+      if (_pendingSignin) {
+        result = await api('/api/auth/resend-signin-otp', { email: _pendingSignin.email });
+      } else if (_pendingSignup) {
+        result = await api('/api/auth/resend-otp', { name: _pendingSignup.name, email: _pendingSignup.email });
+      } else { return; }
+      const { ok, data } = result;
       showBanner('verify-banner', ok ? 'A new code has been sent.' : (data.error || 'Failed to resend.'), ok ? 'success' : 'error');
       startResendCountdown();
     }
@@ -631,8 +637,12 @@
 
       _pendingSignup = { name, email, password };
       document.getElementById('verify-email-display').textContent = email;
+      document.getElementById('verify-hint').innerHTML = 'We sent a 6-digit code to <strong>' + email + '</strong>. Enter it below to confirm your account.';
+      document.getElementById('verify-submit-btn').textContent = 'Verify & create account';
+      document.getElementById('verify-back-btn').textContent = '← Change email address';
       document.getElementById('form-state').style.display = 'none';
       document.getElementById('verify-state').classList.add('visible');
+      document.getElementById('otp-input').value = '';
       document.getElementById('otp-input').focus();
       startResendCountdown();
     }
@@ -649,31 +659,41 @@
       }
 
       const btn = e.target.querySelector('[type="submit"]');
+      const isSignin = !!_pendingSignin;
       btn.textContent = 'Verifying…'; btn.disabled = true;
 
-      const { ok, data } = await api('/api/auth/verify-otp', {
-        name:     _pendingSignup.name,
-        email:    _pendingSignup.email,
-        password: _pendingSignup.password,
-        code:     entered,
-      });
-
-      btn.textContent = 'Verify & create account'; btn.disabled = false;
-
-      if (!ok) {
-        document.getElementById('otp-error').textContent = data.error || 'Verification failed.';
-        return;
+      if (isSignin) {
+        const { ok, data } = await api('/api/auth/verify-signin-otp', { email: _pendingSignin.email, code: entered });
+        btn.textContent = 'Verify & sign in'; btn.disabled = false;
+        if (!ok) { document.getElementById('otp-error').textContent = data.error || 'Verification failed.'; return; }
+        _pendingSignin = null;
+        saveUser(data.user);
+      } else {
+        const { ok, data } = await api('/api/auth/verify-otp', {
+          name:     _pendingSignup.name,
+          email:    _pendingSignup.email,
+          password: _pendingSignup.password,
+          code:     entered,
+        });
+        btn.textContent = 'Verify & create account'; btn.disabled = false;
+        if (!ok) { document.getElementById('otp-error').textContent = data.error || 'Verification failed.'; return; }
+        _pendingSignup = null;
+        saveUser(data.user);
       }
-
-      _pendingSignup = null;
-      saveUser(data.user);
     }
 
-    function showSignupForm() {
+    function showBackFromOtp() {
       document.getElementById('verify-state').classList.remove('visible');
-      document.getElementById('form-state').style.display = 'block';
       if (_resendTimer) clearInterval(_resendTimer);
+      if (_pendingSignin) {
+        _pendingSignin = null;
+        document.getElementById('login-state').style.display = 'block';
+      } else {
+        document.getElementById('form-state').style.display = 'block';
+      }
     }
+    // keep old name as alias so any stray references work
+    function showSignupForm() { showBackFromOtp(); }
 
     // ══════════════════════════════════════════════════════
     // EMAIL SIGN-IN
@@ -705,7 +725,18 @@
         return;
       }
 
-      saveUser(data.user);
+      // Password correct — OTP sent, show verification step
+      _pendingSignin = { email };
+      _pendingSignup = null;
+      document.getElementById('verify-email-display').textContent = email;
+      document.getElementById('verify-hint').innerHTML = 'We sent a 6-digit code to <strong>' + email + '</strong>. Enter it below to sign in.';
+      document.getElementById('verify-submit-btn').textContent = 'Verify & sign in';
+      document.getElementById('verify-back-btn').textContent = '← Back to sign in';
+      document.getElementById('login-state').style.display = 'none';
+      document.getElementById('verify-state').classList.add('visible');
+      document.getElementById('otp-input').value = '';
+      document.getElementById('otp-input').focus();
+      startResendCountdown();
     }
 
     // ══════════════════════════════════════════════════════

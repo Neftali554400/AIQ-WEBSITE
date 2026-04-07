@@ -63,8 +63,8 @@ async function sendResetEmail(to, name, token) {
 }
 
 // ─── Helper: issue JWT in httpOnly cookie ────────────────────────────────────
-function issueToken(res, userId) {
-  const token = jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: '7d' });
+function issueToken(res, userId, tv = 0) {
+  const token = jwt.sign({ id: userId, tv }, process.env.JWT_SECRET, { expiresIn: '7d' });
   res.cookie(COOKIE, token, {
     httpOnly: true,
     secure:   process.env.NODE_ENV === 'production',
@@ -130,9 +130,10 @@ router.post('/verify-otp', async (req, res) => {
       'INSERT INTO users (name, email, password_hash, provider, verified, joined) VALUES (?, ?, ?, ?, 1, ?)'
     ).run(name, email.toLowerCase(), hash, 'email', new Date().toISOString().split('T')[0]);
 
-    const user = db.prepare('SELECT id, name, email, picture, provider, joined FROM users WHERE id = ?').get(result.lastInsertRowid);
-    issueToken(res, user.id);
-    res.json({ ok: true, user });
+    const user = db.prepare('SELECT id, name, email, picture, provider, joined, token_version FROM users WHERE id = ?').get(result.lastInsertRowid);
+    issueToken(res, user.id, user.token_version);
+    const { token_version, ...safeUser } = user;
+    res.json({ ok: true, user: safeUser });
   } catch (err) {
     console.error('[verify-otp]', err.message);
     res.status(500).json({ error: 'Server error. Please try again.' });
@@ -182,9 +183,14 @@ router.post('/signin', async (req, res) => {
     }
 
     clearAttempts(email);
-    issueToken(res, user.id);
-    const { password_hash, ...safeUser } = user;
-    res.json({ ok: true, user: safeUser });
+
+    // Send OTP as 2nd factor before issuing session
+    const otp     = String(Math.floor(100000 + Math.random() * 900000));
+    const expires = Date.now() + 10 * 60 * 1000;
+    db.prepare('UPDATE otp_codes SET used = 1 WHERE email = ?').run(email.toLowerCase());
+    db.prepare('INSERT INTO otp_codes (email, code, expires_at) VALUES (?, ?, ?)').run(email.toLowerCase(), otp, expires);
+    await sendOtpEmail(email, user.name, otp);
+    res.json({ ok: true, otpSent: true });
   } catch (err) {
     console.error('[signin]', err.message);
     res.status(500).json({ error: 'Server error. Please try again.' });
@@ -193,8 +199,88 @@ router.post('/signin', async (req, res) => {
 
 // ─── POST /api/auth/signout ──────────────────────────────────────────────────
 router.post('/signout', (req, res) => {
+  const token = req.cookies[COOKIE];
+  if (token) {
+    try {
+      const { id } = jwt.verify(token, process.env.JWT_SECRET);
+      db.prepare('UPDATE users SET token_version = token_version + 1 WHERE id = ?').run(id);
+    } catch(e) { /* expired/invalid token — nothing to invalidate */ }
+  }
   res.clearCookie(COOKIE);
   res.json({ ok: true });
+});
+
+// ─── POST /api/auth/verify-signin-otp ───────────────────────────────────────
+router.post('/verify-signin-otp', async (req, res) => {
+  try {
+    const { email, code } = req.body;
+    if (!email || !code)
+      return res.status(400).json({ error: 'Email and code required.' });
+
+    const record = db.prepare(
+      'SELECT * FROM otp_codes WHERE email = ? AND used = 0 ORDER BY created_at DESC LIMIT 1'
+    ).get(email.toLowerCase());
+
+    if (!record) return res.status(400).json({ error: 'No active code found. Please sign in again.' });
+    if (Date.now() > record.expires_at) return res.status(400).json({ error: 'Code has expired. Click "Resend code".' });
+    if (record.code !== String(code).trim()) return res.status(400).json({ error: 'Incorrect code. Please try again.' });
+
+    db.prepare('UPDATE otp_codes SET used = 1 WHERE id = ?').run(record.id);
+
+    const user = db.prepare('SELECT id, name, email, picture, provider, joined, token_version FROM users WHERE email = ?').get(email.toLowerCase());
+    if (!user) return res.status(404).json({ error: 'Account not found.' });
+
+    issueToken(res, user.id, user.token_version);
+    const { token_version, password_hash, ...safeUser } = user;
+    res.json({ ok: true, user: safeUser });
+  } catch (err) {
+    console.error('[verify-signin-otp]', err.message);
+    res.status(500).json({ error: 'Server error. Please try again.' });
+  }
+});
+
+// ─── POST /api/auth/resend-signin-otp ───────────────────────────────────────
+router.post('/resend-signin-otp', async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ error: 'Email required.' });
+
+    const user = db.prepare('SELECT name FROM users WHERE email = ?').get(email.toLowerCase());
+    if (!user) return res.status(404).json({ error: 'Account not found.' });
+
+    const otp     = String(Math.floor(100000 + Math.random() * 900000));
+    const expires = Date.now() + 10 * 60 * 1000;
+    db.prepare('UPDATE otp_codes SET used = 1 WHERE email = ?').run(email.toLowerCase());
+    db.prepare('INSERT INTO otp_codes (email, code, expires_at) VALUES (?, ?, ?)').run(email.toLowerCase(), otp, expires);
+    await sendOtpEmail(email, user.name, otp);
+    res.json({ ok: true });
+  } catch (err) {
+    console.error('[resend-signin-otp]', err.message);
+    res.status(500).json({ error: 'Failed to resend.' });
+  }
+});
+
+// ─── POST /api/auth/delete-account ──────────────────────────────────────────
+router.post('/delete-account', (req, res) => {
+  const token = req.cookies[COOKIE];
+  if (!token) return res.status(401).json({ error: 'Not authenticated.' });
+  try {
+    const { id } = jwt.verify(token, process.env.JWT_SECRET);
+    const user = db.prepare('SELECT id, email FROM users WHERE id = ?').get(id);
+    if (!user) return res.status(404).json({ error: 'User not found.' });
+
+    db.prepare('DELETE FROM enrollments WHERE user_id = ?').run(id);
+    db.prepare('DELETE FROM payments WHERE user_id = ?').run(id);
+    db.prepare('DELETE FROM reset_tokens WHERE user_id = ?').run(id);
+    db.prepare('DELETE FROM otp_codes WHERE email = ?').run(user.email);
+    db.prepare('DELETE FROM users WHERE id = ?').run(id);
+
+    res.clearCookie(COOKIE);
+    res.json({ ok: true });
+  } catch(err) {
+    console.error('[delete-account]', err.message);
+    res.status(500).json({ error: 'Server error. Please try again.' });
+  }
 });
 
 // ─── GET /api/auth/me ────────────────────────────────────────────────────────
@@ -202,10 +288,12 @@ router.get('/me', (req, res) => {
   const token = req.cookies[COOKIE];
   if (!token) return res.status(401).json({ error: 'Not authenticated.' });
   try {
-    const { id } = jwt.verify(token, process.env.JWT_SECRET);
-    const user   = db.prepare('SELECT id, name, email, picture, provider, joined FROM users WHERE id = ?').get(id);
+    const { id, tv = 0 } = jwt.verify(token, process.env.JWT_SECRET);
+    const user = db.prepare('SELECT id, name, email, picture, provider, joined, token_version FROM users WHERE id = ?').get(id);
     if (!user) return res.status(401).json({ error: 'User not found.' });
-    res.json({ user });
+    if (user.token_version !== tv) return res.status(401).json({ error: 'Session expired. Please sign in again.' });
+    const { token_version, ...safeUser } = user;
+    res.json({ user: safeUser });
   } catch {
     res.status(401).json({ error: 'Invalid or expired session.' });
   }

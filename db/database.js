@@ -22,6 +22,7 @@ db.exec(`
     picture       TEXT,
     verified      INTEGER NOT NULL DEFAULT 0,
     joined        TEXT    NOT NULL,
+    token_version INTEGER NOT NULL DEFAULT 0,
     created_at    DATETIME DEFAULT CURRENT_TIMESTAMP
   );
 
@@ -63,5 +64,8 @@ db.exec(`
     FOREIGN KEY (user_id) REFERENCES users(id)
   );
 `);
+
+// Add token_version to existing databases that predate this column
+try { db.exec('ALTER TABLE users ADD COLUMN token_version INTEGER NOT NULL DEFAULT 0'); } catch(e) {}
 
 module.exports = db;

@@ -342,12 +342,22 @@
       btn.textContent = btn.textContent === 'Enabled' ? 'Disabled' : 'Enabled';
     }
 
-    function deleteAccount() {
-      if (confirm('This will permanently delete your account and all progress. Are you sure?')) {
-        localStorage.removeItem('aiq_user');
-        Object.keys(COURSE_META).forEach(id => localStorage.removeItem('aiq_progress_' + id));
-        window.location.href = 'index.html';
+    async function deleteAccount() {
+      if (!confirm('This will permanently delete your account and all data. This cannot be undone.')) return;
+      try {
+        const res = await fetch('/api/auth/delete-account', { method: 'POST', credentials: 'include' });
+        if (!res.ok) {
+          const d = await res.json();
+          alert(d.error || 'Failed to delete account. Please try again.');
+          return;
+        }
+      } catch(e) {
+        alert('Network error. Please try again.');
+        return;
       }
+      localStorage.removeItem('aiq_user');
+      Object.keys(COURSE_META).forEach(id => localStorage.removeItem('aiq_progress_' + id));
+      window.location.href = 'index.html';
     }
 
     async function signOut() {
