@@ -28,9 +28,9 @@
     body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:128px}
 
     /* NAV */
-    nav{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:1rem 2.5rem;background:rgba(10,10,8,0.92);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,235,0.06)}
+    nav{position:sticky;top:0;z-index:50;display:grid;grid-template-columns:auto 1fr auto;align-items:center;padding:1rem 2.5rem;background:rgba(10,10,8,0.92);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,235,0.06)}
     .nav-logo{font-family:'EB Garamond',Georgia,serif;font-size:1.45rem;font-weight:500;color:var(--lumen);text-decoration:none;letter-spacing:-0.01em}
-    .nav-links{display:flex;align-items:center;gap:1.25rem;list-style:none}
+    .nav-links{display:flex;align-items:center;justify-content:center;gap:1.25rem;list-style:none}
     .nav-links a{font-size:.875rem;font-weight:500;color:rgba(255,255,235,.55);text-decoration:none;transition:color .15s ease}
     .nav-links a:hover{color:var(--lumen)}
     .nav-right{display:flex;align-items:center;gap:1.25rem}

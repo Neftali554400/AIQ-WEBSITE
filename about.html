@@ -43,9 +43,9 @@
     @keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
     /* NAV */
-    nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:1.1rem 2.5rem;background:rgba(10,10,8,0.97);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,235,0.06);transform:translate3d(0,0,0);-webkit-transform:translate3d(0,0,0)}
+    nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:grid;grid-template-columns:auto 1fr auto;align-items:center;padding:1.1rem 2.5rem;background:rgba(10,10,8,0.97);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,235,0.06);transform:translate3d(0,0,0);-webkit-transform:translate3d(0,0,0)}
     .nav-logo{font-family:'EB Garamond',Georgia,serif;font-size:1.45rem;font-weight:500;color:var(--lumen);text-decoration:none;letter-spacing:-0.01em}
-    .nav-links{display:flex;align-items:center;gap:1.25rem;list-style:none}
+    .nav-links{display:flex;align-items:center;justify-content:center;gap:1.25rem;list-style:none}
     .nav-links a{font-size:.875rem;font-weight:500;color:rgba(255,255,235,0.55);text-decoration:none;transition:color .15s ease}
     .nav-links a:hover,.nav-links a.active{color:var(--lumen)}
     .btn-nav{display:inline-flex;align-items:center;gap:.4rem;background:var(--fathom);color:var(--lumen);border:none;border-radius:9999px;padding:.55rem 1.25rem;font-family:'Figtree',sans-serif;font-size:.85rem;font-weight:600;text-decoration:none;cursor:pointer;transition:background .2s ease,transform .15s ease}
