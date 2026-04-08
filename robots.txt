@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+
+# Block private/auth pages
+Disallow: /account
+Disallow: /admin
+Disallow: /admin-login
+Disallow: /payment
+Disallow: /reset-password
+Disallow: /certificate
+Disallow: /api/
+
+# Block utility assets
+Disallow: /data/
+Disallow: /*.mjs$
+
+Sitemap: https://aiq-courses.com/sitemap.xml

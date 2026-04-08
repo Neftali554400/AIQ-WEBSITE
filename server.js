@@ -60,6 +60,23 @@ app.use(express.static(path.join(__dirname), {
   },
 }));
 
+// ── OG image (social share preview) ─────────────────────────────────────────
+app.get('/og-image.png', (_req, res) => {
+  res.setHeader('Content-Type', 'image/svg+xml');
+  res.setHeader('Cache-Control', 'public, max-age=86400');
+  res.sendFile(path.join(__dirname, 'og-image.svg'));
+});
+
+// ── Sitemap & robots ────────────────────────────────────────────────────────
+app.get('/sitemap.xml', (_req, res) => {
+  res.setHeader('Content-Type', 'application/xml');
+  res.sendFile(path.join(__dirname, 'sitemap.xml'));
+});
+app.get('/robots.txt', (_req, res) => {
+  res.setHeader('Content-Type', 'text/plain');
+  res.sendFile(path.join(__dirname, 'robots.txt'));
+});
+
 // ── API routes ──────────────────────────────────────────────────────────────
 app.use('/api/auth', require('./routes/auth'));
 

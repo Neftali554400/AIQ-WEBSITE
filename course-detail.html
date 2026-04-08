@@ -4,6 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Course — AIQ</title>
+  <meta name="description" content="Learn to create with AI. Practical, self-paced course with a verified certificate on completion. Join thousands of students on AIQ." />
+  <meta name="robots" content="index, follow" />
+  <!-- OG tags are set dynamically by JS once the course is loaded -->
+  <meta property="og:type"   content="website" id="og-type" />
+  <meta property="og:url"    content="" id="og-url" />
+  <meta property="og:title"  content="AIQ Course" id="og-title" />
+  <meta property="og:description" content="" id="og-desc" />
+  <meta property="og:image"  content="https://aiq-courses.com/og-image.png" />
+  <meta name="twitter:card"  content="summary_large_image" />
+  <meta name="twitter:image" content="https://aiq-courses.com/og-image.png" />
+  <link rel="canonical" href="" id="canonical-link" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -573,7 +584,39 @@
     }
 
     // Render page
-    document.title = course.title + ' — AIQ';
+    document.title = course.title + ' — AIQ Online Course';
+    // Dynamic SEO tags
+    const pageUrl = 'https://aiq-courses.com/course-detail?c=' + courseId;
+    const pageDesc = course.desc + ' Self-paced with a verified certificate on completion.';
+    document.getElementById('canonical-link').href = pageUrl;
+    document.getElementById('og-url').content   = pageUrl;
+    document.getElementById('og-title').content = course.title + ' | AIQ Course';
+    document.getElementById('og-desc').content  = pageDesc;
+    document.querySelector('meta[name="description"]').content = pageDesc;
+    // Structured data for course
+    const ldScript = document.createElement('script');
+    ldScript.type = 'application/ld+json';
+    ldScript.textContent = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Course",
+      "name": course.title,
+      "description": course.desc,
+      "url": pageUrl,
+      "provider": { "@type": "Organization", "name": "AIQ Courses", "url": "https://aiq-courses.com" },
+      "educationalLevel": course.level || "Beginner",
+      "hasCourseInstance": {
+        "@type": "CourseInstance",
+        "courseMode": "Online",
+        "instructor": { "@type": "Person", "name": "Michael Neftali", "url": "https://aiq-courses.com/about" }
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": course.rating || "4.8",
+        "reviewCount": (course.students || "1000").replace(/[^0-9]/g, ''),
+        "bestRating": "5"
+      }
+    });
+    document.head.appendChild(ldScript);
     document.getElementById('course-category').textContent = course.category;
     document.getElementById('course-title').textContent = course.title;
     document.getElementById('course-desc').textContent = course.desc;

@@ -1,0 +1,51 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bg1" cx="20%" cy="30%" r="60%">
+      <stop offset="0%" stop-color="#034f46" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#0a0a08" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="bg2" cx="80%" cy="70%" r="50%">
+      <stop offset="0%" stop-color="#056b5e" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#0a0a08" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="noise">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feBlend in="SourceGraphic" mode="overlay" result="blend"/>
+      <feComposite in="blend" in2="SourceGraphic" operator="in"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#0a0a08"/>
+  <rect width="1200" height="630" fill="url(#bg1)"/>
+  <rect width="1200" height="630" fill="url(#bg2)"/>
+  <rect width="1200" height="630" fill="#0a0a08" opacity="0.03" filter="url(#noise)"/>
+
+  <!-- Border frame -->
+  <rect x="32" y="32" width="1136" height="566" rx="16" fill="none" stroke="rgba(3,79,70,0.35)" stroke-width="1.5"/>
+
+  <!-- Logo -->
+  <text x="600" y="220" font-family="Georgia, serif" font-size="96" font-weight="500" fill="#ffffeb" text-anchor="middle" letter-spacing="-2">AIQ</text>
+
+  <!-- Tagline -->
+  <text x="600" y="298" font-family="Arial, sans-serif" font-size="28" font-weight="400" fill="rgba(255,255,235,0.45)" text-anchor="middle" letter-spacing="2">LEARN AI. CREATE ANYTHING.</text>
+
+  <!-- Divider -->
+  <line x1="500" y1="330" x2="700" y2="330" stroke="rgba(3,79,70,0.6)" stroke-width="1"/>
+
+  <!-- Course pills -->
+  <text x="600" y="390" font-family="Arial, sans-serif" font-size="18" fill="rgba(255,255,235,0.5)" text-anchor="middle">Video · Music · Books · Games · Animation · Web</text>
+
+  <!-- Domain -->
+  <text x="600" y="560" font-family="Arial, sans-serif" font-size="20" fill="rgba(255,255,235,0.25)" text-anchor="middle">aiq-courses.com</text>
+
+  <!-- Corner ornament TL -->
+  <path d="M56 56 L56 86 M56 56 L86 56" stroke="#5ecfbb" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+  <!-- Corner ornament TR -->
+  <path d="M1144 56 L1144 86 M1144 56 L1114 56" stroke="#5ecfbb" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+  <!-- Corner ornament BL -->
+  <path d="M56 574 L56 544 M56 574 L86 574" stroke="#5ecfbb" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+  <!-- Corner ornament BR -->
+  <path d="M1144 574 L1144 544 M1144 574 L1114 574" stroke="#5ecfbb" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+</svg>
