@@ -462,7 +462,7 @@
   <!-- INSTRUCTOR -->
   <section class="instructor-section">
     <div class="instructor-inner">
-      <div class="instructor-avatar" id="instructor-avatar">MN</div>
+      <div class="instructor-avatar"><img src="me.PNG" alt="Michael Neftali" style="width:100%;height:100%;object-fit:cover;object-position:center top"></div>
       <div>
         <div class="instructor-eyebrow">Your instructor</div>
         <div class="instructor-name">Michael Neftali</div>
@@ -591,17 +591,5 @@
 </script>
   <script src="auth.js"></script>
   <script src="social-proof.js"></script>
-  <script>
-    // Load instructor photo from account if available
-    (function(){
-      try {
-        const u = JSON.parse(localStorage.getItem('aiq_user'));
-        if (u && u.picture) {
-          const el = document.getElementById('instructor-avatar');
-          if (el) el.innerHTML = '<img src="' + u.picture + '" alt="Michael Neftali" style="width:100%;height:100%;object-fit:cover">';
-        }
-      } catch(e) {}
-    })();
-  </script>
 </body>
 </html>

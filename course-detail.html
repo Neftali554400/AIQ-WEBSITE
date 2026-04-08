@@ -196,6 +196,8 @@
     <aside class="sidebar">
       <div class="sidebar-card">
         <div class="sidebar-title">Course details</div>
+        <div class="sidebar-stat"><span class="sidebar-stat-label">Rating</span><span class="sidebar-stat-val" id="s-rating" style="color:#ffa946">—</span></div>
+        <div class="sidebar-stat"><span class="sidebar-stat-label">Students</span><span class="sidebar-stat-val" id="s-students">—</span></div>
         <div class="sidebar-stat"><span class="sidebar-stat-label">Lessons</span><span class="sidebar-stat-val" id="s-lessons">—</span></div>
         <div class="sidebar-stat"><span class="sidebar-stat-label">Level</span><span class="sidebar-stat-val" id="s-level">—</span></div>
         <div class="sidebar-stat"><span class="sidebar-stat-label">Duration</span><span class="sidebar-stat-val" id="s-duration">—</span></div>
@@ -237,6 +239,8 @@
         level: 'Beginner',
         duration: '2h 40min',
         desc: 'Script to screen in hours. Learn Sora, Runway and Pika to produce cinematic videos without a camera or crew.',
+        rating: '4.8',
+        students: '3,240',
         tools: ['Sora', 'Runway', 'Pika', 'CapCut', 'ElevenLabs'],
         lessons: [
           { title: 'Introduction to AI Video', duration: '8 min' },
@@ -257,6 +261,8 @@
         level: 'All levels',
         duration: '3h 20min',
         desc: 'From first idea to published novel. Use Claude, GPT-4 and Sudowrite to outline, draft, edit and format your book end to end.',
+        rating: '4.9',
+        students: '2,810',
         tools: ['Claude', 'GPT-4', 'Sudowrite', 'Notion', 'Kindle Direct'],
         lessons: [
           { title: 'Introduction to AI Writing', duration: '10 min' },
@@ -279,6 +285,8 @@
         level: 'No experience needed',
         duration: '2h 10min',
         desc: 'Produce full tracks with vocals, instruments and mastering. Learn Suno, Udio and ElevenLabs with no music theory required.',
+        rating: '4.7',
+        students: '1,940',
         tools: ['Suno', 'Udio', 'ElevenLabs', 'Loudme', 'DistroKid'],
         lessons: [
           { title: 'Introduction to AI Music Creation', duration: '10 min' },
@@ -298,6 +306,8 @@
         level: 'Intermediate',
         duration: '2h 55min',
         desc: 'Animate logos, intros and visual effects with AI. Master HeyGen, Adobe Firefly and prompt-driven After Effects workflows.',
+        rating: '4.8',
+        students: '2,130',
         tools: ['HeyGen', 'Adobe Firefly', 'Runway', 'Canva', 'After Effects'],
         lessons: [
           { title: 'Introduction to AI Motion Graphics', duration: '10 min' },
@@ -319,6 +329,8 @@
         level: 'All levels',
         duration: '4h 10min',
         desc: 'Build and ship playable games without coding. Use Scenario, Ludo.ai and Claude to design, code and launch your game.',
+        rating: '4.9',
+        students: '3,560',
         tools: ['Scenario', 'Ludo.ai', 'Claude', 'Unity', 'Itch.io'],
         lessons: [
           { title: 'Introduction to AI Game Development', duration: '12 min' },
@@ -343,6 +355,8 @@
         level: 'Beginner',
         duration: '2h 20min',
         desc: 'Bring still images to life with motion and emotion. Learn Stable Diffusion, Kling and Midjourney animation pipelines from scratch.',
+        rating: '4.7',
+        students: '1,720',
         tools: ['Stable Diffusion', 'Kling', 'Midjourney', 'Runway', 'Canva'],
         lessons: [
           { title: 'Introduction to Image Animation', duration: '10 min' },
@@ -363,6 +377,8 @@
         level: 'All levels',
         duration: '3h 10min',
         desc: 'Design and launch professional websites with AI. Learn v0, Bolt, Cursor and Framer to go from idea to live site in a day.',
+        rating: '4.8',
+        students: '2,980',
         tools: ['v0', 'Bolt', 'Cursor', 'Framer', 'Vercel'],
         lessons: [
           { title: 'Introduction to AI Web Design', duration: '10 min' },
@@ -460,6 +476,8 @@
     document.getElementById('course-category').textContent = course.category;
     document.getElementById('course-title').textContent = course.title;
     document.getElementById('course-desc').textContent = course.desc;
+    document.getElementById('s-rating').textContent = '★ ' + (course.rating || '4.8') + ' / 5';
+    document.getElementById('s-students').textContent = (course.students || '0') + ' enrolled';
     document.getElementById('s-lessons').textContent = course.lessons.length + ' lessons';
     document.getElementById('s-level').textContent = course.level;
     document.getElementById('s-duration').textContent = course.duration;
@@ -468,12 +486,15 @@
     // Meta pills
     const meta = document.getElementById('course-meta');
     [
+      { icon: '★', label: (course.rating || '4.8') + ' rating', style: 'color:#ffa946' },
+      { icon: '👥', label: (course.students || '0') + ' students' },
       { icon: '📚', label: course.lessons.length + ' lessons' },
       { icon: '⏱', label: course.duration },
       { icon: '📊', label: course.level },
     ].forEach(m => {
       const p = document.createElement('div');
       p.className = 'meta-pill';
+      if (m.style) p.style.cssText = m.style;
       p.textContent = m.icon + ' ' + m.label;
       meta.appendChild(p);
     });
