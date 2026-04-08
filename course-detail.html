@@ -30,6 +30,9 @@
     /* NAV */
     nav{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:1rem 2.5rem;background:rgba(10,10,8,0.92);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,235,0.06)}
     .nav-logo{font-family:'EB Garamond',Georgia,serif;font-size:1.45rem;font-weight:500;color:var(--lumen);text-decoration:none;letter-spacing:-0.01em}
+    .nav-links{display:flex;align-items:center;gap:1.25rem;list-style:none}
+    .nav-links a{font-size:.875rem;font-weight:500;color:rgba(255,255,235,.55);text-decoration:none;transition:color .15s ease}
+    .nav-links a:hover{color:var(--lumen)}
     .nav-right{display:flex;align-items:center;gap:1.25rem}
     .nav-back{display:inline-flex;align-items:center;gap:.4rem;font-size:.85rem;color:rgba(255,255,235,.5);text-decoration:none;transition:color .15s ease}
     .nav-back:hover{color:var(--lumen)}
@@ -171,6 +174,7 @@
       .btn-ham{display:flex}
       .btn-nav{display:none}
       .btn-signout{display:none}
+      .nav-links{display:none!important}
       .nav-hide-mob{display:none!important}
       .layout{padding:1.5rem 1rem 5rem;gap:1.5rem}
       .course-title{font-size:2rem}
@@ -188,14 +192,16 @@
 <body>
   <nav>
     <a href="/" class="nav-logo">AIQ</a>
-    <div class="nav-right" style="display:flex;align-items:center;gap:1.5rem">
-      <a href="/courses" class="nav-hide-mob" style="font-size:.85rem;color:rgba(255,255,235,.5);text-decoration:none;transition:color .15s ease" onmouseover="this.style.color='#ffffeb'" onmouseout="this.style.color='rgba(255,255,235,.5)'">All Courses</a>
-      <a href="/community" class="nav-hide-mob" style="font-size:.85rem;color:rgba(255,255,235,.5);text-decoration:none;transition:color .15s ease" onmouseover="this.style.color='#ffffeb'" onmouseout="this.style.color='rgba(255,255,235,.5)'">Community</a>
-      <a href="javascript:history.back()" class="nav-back nav-hide-mob">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
-        Back
-      </a>
-      <a href="/signup" id="nav-signup-btn" style="display:inline-flex;align-items:center;gap:.4rem;background:var(--fathom);color:var(--lumen);border:none;border-radius:9999px;padding:.4rem 1rem;font-family:'Figtree',sans-serif;font-size:.82rem;font-weight:600;text-decoration:none;transition:background .2s ease" onmouseover="this.style.background='#056b5e'" onmouseout="this.style.background='var(--fathom)'">Sign up free</a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/courses">Courses</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/community">Community</a></li>
+      <li><a href="/pricing">Pricing</a></li>
+      <li><a href="/blog">Blog</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="/signup" id="nav-signup-btn" style="display:inline-flex;align-items:center;gap:.4rem;background:var(--fathom);color:var(--lumen);border:none;border-radius:9999px;padding:.55rem 1.25rem;font-family:'Figtree',sans-serif;font-size:.85rem;font-weight:600;text-decoration:none;transition:background .2s ease" onmouseover="this.style.background='#056b5e'" onmouseout="this.style.background='var(--fathom)'">Get started</a>
       <a href="/account" class="nav-avatar" id="nav-avatar" aria-label="My account" style="display:none"></a>
       <button class="btn-ham" id="btn-ham" aria-label="Open menu" aria-expanded="false"><span class="bar"></span><span class="bar"></span><span class="bar"></span></button>
     </div>
