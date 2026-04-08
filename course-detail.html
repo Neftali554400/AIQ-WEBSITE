@@ -79,6 +79,10 @@
     .btn-enroll.enrolled{background:rgba(255,255,235,.08);color:rgba(255,255,235,.5);cursor:default}
     .btn-enroll.enrolled:hover{transform:none;background:rgba(255,255,235,.08)}
     .enroll-note{font-size:.72rem;color:rgba(255,255,235,.28);text-align:center;line-height:1.5}
+    .guarantee-badge{display:flex;align-items:flex-start;gap:.75rem;background:rgba(3,79,70,.1);border:1px solid rgba(3,79,70,.25);border-radius:.875rem;padding:.85rem 1rem;margin-top:.85rem}
+    .guarantee-icon{color:#5ecfbb;flex-shrink:0;margin-top:1px}
+    .guarantee-title{font-size:.78rem;font-weight:700;color:rgba(255,255,235,.75);margin-bottom:.1rem}
+    .guarantee-sub{font-size:.7rem;color:rgba(255,255,235,.35);line-height:1.5}
 
     /* TOOLS */
     .tools-list{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.5rem}
@@ -203,6 +207,13 @@
         <div style="font-size:.7rem;color:rgba(255,255,235,.35);text-align:center;margin-bottom:1rem;font-weight:500">one-time · lifetime access</div>
         <button class="btn-enroll" id="btn-enroll" onclick="toggleEnroll()">Enrol in this course</button>
         <p class="enroll-note" id="enroll-note">Enrol once. Access all lessons and earn your certificate.</p>
+        <div class="guarantee-badge">
+          <svg class="guarantee-icon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+          <div>
+            <div class="guarantee-title">7-Day Money-Back Guarantee</div>
+            <div class="guarantee-sub">Not satisfied within 7 days? Email hello@aiq-courses.com for a full refund — no questions asked.</div>
+          </div>
+        </div>
         <div id="superadmin-access" style="display:none" class="superadmin-badge">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
           Super admin access

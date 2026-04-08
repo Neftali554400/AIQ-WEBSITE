@@ -78,8 +78,27 @@
     .card-body{padding:1.35rem 1.5rem 1.5rem;flex:1;display:flex;flex-direction:column}
     .card-category{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,235,.32);margin-bottom:.4rem}
     .card-title{font-family:'EB Garamond',Georgia,serif;font-size:1.2rem;font-weight:500;color:var(--lumen);line-height:1.2;margin-bottom:.6rem;flex:1}
-    .card-desc{font-size:.8rem;color:rgba(255,255,235,.42);line-height:1.65;margin-bottom:1rem}
+    .card-desc{font-size:.8rem;color:rgba(255,255,235,.42);line-height:1.65;margin-bottom:.65rem}
+    .card-rating{display:flex;align-items:center;gap:.35rem;margin-bottom:.85rem}
+    .card-stars{color:#ffa946;font-size:.78rem;letter-spacing:.05em}
+    .card-rating-num{font-size:.78rem;font-weight:700;color:rgba(255,255,235,.75)}
+    .card-rating-count{font-size:.72rem;color:rgba(255,255,235,.28)}
     .card-footer-row{display:flex;align-items:center;justify-content:space-between;margin-top:auto}
+
+    /* INSTRUCTOR BIO */
+    .instructor-section{border-top:1px solid rgba(255,255,235,.07);padding:5rem 2rem}
+    .instructor-inner{max-width:860px;margin:0 auto;display:flex;align-items:center;gap:3.5rem}
+    @media(max-width:640px){.instructor-inner{flex-direction:column;text-align:center;gap:2rem}}
+    .instructor-avatar{width:110px;height:110px;border-radius:50%;border:3px solid rgba(3,79,70,.5);overflow:hidden;flex-shrink:0;background:var(--fathom);display:flex;align-items:center;justify-content:center;font-family:'EB Garamond',Georgia,serif;font-size:2.6rem;color:var(--lumen)}
+    .instructor-avatar img{width:100%;height:100%;object-fit:cover}
+    .instructor-eyebrow{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:rgba(3,79,70,.9);margin-bottom:.4rem}
+    .instructor-name{font-family:'EB Garamond',Georgia,serif;font-size:1.9rem;font-weight:500;color:var(--lumen);letter-spacing:-.02em;margin-bottom:.4rem}
+    .instructor-title{font-size:.85rem;color:rgba(255,255,235,.45);margin-bottom:1rem}
+    .instructor-bio{font-size:.88rem;color:rgba(255,255,235,.5);line-height:1.75;margin-bottom:1.25rem;max-width:540px}
+    .instructor-stats{display:flex;gap:2rem;flex-wrap:wrap}
+    @media(max-width:640px){.instructor-stats{justify-content:center}}
+    .instructor-stat-num{font-family:'EB Garamond',Georgia,serif;font-size:1.5rem;font-weight:500;color:var(--lumen);line-height:1}
+    .instructor-stat-lbl{font-size:.72rem;color:rgba(255,255,235,.32);margin-top:.15rem}
     .card-meta{display:flex;align-items:center;gap:.5rem;font-size:.75rem;color:rgba(255,255,235,.32)}
     .card-meta-dot{width:3px;height:3px;border-radius:50%;background:rgba(255,255,235,.2)}
     .card-price{font-family:'EB Garamond',Georgia,serif;font-size:1rem;font-weight:600;color:var(--lumen);letter-spacing:-.01em;margin-left:auto;margin-right:.5rem}
@@ -269,6 +288,7 @@
           <div class="card-category">Video Creation</div>
           <h3 class="card-title">Create Videos Using AI</h3>
           <p class="card-desc">Script to screen in hours. Learn Sora, Runway and Pika to produce cinematic videos without a camera or crew.</p>
+          <div class="card-rating"><span class="card-stars">★★★★★</span><span class="card-rating-num">4.8</span><span class="card-rating-count">(3,240 students)</span></div>
           <div class="card-footer-row">
             <div class="card-meta"><span>8 lessons</span><span class="card-meta-dot"></span><span>Beginner</span></div>
             <div class="card-price">₦9,999</div>
@@ -287,6 +307,7 @@
           <div class="card-category">Writing and Publishing</div>
           <h3 class="card-title">Write Books Using AI</h3>
           <p class="card-desc">From first idea to published novel. Use Claude, GPT-4 and Sudowrite to outline, draft and format your book end to end.</p>
+          <div class="card-rating"><span class="card-stars">★★★★★</span><span class="card-rating-num">4.9</span><span class="card-rating-count">(2,810 students)</span></div>
           <div class="card-footer-row">
             <div class="card-meta"><span>10 lessons</span><span class="card-meta-dot"></span><span>All levels</span></div>
             <div class="card-price">₦9,999</div>
@@ -305,6 +326,7 @@
           <div class="card-category">Music and Audio</div>
           <h3 class="card-title">Create Songs Using AI</h3>
           <p class="card-desc">Produce full tracks with vocals, instruments and mastering. Learn Suno, Udio and ElevenLabs with no music theory required.</p>
+          <div class="card-rating"><span class="card-stars">★★★★☆</span><span class="card-rating-num">4.7</span><span class="card-rating-count">(1,940 students)</span></div>
           <div class="card-footer-row">
             <div class="card-meta"><span>7 lessons</span><span class="card-meta-dot"></span><span>Beginner</span></div>
             <div class="card-price">₦24,999</div>
@@ -323,6 +345,7 @@
           <div class="card-category">Motion and Design</div>
           <h3 class="card-title">Create Motion Graphics Using AI</h3>
           <p class="card-desc">Animate logos, intros and visual effects with AI. Master HeyGen, Adobe Firefly and prompt-driven After Effects workflows.</p>
+          <div class="card-rating"><span class="card-stars">★★★★★</span><span class="card-rating-num">4.8</span><span class="card-rating-count">(2,130 students)</span></div>
           <div class="card-footer-row">
             <div class="card-meta"><span>9 lessons</span><span class="card-meta-dot"></span><span>Intermediate</span></div>
             <div class="card-price">₦19,999</div>
@@ -341,6 +364,7 @@
           <div class="card-category">Game Development</div>
           <h3 class="card-title">Create Games Using AI</h3>
           <p class="card-desc">Build and ship playable games without coding. Use Scenario, Ludo.ai and Claude to design, code and launch your game.</p>
+          <div class="card-rating"><span class="card-stars">★★★★★</span><span class="card-rating-num">4.9</span><span class="card-rating-count">(3,560 students)</span></div>
           <div class="card-footer-row">
             <div class="card-meta"><span>12 lessons</span><span class="card-meta-dot"></span><span>All levels</span></div>
             <div class="card-price">₦29,999</div>
@@ -359,6 +383,7 @@
           <div class="card-category">Image Animation</div>
           <h3 class="card-title">Animate Images Using AI</h3>
           <p class="card-desc">Bring still images to life with motion and emotion. Learn Stable Diffusion, Kling and Midjourney animation pipelines.</p>
+          <div class="card-rating"><span class="card-stars">★★★★☆</span><span class="card-rating-num">4.7</span><span class="card-rating-count">(1,720 students)</span></div>
           <div class="card-footer-row">
             <div class="card-meta"><span>8 lessons</span><span class="card-meta-dot"></span><span>Beginner</span></div>
             <div class="card-price">₦4,999</div>
@@ -377,6 +402,7 @@
           <div class="card-category">Web Design</div>
           <h3 class="card-title">Create Websites Using AI</h3>
           <p class="card-desc">Design and launch professional websites with AI. Learn v0, Bolt, Cursor and Framer to go from idea to live site in a day.</p>
+          <div class="card-rating"><span class="card-stars">★★★★★</span><span class="card-rating-num">4.8</span><span class="card-rating-count">(2,980 students)</span></div>
           <div class="card-footer-row">
             <div class="card-meta"><span>10 lessons</span><span class="card-meta-dot"></span><span>All levels</span></div>
             <div class="card-price">₦24,999</div>
@@ -428,6 +454,25 @@
         <div class="faq-item">
           <button class="faq-q" onclick="toggleFaq(this)">Is there a refund policy?<svg class="faq-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg></button>
           <div class="faq-a"><p>If you're not satisfied within 7 days of purchase, contact us at hello@aiq-courses.com and we'll make it right.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INSTRUCTOR -->
+  <section class="instructor-section">
+    <div class="instructor-inner">
+      <div class="instructor-avatar" id="instructor-avatar">MN</div>
+      <div>
+        <div class="instructor-eyebrow">Your instructor</div>
+        <div class="instructor-name">Michael Neftali</div>
+        <div class="instructor-title">AI Creator, Educator &amp; Digital Entrepreneur</div>
+        <p class="instructor-bio">Michael has spent years at the intersection of creativity and technology, building real projects with AI tools before teaching them. He created AIQ to give everyday creators — with zero background — the exact skills needed to produce professional work using AI. No fluff, no theory, just practical systems that work.</p>
+        <div class="instructor-stats">
+          <div><div class="instructor-stat-num">7</div><div class="instructor-stat-lbl">Courses created</div></div>
+          <div><div class="instructor-stat-num">52K+</div><div class="instructor-stat-lbl">Students taught</div></div>
+          <div><div class="instructor-stat-num">4.8★</div><div class="instructor-stat-lbl">Avg. rating</div></div>
+          <div><div class="instructor-stat-num">180+</div><div class="instructor-stat-lbl">Countries reached</div></div>
         </div>
       </div>
     </div>
@@ -546,5 +591,17 @@
 </script>
   <script src="auth.js"></script>
   <script src="social-proof.js"></script>
+  <script>
+    // Load instructor photo from account if available
+    (function(){
+      try {
+        const u = JSON.parse(localStorage.getItem('aiq_user'));
+        if (u && u.picture) {
+          const el = document.getElementById('instructor-avatar');
+          if (el) el.innerHTML = '<img src="' + u.picture + '" alt="Michael Neftali" style="width:100%;height:100%;object-fit:cover">';
+        }
+      } catch(e) {}
+    })();
+  </script>
 </body>
 </html>
