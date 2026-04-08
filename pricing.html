@@ -98,16 +98,50 @@
     footer span{font-size:.78rem;color:rgba(255,255,235,.22)}
     footer a{font-size:.78rem;color:rgba(255,255,235,.4);text-decoration:none}
     footer a:hover{color:rgba(255,255,235,.75)}
+  
+    .footer-inner{max-width:1080px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem}
+    @media(max-width:768px){.footer-inner{grid-template-columns:1fr 1fr}}
+    @media(max-width:480px){.footer-inner{grid-template-columns:1fr}}
+    .footer-logo{font-family:'EB Garamond',Georgia,serif;font-size:1.6rem;font-weight:500;color:var(--lumen);letter-spacing:-.02em;display:block;margin-bottom:.75rem}
+    .footer-desc{font-size:.82rem;color:rgba(255,255,235,.35);line-height:1.7;margin-bottom:1rem;max-width:280px}
+    .footer-email{display:inline-flex;align-items:center;gap:.4rem;font-size:.8rem;color:rgba(255,255,235,.4);text-decoration:none;margin-bottom:1.1rem;transition:color .15s;display:block}
+    .footer-email:hover{color:var(--lumen)}
+    .footer-socials{display:flex;gap:.6rem;flex-wrap:wrap}
+    .footer-social{width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,235,.1);display:flex;align-items:center;justify-content:center;color:rgba(255,255,235,.4);text-decoration:none;transition:border-color .15s,color .15s}
+    .footer-social:hover{border-color:rgba(255,255,235,.3);color:var(--lumen)}
+    .footer-col-head{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,235,.3);margin-bottom:.85rem}
+    .footer-links{list-style:none;display:flex;flex-direction:column;gap:.5rem}
+    .footer-links a{font-size:.82rem;color:rgba(255,255,235,.4);text-decoration:none;transition:color .15s}
+    .footer-links a:hover{color:var(--lumen)}
+    .footer-bottom{max-width:1080px;margin:0 auto;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem;padding-top:2rem;border-top:1px solid rgba(255,255,235,.06)}
+    .footer-bottom span{font-size:.75rem;color:rgba(255,255,235,.22)}
+
+    /* INSTRUCTOR */
+    .instructor-section{border-top:1px solid rgba(255,255,235,.07);padding:5rem 2rem;margin-top:4rem}
+    .instructor-inner{max-width:860px;margin:0 auto;display:flex;align-items:center;gap:3.5rem}
+    @media(max-width:640px){.instructor-inner{flex-direction:column;text-align:center;gap:2rem}}
+    .instructor-avatar{width:110px;height:110px;border-radius:50%;border:3px solid rgba(3,79,70,.5);overflow:hidden;flex-shrink:0;background:var(--fathom);display:flex;align-items:center;justify-content:center}
+    .instructor-eyebrow{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:rgba(3,79,70,.9);margin-bottom:.4rem}
+    .instructor-name{font-family:'EB Garamond',Georgia,serif;font-size:1.9rem;font-weight:500;color:var(--lumen);letter-spacing:-.02em;margin-bottom:.4rem}
+    .instructor-title{font-size:.85rem;color:rgba(255,255,235,.45);margin-bottom:1rem}
+    .instructor-bio{font-size:.88rem;color:rgba(255,255,235,.5);line-height:1.75;margin-bottom:1.25rem;max-width:540px}
+    .instructor-stats{display:flex;gap:2rem;flex-wrap:wrap}
+    @media(max-width:640px){.instructor-stats{justify-content:center}}
+    .instructor-stat-num{font-family:'EB Garamond',Georgia,serif;font-size:1.5rem;font-weight:500;color:var(--lumen);line-height:1}
+    .instructor-stat-lbl{font-size:.72rem;color:rgba(255,255,235,.32);margin-top:.15rem}
   </style>
 </head>
 <body>
   <nav>
     <a href="/" class="nav-logo">AIQ</a>
-    <div class="nav-links">
-      <a href="/courses">Courses</a>
-      <a href="/about">About</a>
-      <a href="/blog">Blog</a>
-    </div>
+    <ul class="nav-links" style="display:flex;align-items:center;gap:1.5rem;list-style:none">
+      <li><a href="/" style="font-size:.875rem;color:rgba(255,255,235,.5);text-decoration:none;transition:color .15s">Home</a></li>
+      <li><a href="/courses" style="font-size:.875rem;color:rgba(255,255,235,.5);text-decoration:none;transition:color .15s">Courses</a></li>
+      <li><a href="/about" style="font-size:.875rem;color:rgba(255,255,235,.5);text-decoration:none;transition:color .15s">About</a></li>
+      <li><a href="/community" style="font-size:.875rem;color:rgba(255,255,235,.5);text-decoration:none;transition:color .15s">Community</a></li>
+      <li><a href="/blog" style="font-size:.875rem;color:rgba(255,255,235,.5);text-decoration:none;transition:color .15s">Blog</a></li>
+      <li><a href="/pricing" style="font-size:.875rem;color:var(--lumen);text-decoration:none;font-weight:600">Pricing</a></li>
+    </ul>
     <a href="/signup" class="btn-nav">Get started</a>
   </nav>
 
@@ -284,16 +318,80 @@
       </div>
 
     </div>
+
+    <!-- INSTRUCTOR -->
+    <section class="instructor-section">
+      <div class="instructor-inner">
+        <div class="instructor-avatar"><img src="me.PNG" alt="Michael Neftali" style="width:100%;height:100%;object-fit:cover;object-position:center top"></div>
+        <div>
+          <div class="instructor-eyebrow">Your instructor</div>
+          <div class="instructor-name">Michael Neftali</div>
+          <div class="instructor-title">AI Creator, Educator &amp; Digital Entrepreneur</div>
+          <p class="instructor-bio">Michael has spent years at the intersection of creativity and technology, building real projects with AI tools before teaching them. He created AIQ to give everyday creators — with zero background — the exact skills needed to produce professional work using AI. No fluff, no theory, just practical systems that work.</p>
+          <div class="instructor-stats">
+            <div><div class="instructor-stat-num">7</div><div class="instructor-stat-lbl">Courses created</div></div>
+            <div><div class="instructor-stat-num">52K+</div><div class="instructor-stat-lbl">Students taught</div></div>
+            <div><div class="instructor-stat-num">4.8★</div><div class="instructor-stat-lbl">Avg. rating</div></div>
+            <div><div class="instructor-stat-num">180+</div><div class="instructor-stat-lbl">Countries reached</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <footer>
-    <span>© 2026 AIQ. All rights reserved.</span>
-    <div style="display:flex;gap:1.5rem">
-      <a href="/privacy">Privacy Policy</a>
-      <a href="/terms">Terms of Use</a>
-      <a href="/courses">All Courses</a>
-      <a href="/">Home</a>
+    <div class="footer-inner">
+      <div>
+        <span class="footer-logo">AIQ</span>
+        <p class="footer-desc">Open AI courses for curious creators. Master video, music, books, games and more with no experience required.</p>
+        <a href="mailto:hello@aiq-courses.com" class="footer-email">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>
+          hello@aiq-courses.com
+        </a>
+        <div class="footer-socials">
+          <a href="#" class="footer-social" aria-label="X"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.259 5.631L18.244 2.25zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+          <a href="#" class="footer-social" aria-label="Instagram"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg></a>
+          <a href="#" class="footer-social" aria-label="YouTube"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg></a>
+          <a href="#" class="footer-social" aria-label="TikTok"><svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg></a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-head">Courses</div>
+        <ul class="footer-links">
+          <li><a href="/course-detail?c=video">AI Video</a></li>
+          <li><a href="/course-detail?c=books">AI Writing</a></li>
+          <li><a href="/course-detail?c=music">AI Music</a></li>
+          <li><a href="/course-detail?c=motion">Motion Graphics</a></li>
+          <li><a href="/course-detail?c=games">AI Games</a></li>
+          <li><a href="/course-detail?c=animate">Image Animation</a></li>
+          <li><a href="/course-detail?c=web">AI Websites</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-head">Company</div>
+        <ul class="footer-links">
+          <li><a href="/about">About</a></li>
+          <li><a href="/blog">Blog</a></li>
+          <li><a href="/pricing">Pricing</a></li>
+          <li><a href="/community">Community</a></li>
+          <li><a href="mailto:hello@aiq-courses.com">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-head">Legal</div>
+        <ul class="footer-links">
+          <li><a href="/privacy">Privacy Policy</a></li>
+          <li><a href="/terms">Terms of Use</a></li>
+          <li><a href="/privacy#cookies">Cookie Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 AIQ. All rights reserved.</span>
+      <span>Made for curious creators</span>
     </div>
   </footer>
+
 </body>
 </html>
