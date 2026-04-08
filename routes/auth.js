@@ -155,12 +155,12 @@ async function sendCourseCompleteEmail(to, name, courseTitle, certId, certUrl, o
 
 // ─── Helper: issue JWT in httpOnly cookie ────────────────────────────────────
 function issueToken(res, userId, tv = 0) {
-  const token = jwt.sign({ id: userId, tv }, process.env.JWT_SECRET, { expiresIn: '7d' });
+  const token = jwt.sign({ id: userId, tv }, process.env.JWT_SECRET, { expiresIn: '24h' });
   res.cookie(COOKIE, token, {
     httpOnly: true,
     secure:   process.env.NODE_ENV === 'production',
     sameSite: 'lax',
-    maxAge:   7 * 24 * 60 * 60 * 1000,
+    maxAge:   24 * 60 * 60 * 1000,
   });
 }
 

@@ -783,6 +783,15 @@
       } catch(e) {}
     })();
 
+    // Default to sign-in tab if ?tab=login is in URL
+    (function() {
+      const tab = new URLSearchParams(window.location.search).get('tab');
+      if (tab === 'login') {
+        document.getElementById('form-state').style.display = 'none';
+        document.getElementById('login-state').style.display = 'block';
+      }
+    })();
+
     let _isReturning = false;
 
     function saveUser(data) {
