@@ -97,6 +97,36 @@
     .motivate-title{font-size:.78rem;font-weight:700;color:rgba(255,255,235,.72);margin-bottom:.2rem;line-height:1.45}
     .motivate-sub{font-size:.7rem;color:rgba(255,255,235,.35);line-height:1.55}
 
+    /* COMPLETION */
+    .congrats-section{margin-bottom:2rem}
+    .congrats-card{background:linear-gradient(135deg,rgba(3,79,70,.22) 0%,rgba(3,79,70,.08) 100%);border:1px solid rgba(3,79,70,.45);border-radius:1.5rem;padding:2.5rem 2rem;text-align:center;position:relative;overflow:hidden;margin-bottom:1.25rem}
+    .congrats-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(3,79,70,.18) 0%,transparent 60%);pointer-events:none}
+    .congrats-emoji{font-size:3rem;margin-bottom:.75rem;display:block;animation:pop .5s cubic-bezier(.16,1,.3,1)}
+    @keyframes pop{0%{transform:scale(0);opacity:0}70%{transform:scale(1.15)}100%{transform:scale(1);opacity:1}}
+    .congrats-title{font-family:'EB Garamond',Georgia,serif;font-size:clamp(1.8rem,4vw,2.6rem);font-weight:500;color:var(--lumen);margin-bottom:.5rem}
+    .congrats-sub{font-size:.92rem;color:rgba(255,255,235,.55);line-height:1.7;margin-bottom:1.75rem;max-width:460px;margin-left:auto;margin-right:auto}
+    .congrats-cert-box{background:rgba(0,0,0,.25);border:1px solid rgba(3,79,70,.35);border-radius:1rem;padding:1.25rem 1.5rem;display:inline-block;text-align:left;margin-bottom:1.75rem;min-width:260px}
+    .congrats-cert-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:#5ecfbb;margin-bottom:.5rem}
+    .congrats-cert-name{font-family:'EB Garamond',Georgia,serif;font-size:1.2rem;font-weight:500;color:var(--lumen);margin-bottom:.2rem}
+    .congrats-cert-course{font-family:'EB Garamond',Georgia,serif;font-size:.95rem;font-style:italic;color:rgba(255,255,235,.6);margin-bottom:.35rem}
+    .congrats-cert-id{font-size:.68rem;color:rgba(255,255,235,.3)}
+    .btn-view-cert{display:inline-flex;align-items:center;gap:.5rem;background:var(--fathom);color:var(--lumen);border:none;border-radius:9999px;padding:.7rem 1.75rem;font-family:'Figtree',sans-serif;font-size:.9rem;font-weight:600;text-decoration:none;transition:background .2s ease,transform .15s ease;cursor:pointer}
+    .btn-view-cert:hover{background:var(--fathom-lt);transform:translateY(-1px)}
+    .next-courses-wrap{background:rgba(255,255,235,.03);border:1px solid rgba(255,255,235,.08);border-radius:1.25rem;padding:1.5rem}
+    .next-courses-title{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:rgba(255,255,235,.3);margin-bottom:1rem}
+    .next-courses-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem}
+    @media(max-width:700px){.next-courses-grid{grid-template-columns:1fr}}
+    .next-course-card{display:block;padding:.9rem 1rem;background:rgba(255,255,235,.04);border:1px solid rgba(255,255,235,.08);border-radius:.875rem;text-decoration:none;transition:border-color .15s ease,background .15s ease}
+    .next-course-card:hover{border-color:rgba(255,255,235,.2);background:rgba(255,255,235,.07)}
+    .next-course-icon{font-size:1.4rem;margin-bottom:.45rem}
+    .next-course-name{font-size:.82rem;font-weight:600;color:rgba(255,255,235,.85);line-height:1.35;margin-bottom:.2rem}
+    .next-course-cat{font-size:.68rem;color:rgba(255,255,235,.32);text-transform:uppercase;letter-spacing:.07em}
+
+    /* CONFETTI */
+    #confetti-overlay{position:fixed;inset:0;pointer-events:none;z-index:1000;overflow:hidden}
+    .confetti-piece{position:absolute;width:8px;height:8px;top:-10px;border-radius:2px;animation:confetti-fall linear forwards}
+    @keyframes confetti-fall{0%{transform:translateY(0) rotate(0deg);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
+
     /* TOOLS */
     .tools-list{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.5rem}
     .tool-tag{background:rgba(255,255,235,.06);border:1px solid rgba(255,255,235,.1);border-radius:9999px;padding:.25rem .75rem;font-size:.72rem;color:rgba(255,255,235,.55);font-weight:500}
@@ -212,22 +242,32 @@
         <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
       </div>
 
-      <!-- COMPLETION BANNER -->
-      <div id="completion-banner" style="display:none;background:linear-gradient(135deg,rgba(3,79,70,.2),rgba(3,79,70,.08));border:1px solid rgba(3,79,70,.4);border-radius:1rem;padding:1.25rem 1.5rem;margin-bottom:1.5rem;display:none;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap">
-        <div style="display:flex;align-items:center;gap:.85rem">
-          <div style="width:40px;height:40px;border-radius:50%;background:rgba(3,79,70,.3);border:1px solid rgba(3,79,70,.6);display:flex;align-items:center;justify-content:center;flex-shrink:0">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="#5ecfbb"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+      <!-- COMPLETION SECTION -->
+      <div id="completion-section" class="congrats-section" style="display:none">
+        <div class="congrats-card">
+          <span class="congrats-emoji" id="congrats-emoji">🎉</span>
+          <h2 class="congrats-title" id="congrats-title">Congratulations!</h2>
+          <p class="congrats-sub" id="congrats-sub">You've completed the course. Your certificate is ready.</p>
+          <div class="congrats-cert-box">
+            <div class="congrats-cert-label">Certificate of Completion</div>
+            <div class="congrats-cert-name" id="congrats-cert-name">—</div>
+            <div class="congrats-cert-course" id="congrats-cert-course">—</div>
+            <div class="congrats-cert-id" id="congrats-cert-id">—</div>
           </div>
-          <div>
-            <div style="font-size:.9rem;font-weight:700;color:var(--lumen);margin-bottom:.1rem">Course completed!</div>
-            <div style="font-size:.78rem;color:rgba(255,255,235,.45)">Your certificate is ready to download.</div>
-          </div>
+          <br>
+          <a href="#" id="cert-link" class="btn-view-cert">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+            View Certificate
+          </a>
         </div>
-        <a id="cert-link" href="#" style="display:inline-flex;align-items:center;gap:.45rem;background:var(--fathom);color:var(--lumen);border-radius:9999px;padding:.6rem 1.25rem;font-family:'Figtree',sans-serif;font-size:.85rem;font-weight:600;text-decoration:none;white-space:nowrap;transition:background .2s ease" onmouseover="this.style.background='#056b5e'" onmouseout="this.style.background='var(--fathom)'">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
-          View Certificate
-        </a>
+        <div class="next-courses-wrap">
+          <div class="next-courses-title">What to learn next</div>
+          <div class="next-courses-grid" id="next-courses-grid"></div>
+        </div>
       </div>
+
+      <!-- CONFETTI OVERLAY -->
+      <div id="confetti-overlay"></div>
 
       <!-- VIDEO PLAYER -->
       <div class="player-wrap" id="player-wrap">
@@ -605,22 +645,67 @@
         document.getElementById('progress-fill').style.width = pct + '%';
       }
 
-      // Certificate on 100% completion
-      const banner = document.getElementById('completion-banner');
+      // Completion section at 100%
+      const section = document.getElementById('completion-section');
       if (isEnrolled() && pct === 100) {
         const u = getUser();
-        const name = encodeURIComponent(u ? (u.name || u.email) : 'Student');
+        const displayName = u ? (u.name || u.email) : 'Student';
+        const firstName = displayName.split(' ')[0];
         const date = new Date().toISOString().split('T')[0];
-        // Deterministic cert ID from email + course
         const raw = (u ? u.email : '') + courseId + date;
         let hash = 0;
         for (let i = 0; i < raw.length; i++) hash = ((hash << 5) - hash + raw.charCodeAt(i)) | 0;
         const certId = 'AIQ-' + courseId.toUpperCase() + '-' + Math.abs(hash).toString(36).toUpperCase().slice(0, 6);
-        const certUrl = '/certificate?course=' + courseId + '&name=' + name + '&date=' + date + '&cert=' + certId;
+        const certUrl = '/certificate?course=' + courseId + '&name=' + encodeURIComponent(displayName) + '&date=' + date + '&cert=' + certId;
+
+        // Populate congratulations card
+        document.getElementById('congrats-title').textContent   = 'Congratulations, ' + firstName + '!';
+        document.getElementById('congrats-sub').textContent     = 'You\'ve completed ' + course.title + '. Your certificate is ready to download.';
+        document.getElementById('congrats-cert-name').textContent   = displayName;
+        document.getElementById('congrats-cert-course').textContent = course.title;
+        document.getElementById('congrats-cert-id').textContent     = 'Cert ID: ' + certId;
         document.getElementById('cert-link').href = certUrl;
-        banner.style.display = 'flex';
+
+        // Populate "What's next" cards (up to 3 other courses)
+        const grid = document.getElementById('next-courses-grid');
+        if (!grid.dataset.filled) {
+          grid.dataset.filled = '1';
+          const others = Object.entries(COURSES).filter(([k]) => k !== courseId).slice(0, 3);
+          others.forEach(([k, c]) => {
+            const card = document.createElement('a');
+            card.className = 'next-course-card';
+            card.href = '/course-detail?c=' + k;
+            card.innerHTML = '<div class="next-course-icon">' + (c.icon || '📚') + '</div>'
+              + '<div class="next-course-name">' + c.title + '</div>'
+              + '<div class="next-course-cat">' + (c.category || '') + '</div>';
+            grid.appendChild(card);
+          });
+        }
+
+        section.style.display = 'block';
+
+        // Fire confetti once per page load when section first becomes visible
+        if (!section.dataset.celebrated) {
+          section.dataset.celebrated = '1';
+          fireConfetti();
+        }
+
+        // Send completion email once per course (tracked in localStorage)
+        const emailKey = 'aiq_completed_email_' + courseId;
+        if (u && !localStorage.getItem(emailKey)) {
+          localStorage.setItem(emailKey, '1');
+          const otherCourses = Object.entries(COURSES)
+            .filter(([k]) => k !== courseId).slice(0, 3)
+            .map(([k, c]) => ({ id: k, category: c.category || '', title: c.title, desc: c.desc || '' }));
+          fetch('/api/auth/course-complete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify({ courseId, courseTitle: course.title, certId, certUrl, otherCourses }),
+          }).catch(e => console.warn('[course-complete email]', e.message));
+        }
       } else {
-        banner.style.display = 'none';
+        section.style.display = 'none';
       }
     }
 
@@ -798,6 +883,26 @@
         } else {
           el.textContent = (u.name || 'A')[0].toUpperCase();
         }
+      }
+    }
+
+    // Confetti burst
+    function fireConfetti() {
+      const overlay = document.getElementById('confetti-overlay');
+      const colors = ['#5ecfbb','#ffa946','#ffffeb','#034f46','#a8f0e5','#ffcc70'];
+      for (let i = 0; i < 80; i++) {
+        const el = document.createElement('div');
+        el.className = 'confetti-piece';
+        el.style.left = Math.random() * 100 + 'vw';
+        el.style.background = colors[Math.floor(Math.random() * colors.length)];
+        el.style.width = (6 + Math.random() * 6) + 'px';
+        el.style.height = (6 + Math.random() * 6) + 'px';
+        el.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+        const dur = 1.8 + Math.random() * 1.6;
+        el.style.animationDuration = dur + 's';
+        el.style.animationDelay = Math.random() * 0.8 + 's';
+        overlay.appendChild(el);
+        setTimeout(() => el.remove(), (dur + 1) * 1000);
       }
     }
 

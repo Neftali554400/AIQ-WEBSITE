@@ -85,6 +85,45 @@ async function sendResetEmail(to, name, token) {
   });
 }
 
+async function sendCourseCompleteEmail(to, name, courseTitle, certId, certUrl, otherCourses) {
+  const firstName = (name || 'there').split(' ')[0];
+  const suggestions = (otherCourses || []).map(c => `
+    <a href="${SITE_URL}/course-detail?c=${c.id}" style="display:block;padding:14px 16px;background:rgba(3,79,70,0.12);border:1px solid rgba(3,79,70,0.35);border-radius:10px;text-decoration:none;margin-bottom:10px">
+      <div style="font-size:11px;color:#5ecfbb;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:5px">${c.category}</div>
+      <div style="color:#ffffeb;font-weight:600;font-size:14px;margin-bottom:3px">${c.title}</div>
+      <div style="color:rgba(255,255,235,0.45);font-size:12px">${c.desc}</div>
+    </a>`).join('');
+
+  await getResend().emails.send({
+    from: 'AIQ <hello@aiq-courses.com>',
+    to,
+    subject: `🎓 You've completed "${courseTitle}" — your certificate is ready`,
+    html: `
+      <div style="font-family:system-ui,Arial,sans-serif;max-width:540px;margin:0 auto;background:#0a0a08;color:#ffffeb;border-radius:12px;overflow:hidden">
+        <div style="background:linear-gradient(135deg,#034f46,#0a3d2e);padding:36px 40px;text-align:center">
+          <div style="font-size:48px;margin-bottom:12px">🎓</div>
+          <div style="font-family:Georgia,serif;font-size:28px;font-weight:500;color:#ffffeb;letter-spacing:-0.02em">AIQ</div>
+        </div>
+        <div style="padding:40px">
+          <h1 style="font-family:Georgia,serif;font-size:26px;font-weight:500;margin:0 0 10px;color:#ffffeb">Congratulations, ${firstName}!</h1>
+          <p style="color:rgba(255,255,235,0.65);line-height:1.7;margin:0 0 28px">You've successfully completed <strong style="color:#ffffeb">${courseTitle}</strong>. That's a real achievement — you now have the skills to put this into practice.</p>
+
+          <div style="background:rgba(3,79,70,0.15);border:1px solid rgba(3,79,70,0.4);border-radius:12px;padding:24px;text-align:center;margin-bottom:28px">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.15em;color:#5ecfbb;margin-bottom:10px">Certificate of Completion</div>
+            <div style="font-family:Georgia,serif;font-size:20px;color:#ffffeb;margin-bottom:6px">${name}</div>
+            <div style="font-family:Georgia,serif;font-size:15px;font-style:italic;color:rgba(255,255,235,0.7);margin-bottom:16px">${courseTitle}</div>
+            <div style="font-size:11px;color:rgba(255,255,235,0.35);margin-bottom:18px">Cert ID: ${certId}</div>
+            <a href="${SITE_URL}${certUrl}" style="display:inline-block;padding:12px 28px;background:#034f46;color:#ffffeb;border-radius:9999px;text-decoration:none;font-weight:600;font-size:14px">View &amp; Download Certificate</a>
+          </div>
+
+          ${suggestions ? `<div style="margin-bottom:8px"><p style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:rgba(255,255,235,0.35);margin:0 0 14px">What to learn next</p>${suggestions}</div>` : ''}
+
+          <p style="color:rgba(255,255,235,0.25);font-size:11px;line-height:1.6;margin:24px 0 0;border-top:1px solid rgba(255,255,235,0.06);padding-top:20px">You're receiving this because you completed a course on AIQ. Questions? <a href="mailto:hello@aiq-courses.com" style="color:#5ecfbb">hello@aiq-courses.com</a></p>
+        </div>
+      </div>`,
+  });
+}
+
 // ─── Helper: issue JWT in httpOnly cookie ────────────────────────────────────
 function issueToken(res, userId, tv = 0) {
   const token = jwt.sign({ id: userId, tv }, process.env.JWT_SECRET, { expiresIn: '7d' });
@@ -464,6 +503,25 @@ router.post('/reset-password', async (req, res) => {
   } catch (err) {
     console.error('[reset-password]', err.message);
     res.status(500).json({ error: 'Server error. Please try again.' });
+  }
+});
+
+// ─── POST /api/auth/course-complete ─────────────────────────────────────────
+router.post('/course-complete', async (req, res) => {
+  const token = req.cookies[COOKIE];
+  if (!token) return res.status(401).json({ error: 'Not authenticated.' });
+  try {
+    const { id } = jwt.verify(token, process.env.JWT_SECRET);
+    const user = db.prepare('SELECT * FROM users WHERE id = ?').get(id);
+    if (!user) return res.status(404).json({ error: 'User not found.' });
+    const { courseId, courseTitle, certId, certUrl, otherCourses } = req.body;
+    if (!courseId || !courseTitle || !certId)
+      return res.status(400).json({ error: 'Missing required fields.' });
+    await sendCourseCompleteEmail(user.email, user.name, courseTitle, certId, certUrl || '', otherCourses || []);
+    res.json({ ok: true });
+  } catch (err) {
+    console.error('[course-complete]', err.message);
+    res.status(500).json({ error: 'Server error.' });
   }
 });
 
