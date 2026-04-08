@@ -40,6 +40,17 @@
     footer span{font-size:.78rem;color:rgba(255,255,235,.22)}
     footer a{font-size:.78rem;color:rgba(255,255,235,.4);text-decoration:none}
     footer a:hover{color:rgba(255,255,235,.75)}
+
+    .btn-ham{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:.5rem;color:var(--lumen);position:relative;z-index:1001}
+    .btn-ham .bar{display:block;width:22px;height:2px;background:currentColor;border-radius:2px;transition:transform .25s ease,opacity .2s ease}
+    .mob-nav{position:fixed;inset:0;z-index:1050;background:rgba(10,10,8,.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2.5rem;opacity:0;transform:translateY(-10px);pointer-events:none;transition:opacity .25s ease,transform .25s ease}
+    .mob-nav.open{opacity:1;transform:translateY(0);pointer-events:all}
+    .mob-nav a{font-family:'EB Garamond',Georgia,serif;font-size:2.4rem;font-weight:500;color:rgba(255,255,235,.6);text-decoration:none;transition:color .15s ease}
+    .mob-nav a:hover,.mob-nav a.active{color:var(--lumen)}
+    .mob-nav .mob-cta{margin-top:.5rem;background:var(--fathom);color:var(--lumen);border-radius:9999px;padding:.75rem 2.2rem;font-family:'Figtree',sans-serif;font-size:1rem;font-weight:600;text-decoration:none;transition:background .2s ease}
+    .mob-nav .mob-cta:hover{background:var(--fathom-lt)}
+    .mob-nav-close{position:absolute;top:1.25rem;right:1.25rem;background:none;border:none;color:rgba(255,255,235,.7);cursor:pointer;padding:.5rem;border-radius:.625rem;display:flex;align-items:center;justify-content:center}
+    @media(max-width:640px){.btn-ham{display:flex}.btn-nav{display:none}.nav-links{display:none!important}}
   </style>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
 </head>
@@ -55,6 +66,7 @@
       <li><a href="/blog">Blog</a></li>
     </ul>
     <a href="/signup?tab=login" class="btn-nav">Get started</a>
+  <button class="btn-ham" id="btn-ham" aria-label="Open menu" aria-expanded="false"><span class="bar"></span><span class="bar"></span><span class="bar"></span></button>
   </nav>
 
   <main>
@@ -183,6 +195,23 @@
     </div>
   </footer>
 
+
+<script>
+(function(){
+  var btn=document.getElementById("btn-ham"),menu=document.getElementById("mob-nav"),bars=btn?btn.querySelectorAll(".bar"):[];
+  if(!btn||!menu)return;
+  btn.addEventListener("click",function(){
+    var open=menu.classList.toggle("open");
+    btn.setAttribute("aria-expanded",open);
+    if(open){bars[0].style.transform="translateY(7px) rotate(45deg)";bars[1].style.opacity="0";bars[2].style.transform="translateY(-7px) rotate(-45deg)";}
+    else{bars[0].style.transform="";bars[1].style.opacity="";bars[2].style.transform="";}
+  });
+  menu.querySelectorAll("a").forEach(function(a){
+    a.addEventListener("click",function(){menu.classList.remove("open");btn.setAttribute("aria-expanded","false");bars[0].style.transform="";bars[1].style.opacity="";bars[2].style.transform="";});
+  });
+  (function(){try{var u=JSON.parse(localStorage.getItem("aiq_user"));if(!u)return;var s=document.getElementById("nav-start-btn"),a=document.getElementById("nav-avatar"),m=document.getElementById("mob-nav-cta");if(s)s.style.display="none";if(m){m.textContent="My Account";m.href="/account";}}catch(e){}})();
+})();
+</script>
 <script src="/chat-widget.js" defer></script>
 </body>
 </html>
