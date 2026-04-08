@@ -138,7 +138,8 @@
         <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
         Back
       </a>
-      <a href="/account" class="nav-avatar" id="nav-avatar" aria-label="My account"></a>
+      <a href="/signup" id="nav-signup-btn" style="display:inline-flex;align-items:center;gap:.4rem;background:var(--fathom);color:var(--lumen);border:none;border-radius:9999px;padding:.4rem 1rem;font-family:'Figtree',sans-serif;font-size:.82rem;font-weight:600;text-decoration:none;transition:background .2s ease" onmouseover="this.style.background='#056b5e'" onmouseout="this.style.background='var(--fathom)'">Sign up free</a>
+      <a href="/account" class="nav-avatar" id="nav-avatar" aria-label="My account" style="display:none"></a>
       <button class="btn-ham" id="btn-ham" aria-label="Open menu" aria-expanded="false"><span class="bar"></span><span class="bar"></span><span class="bar"></span></button>
     </div>
   </nav>
@@ -213,7 +214,7 @@
           <svg class="guarantee-icon" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
           <div>
             <div class="guarantee-title">Money-Back Guarantee</div>
-            <div class="guarantee-sub">Conditions apply. Please read our <a href="/terms#refund-policy" style="color:#5ecfbb;text-decoration:underline">refund policy</a> before purchasing.</div>
+            <div class="guarantee-sub">Conditions apply. Please read our <a href="/terms#refund-policy" style="color:#5ecfbb;text-decoration:underline">refund policy</a>.</div>
           </div>
         </div>
         <div id="superadmin-access" style="display:none" class="superadmin-badge">
@@ -646,15 +647,15 @@
     function renderNavAvatar() {
       const u = getUser();
       const el = document.getElementById('nav-avatar');
+      const signupBtn = document.getElementById('nav-signup-btn');
       if (u) {
+        if (signupBtn) signupBtn.style.display = 'none';
+        el.style.display = 'flex';
         if (u.picture) {
           el.innerHTML = '<img src="' + u.picture + '" alt="' + (u.name || 'Account') + '">';
         } else {
           el.textContent = (u.name || 'A')[0].toUpperCase();
         }
-      } else {
-        el.textContent = '?';
-        el.href = '/signup';
       }
     }
 
