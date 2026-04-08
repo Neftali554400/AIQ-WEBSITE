@@ -1,12 +1,10 @@
-const express   = require('express');
-const Anthropic  = require('@anthropic-ai/sdk');
-const rateLimit  = require('express-rate-limit');
+const express  = require('express');
+const rateLimit = require('express-rate-limit');
 
 const router = express.Router();
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
 const chatLimiter = rateLimit({
-  windowMs: 60 * 1000, // 1 minute
+  windowMs: 60 * 1000,
   max: 20,
   message: { error: 'Too many messages. Please slow down.' },
 });
@@ -41,47 +39,66 @@ You help visitors understand the platform, choose the right course, and answer q
 - Future course updates included at no extra cost
 
 == COMMON QUESTIONS ==
-- "Which course should I start with?" → Ask what they want to create (videos, music, books, etc.) and recommend accordingly
-- "Is there a free trial?" → No free trial, but there's a 48-hour money-back guarantee
+- "Which course should I start with?" → Ask what they want to create and recommend accordingly
+- "Is there a free trial?" → No free trial, but there is a 48-hour money-back guarantee
 - "Can I pay in installments?" → No, one-time payment only
 - "Do I get a certificate?" → Yes, a verified certificate on completion
 - "How long do courses take?" → Self-paced, most students finish in 1–2 weeks
-- "What tools do I need?" → Just a device and internet connection. All AI tools used are introduced in the course.
+- "What tools do I need?" → Just a device and internet connection. All tools are introduced in the course.
 
 == BEHAVIOR RULES ==
 - Never make up information not listed above
 - If you don't know something, say "I'm not sure — email us at hello@aiq-courses.com and we'll help you"
 - Never discuss competitors negatively
 - Keep responses under 120 words unless the user asks for detail
-- Always end with a helpful nudge (e.g. "Want me to help you pick a course?")
+- Always end with a helpful nudge
 - Do not discuss anything unrelated to AIQ or online learning`;
 
 router.post('/', chatLimiter, async (req, res) => {
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+
+  if (!apiKey) {
+    console.error('[chat] ANTHROPIC_API_KEY is not set');
+    return res.status(500).json({ error: 'Chat is not configured yet. Please contact us at hello@aiq-courses.com' });
+  }
+
   try {
     const { messages } = req.body;
     if (!Array.isArray(messages) || messages.length === 0)
       return res.status(400).json({ error: 'Messages required.' });
 
-    // Sanitise — only allow role/content, max 20 messages
     const safe = messages.slice(-20).map(m => ({
       role:    m.role === 'assistant' ? 'assistant' : 'user',
       content: String(m.content).slice(0, 1000),
     }));
 
-    const response = await client.messages.create({
-      model:      'claude-haiku-4-5-20251001',
-      max_tokens: 300,
-      system:     SYSTEM_PROMPT,
-      messages:   safe,
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type':      'application/json',
+        'x-api-key':         apiKey,
+        'anthropic-version': '2023-06-01',
+      },
+      body: JSON.stringify({
+        model:      'claude-haiku-4-5-20251001',
+        max_tokens: 300,
+        system:     SYSTEM_PROMPT,
+        messages:   safe,
+      }),
     });
 
-    const reply = response.content[0]?.text || "I'm sorry, I couldn't generate a response. Please try again.";
-    res.json({ reply });
-  } catch (err) {
-    console.error('[chat error]', err.status, err.message, err.error);
-    if (!process.env.ANTHROPIC_API_KEY) {
-      return res.status(500).json({ error: 'ANTHROPIC_API_KEY is not set on the server.' });
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.error('[chat] Anthropic API error:', response.status, JSON.stringify(data));
+      return res.status(500).json({ error: 'Chat unavailable right now. Please try again shortly.' });
     }
+
+    const reply = data.content?.[0]?.text || "I couldn't generate a response. Please try again.";
+    res.json({ reply });
+
+  } catch (err) {
+    console.error('[chat] Unexpected error:', err.message);
     res.status(500).json({ error: 'Chat unavailable right now. Please try again shortly.' });
   }
 });
