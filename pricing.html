@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Course Pricing — AIQ | Learn AI Skills Online</title>
+  <meta name="description" content="Simple, affordable pricing. Buy the courses you need individually or get all 7 AI courses for one price. No subscription. Lifetime access. Certificate included." />
+  <link rel="canonical" href="https://aiq-courses.com/pricing" />
+  <meta property="og:title"       content="Course Pricing — AIQ" />
+  <meta property="og:description" content="Simple, affordable pricing. Individual courses or all 7 in a bundle. Lifetime access. Certificate included." />
+  <meta property="og:image"       content="https://aiq-courses.com/og-image.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    :root{--lumen:#ffffeb;--fathom:#034f46;--fathom-lt:#056b5e;--glow:#ffa946;--bg:#0a0a08;--surface:rgba(255,255,235,0.04);--border:rgba(255,255,235,0.09)}
+    body{font-family:'Figtree',Arial,sans-serif;-webkit-font-smoothing:antialiased;background:var(--bg);color:var(--lumen);min-height:100vh}
+    body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:128px}
+
+    nav{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:1.1rem 2.5rem;background:rgba(10,10,8,0.92);backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,235,0.06)}
+    .nav-logo{font-family:'EB Garamond',Georgia,serif;font-size:1.45rem;font-weight:500;color:var(--lumen);text-decoration:none;letter-spacing:-0.01em}
+    .nav-links{display:flex;align-items:center;gap:1.5rem}
+    .nav-links a{font-size:.875rem;color:rgba(255,255,235,.5);text-decoration:none;transition:color .15s}
+    .nav-links a:hover{color:var(--lumen)}
+    .btn-nav{background:var(--fathom);color:var(--lumen);border:none;border-radius:9999px;padding:.55rem 1.25rem;font-family:'Figtree',sans-serif;font-size:.85rem;font-weight:600;text-decoration:none;cursor:pointer;transition:background .2s}
+    .btn-nav:hover{background:var(--fathom-lt)}
+
+    main{max-width:1080px;margin:0 auto;padding:6rem 2rem 8rem}
+
+    .page-eyebrow{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:#5ecfbb;text-align:center;margin-bottom:1rem}
+    .page-title{font-family:'EB Garamond',Georgia,serif;font-size:clamp(2.8rem,5vw,4.5rem);font-weight:500;line-height:1.05;letter-spacing:-.02em;text-align:center;margin-bottom:1rem}
+    .page-sub{font-size:1rem;color:rgba(255,255,235,.5);text-align:center;line-height:1.7;margin-bottom:4rem;max-width:520px;margin-left:auto;margin-right:auto}
+
+    /* TRUST BAR */
+    .trust-bar{display:flex;align-items:center;justify-content:center;gap:2rem;flex-wrap:wrap;margin-bottom:4rem;padding:1.25rem;background:rgba(255,255,235,.03);border:1px solid rgba(255,255,235,.07);border-radius:1rem}
+    .trust-item{display:flex;align-items:center;gap:.5rem;font-size:.82rem;color:rgba(255,255,235,.5)}
+    .trust-item svg{color:#5ecfbb;flex-shrink:0}
+
+    /* BUNDLE CARD */
+    .bundle-wrap{margin-bottom:3rem}
+    .bundle-card{background:linear-gradient(135deg,rgba(3,79,70,.2) 0%,rgba(3,79,70,.08) 100%);border:1.5px solid rgba(3,79,70,.5);border-radius:1.5rem;padding:2.5rem;position:relative;overflow:hidden}
+    .bundle-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(3,79,70,.2) 0%,transparent 60%);pointer-events:none}
+    .bundle-badge{display:inline-flex;align-items:center;gap:.4rem;background:var(--glow);color:#0a0a08;border-radius:9999px;padding:.3rem .85rem;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:1.25rem}
+    .bundle-inner{display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:center}
+    @media(max-width:640px){.bundle-inner{grid-template-columns:1fr}}
+    .bundle-title{font-family:'EB Garamond',Georgia,serif;font-size:2rem;font-weight:500;color:var(--lumen);margin-bottom:.5rem}
+    .bundle-desc{font-size:.9rem;color:rgba(255,255,235,.55);line-height:1.7;margin-bottom:1.25rem}
+    .bundle-includes{display:flex;flex-wrap:wrap;gap:.5rem}
+    .bundle-tag{background:rgba(255,255,235,.07);border:1px solid rgba(255,255,235,.1);border-radius:9999px;padding:.25rem .75rem;font-size:.75rem;color:rgba(255,255,235,.6)}
+    .bundle-price-box{text-align:center;flex-shrink:0}
+    .bundle-was{font-size:.82rem;color:rgba(255,255,235,.3);text-decoration:line-through;margin-bottom:.25rem}
+    .bundle-price{font-family:'EB Garamond',Georgia,serif;font-size:3rem;font-weight:500;color:var(--lumen);line-height:1;margin-bottom:.25rem}
+    .bundle-period{font-size:.78rem;color:rgba(255,255,235,.4);margin-bottom:1.25rem}
+    .btn-bundle{display:block;width:100%;background:var(--fathom);color:var(--lumen);border:none;border-radius:.875rem;padding:.9rem 1.5rem;font-family:'Figtree',sans-serif;font-size:.95rem;font-weight:600;text-align:center;text-decoration:none;cursor:pointer;transition:background .2s,transform .15s}
+    .btn-bundle:hover{background:var(--fathom-lt);transform:translateY(-1px)}
+    .btn-bundle-note{font-size:.7rem;color:rgba(255,255,235,.3);text-align:center;margin-top:.6rem}
+
+    /* INDIVIDUAL COURSES */
+    .courses-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,235,.3);margin-bottom:1.25rem}
+    .courses-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+    @media(max-width:800px){.courses-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:500px){.courses-grid{grid-template-columns:1fr}}
+
+    .course-card{background:var(--surface);border:1px solid var(--border);border-radius:1.25rem;padding:1.5rem;display:flex;flex-direction:column;gap:.85rem;transition:border-color .2s}
+    .course-card:hover{border-color:rgba(255,255,235,.2)}
+    .course-icon{font-size:1.6rem}
+    .course-name{font-family:'EB Garamond',Georgia,serif;font-size:1.15rem;font-weight:500;color:var(--lumen);line-height:1.3}
+    .course-meta-row{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap}
+    .course-level{font-size:.7rem;background:rgba(255,255,235,.06);border:1px solid rgba(255,255,235,.1);border-radius:9999px;padding:.2rem .65rem;color:rgba(255,255,235,.5)}
+    .course-rating{font-size:.75rem;color:var(--glow)}
+    .course-price{font-family:'EB Garamond',Georgia,serif;font-size:1.6rem;font-weight:500;color:var(--lumen);margin-top:auto}
+    .btn-course{display:block;width:100%;background:rgba(3,79,70,.25);color:#5ecfbb;border:1px solid rgba(3,79,70,.4);border-radius:.75rem;padding:.65rem 1rem;font-family:'Figtree',sans-serif;font-size:.82rem;font-weight:600;text-align:center;text-decoration:none;cursor:pointer;transition:background .2s,border-color .2s}
+    .btn-course:hover{background:rgba(3,79,70,.45);border-color:rgba(3,79,70,.7)}
+
+    /* INCLUDES */
+    .includes-section{margin-top:4rem;background:var(--surface);border:1px solid var(--border);border-radius:1.5rem;padding:2.5rem}
+    .includes-title{font-family:'EB Garamond',Georgia,serif;font-size:1.5rem;font-weight:500;color:var(--lumen);margin-bottom:1.5rem;text-align:center}
+    .includes-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+    @media(max-width:640px){.includes-grid{grid-template-columns:1fr}}
+    .include-item{display:flex;align-items:flex-start;gap:.75rem}
+    .include-icon{width:36px;height:36px;border-radius:.625rem;background:rgba(3,79,70,.2);border:1px solid rgba(3,79,70,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .include-label{font-size:.88rem;font-weight:600;color:rgba(255,255,235,.85);margin-bottom:.2rem}
+    .include-sub{font-size:.78rem;color:rgba(255,255,235,.4);line-height:1.55}
+
+    /* FAQ */
+    .faq-section{margin-top:4rem}
+    .faq-title{font-family:'EB Garamond',Georgia,serif;font-size:1.5rem;font-weight:500;color:var(--lumen);margin-bottom:1.5rem;text-align:center}
+    .faq-item{border-bottom:1px solid rgba(255,255,235,.08);padding:1.1rem 0}
+    .faq-q{font-size:.92rem;font-weight:600;color:rgba(255,255,235,.85);cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:1rem}
+    .faq-a{font-size:.88rem;color:rgba(255,255,235,.5);line-height:1.75;max-height:0;overflow:hidden;transition:max-height .3s ease,padding .3s ease}
+    .faq-item.open .faq-a{max-height:200px;padding-top:.75rem}
+    .faq-chevron{transition:transform .3s ease;flex-shrink:0;opacity:.5}
+    .faq-item.open .faq-chevron{transform:rotate(180deg)}
+
+    footer{border-top:1px solid rgba(255,255,235,.06);padding:2rem 2.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+    footer span{font-size:.78rem;color:rgba(255,255,235,.22)}
+    footer a{font-size:.78rem;color:rgba(255,255,235,.4);text-decoration:none}
+    footer a:hover{color:rgba(255,255,235,.75)}
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="/" class="nav-logo">AIQ</a>
+    <div class="nav-links">
+      <a href="/courses">Courses</a>
+      <a href="/about">About</a>
+      <a href="/blog">Blog</a>
+    </div>
+    <a href="/signup" class="btn-nav">Get started</a>
+  </nav>
+
+  <main>
+    <div class="page-eyebrow">Pricing</div>
+    <h1 class="page-title">Simple, honest pricing</h1>
+    <p class="page-sub">Pay once. Learn forever. Every course includes lifetime access, a verified certificate, and no hidden fees.</p>
+
+    <!-- TRUST BAR -->
+    <div class="trust-bar">
+      <div class="trust-item">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+        Lifetime access
+      </div>
+      <div class="trust-item">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+        Verified certificate
+      </div>
+      <div class="trust-item">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+        48-hour money-back guarantee
+      </div>
+      <div class="trust-item">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+        No subscription
+      </div>
+      <div class="trust-item">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+        Learn at your own pace
+      </div>
+    </div>
+
+    <!-- INDIVIDUAL COURSES -->
+    <div class="courses-label">Choose your course</div>
+    <div class="courses-grid">
+
+      <div class="course-card">
+        <div class="course-icon">🎬</div>
+        <div class="course-name">Create Videos Using AI</div>
+        <div class="course-meta-row">
+          <span class="course-level">Beginner</span>
+          <span class="course-rating">★ 4.9 · 3,240 students</span>
+        </div>
+        <div class="course-price">₦9,999</div>
+        <a href="/course-detail?c=video" class="btn-course">View course →</a>
+      </div>
+
+      <div class="course-card">
+        <div class="course-icon">📖</div>
+        <div class="course-name">Write Books Using AI</div>
+        <div class="course-meta-row">
+          <span class="course-level">Beginner</span>
+          <span class="course-rating">★ 4.8 · 2,110 students</span>
+        </div>
+        <div class="course-price">₦9,999</div>
+        <a href="/course-detail?c=books" class="btn-course">View course →</a>
+      </div>
+
+      <div class="course-card">
+        <div class="course-icon">🎵</div>
+        <div class="course-name">Create Songs Using AI</div>
+        <div class="course-meta-row">
+          <span class="course-level">Beginner</span>
+          <span class="course-rating">★ 4.8 · 1,890 students</span>
+        </div>
+        <div class="course-price">₦4,999</div>
+        <a href="/course-detail?c=music" class="btn-course">View course →</a>
+      </div>
+
+      <div class="course-card">
+        <div class="course-icon">🎨</div>
+        <div class="course-name">Create Motion Graphics Using AI</div>
+        <div class="course-meta-row">
+          <span class="course-level">Intermediate</span>
+          <span class="course-rating">★ 4.7 · 1,430 students</span>
+        </div>
+        <div class="course-price">₦14,999</div>
+        <a href="/course-detail?c=motion" class="btn-course">View course →</a>
+      </div>
+
+      <div class="course-card">
+        <div class="course-icon">🎮</div>
+        <div class="course-name">Create Games Using AI</div>
+        <div class="course-meta-row">
+          <span class="course-level">All levels</span>
+          <span class="course-rating">★ 4.9 · 3,560 students</span>
+        </div>
+        <div class="course-price">₦29,999</div>
+        <a href="/course-detail?c=games" class="btn-course">View course →</a>
+      </div>
+
+      <div class="course-card">
+        <div class="course-icon">🖼️</div>
+        <div class="course-name">Animate Images Using AI</div>
+        <div class="course-meta-row">
+          <span class="course-level">Beginner</span>
+          <span class="course-rating">★ 4.7 · 1,720 students</span>
+        </div>
+        <div class="course-price">₦4,999</div>
+        <a href="/course-detail?c=animate" class="btn-course">View course →</a>
+      </div>
+
+      <div class="course-card">
+        <div class="course-icon">🌐</div>
+        <div class="course-name">Create Websites Using AI</div>
+        <div class="course-meta-row">
+          <span class="course-level">All levels</span>
+          <span class="course-rating">★ 4.8 · 2,980 students</span>
+        </div>
+        <div class="course-price">₦24,999</div>
+        <a href="/course-detail?c=web" class="btn-course">View course →</a>
+      </div>
+
+    </div>
+
+    <!-- WHAT'S INCLUDED -->
+    <div class="includes-section">
+      <div class="includes-title">Every course includes</div>
+      <div class="includes-grid">
+        <div class="include-item">
+          <div class="include-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="#5ecfbb"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg></div>
+          <div><div class="include-label">Verified certificate</div><div class="include-sub">Download your certificate with your name on completion</div></div>
+        </div>
+        <div class="include-item">
+          <div class="include-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="#5ecfbb"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg></div>
+          <div><div class="include-label">Lifetime access</div><div class="include-sub">Pay once, revisit the course any time, forever</div></div>
+        </div>
+        <div class="include-item">
+          <div class="include-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="#5ecfbb"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg></div>
+          <div><div class="include-label">Community access</div><div class="include-sub">Join thousands of AI creators for feedback and support</div></div>
+        </div>
+        <div class="include-item">
+          <div class="include-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="#5ecfbb"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg></div>
+          <div><div class="include-label">Self-paced learning</div><div class="include-sub">Learn on your schedule — no deadlines, no pressure</div></div>
+        </div>
+        <div class="include-item">
+          <div class="include-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="#5ecfbb"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>
+          <div><div class="include-label">Practical projects</div><div class="include-sub">Build real things you can add to your portfolio immediately</div></div>
+        </div>
+        <div class="include-item">
+          <div class="include-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="#5ecfbb"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm4.24 16L12 15.45 7.77 18l1.12-4.81-3.73-3.23 4.92-.42L12 5l1.92 4.53 4.92.42-3.73 3.23L16.23 18z"/></svg></div>
+          <div><div class="include-label">48-hr money-back</div><div class="include-sub">Not satisfied in 48 hours? Email us for a full refund</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ -->
+    <div class="faq-section">
+      <div class="faq-title">Pricing questions</div>
+
+      <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q">Do I pay monthly or once?<svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg></div>
+        <div class="faq-a">Once. You pay a single one-time fee per course and get lifetime access. There is no subscription, no renewal, and no hidden fees.</div>
+      </div>
+
+      <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q">What's your refund policy?<svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg></div>
+        <div class="faq-a">We offer a full refund if you request it within 48 hours of purchase and have watched fewer than 2 lessons. Email hello@aiq-courses.com with your request.</div>
+      </div>
+
+      <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q">Can I pay in Nigerian Naira?<svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg></div>
+        <div class="faq-a">Yes — all prices are in Nigerian Naira (₦) and payments are processed securely via Paystack, which supports cards, bank transfers and USSD.</div>
+      </div>
+
+      <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q">Will course content be updated?<svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg></div>
+        <div class="faq-a">Yes. AI tools evolve fast and we update courses when major tools change. As a student you get all future updates to a course you've purchased at no extra cost.</div>
+      </div>
+
+      <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q">Do I need any prior experience?<svg class="faq-chevron" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg></div>
+        <div class="faq-a">No. Most courses are built for complete beginners. If a course is intermediate level it's noted on the course page. All you need is curiosity and a device to learn on.</div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    <span>© 2026 AIQ. All rights reserved.</span>
+    <div style="display:flex;gap:1.5rem">
+      <a href="/privacy">Privacy Policy</a>
+      <a href="/terms">Terms of Use</a>
+      <a href="/courses">All Courses</a>
+      <a href="/">Home</a>
+    </div>
+  </footer>
+</body>
+</html>
