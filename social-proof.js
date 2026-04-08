@@ -168,6 +168,12 @@
     }, delay);
   }
 
+  // Only show to non-logged-in users
+  try {
+    const u = JSON.parse(localStorage.getItem('aiq_user'));
+    if (u && u.email) return;
+  } catch(e) {}
+
   // First one appears after 4–7 seconds
   setTimeout(() => {
     showNotification();
