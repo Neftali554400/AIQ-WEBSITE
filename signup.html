@@ -46,10 +46,14 @@
     body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:999;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");background-size:128px}
 
     /* NAV */
-    nav{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 2.5rem;border-bottom:1px solid rgba(255,255,235,0.06)}
+    nav{display:grid;grid-template-columns:auto 1fr auto;align-items:center;padding:1.1rem 2.5rem;border-bottom:1px solid rgba(255,255,235,0.06)}
     .nav-logo{font-family:'EB Garamond',Georgia,serif;font-size:1.45rem;font-weight:500;color:var(--lumen);text-decoration:none;letter-spacing:-0.01em}
-    .nav-back{display:inline-flex;align-items:center;gap:.4rem;font-size:.85rem;color:rgba(255,255,235,.5);text-decoration:none;transition:color .15s ease}
-    .nav-back:hover{color:var(--lumen)}
+    .nav-links{display:flex;align-items:center;justify-content:center;gap:1.25rem;list-style:none}
+    .nav-links a{font-size:.875rem;font-weight:500;color:rgba(255,255,235,.55);text-decoration:none;transition:color .15s ease}
+    .nav-links a:hover{color:var(--lumen)}
+    .btn-nav{display:inline-flex;align-items:center;gap:.4rem;background:var(--fathom);color:var(--lumen);border:none;border-radius:9999px;padding:.55rem 1.25rem;font-family:'Figtree',sans-serif;font-size:.85rem;font-weight:600;text-decoration:none;cursor:pointer;transition:background .2s ease}
+    .btn-nav:hover{background:var(--fathom-lt)}
+    @media(max-width:600px){.nav-links{display:none}}
 
     /* PAGE */
     .page{flex:1;display:flex;align-items:center;justify-content:center;padding:3rem 1.5rem;position:relative;overflow:hidden}
@@ -159,10 +163,15 @@
   <!-- NAV -->
   <nav>
     <a href="/" class="nav-logo">AIQ</a>
-    <a href="/" class="nav-back">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6z"/></svg>
-      Back to home
-    </a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/courses">Courses</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/community">Community</a></li>
+      <li><a href="/pricing">Pricing</a></li>
+      <li><a href="/blog">Blog</a></li>
+    </ul>
+    <a href="/signup" class="btn-nav">Get started</a>
   </nav>
 
   <!-- PAGE -->
