@@ -25,6 +25,22 @@ app.use(cors({
   credentials: true,
 }));
 
+// ── Auto-inject Google Analytics into every HTML response ───────────────────
+const GA_SNIPPET = `<!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-7MGX2RJX2L"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-7MGX2RJX2L');</script>`;
+
+app.use((req, res, next) => {
+  const orig = res.send.bind(res);
+  res.send = function (body) {
+    if (typeof body === 'string' && body.includes('</head>') && !body.includes('G-7MGX2RJX2L')) {
+      body = body.replace('</head>', GA_SNIPPET + '\n</head>');
+    }
+    return orig(body);
+  };
+  next();
+});
+
 // ── Strip .html extension → redirect to clean URL ───────────────────────────
 app.use((req, res, next) => {
   if (req.path.endsWith('.html')) {
