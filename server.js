@@ -25,19 +25,42 @@ app.use(cors({
   credentials: true,
 }));
 
-// ── Auto-inject Google Analytics into every HTML response ───────────────────
+// ── Auto-inject Google Analytics into every HTML page ───────────────────────
+// Uses sendFile interception so it works for static files too
+const fs = require('fs');
 const GA_SNIPPET = `<!-- Google Analytics 4 -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-7MGX2RJX2L"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-7MGX2RJX2L');</script>`;
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-7MGX2RJX2L');</script>
+`;
 
 app.use((req, res, next) => {
-  const orig = res.send.bind(res);
+  // Only intercept HTML requests
+  const origSendFile = res.sendFile.bind(res);
+  res.sendFile = function (filePath, options, callback) {
+    if (typeof filePath === 'string' && filePath.endsWith('.html')) {
+      try {
+        let content = fs.readFileSync(filePath, 'utf8');
+        if (!content.includes('G-7MGX2RJX2L')) {
+          content = content.replace('</head>', GA_SNIPPET + '</head>');
+        }
+        res.setHeader('Content-Type', 'text/html; charset=utf-8');
+        return res.send(content);
+      } catch (e) {
+        return origSendFile(filePath, options, callback);
+      }
+    }
+    return origSendFile(filePath, options, callback);
+  };
+
+  // Also intercept res.send for dynamic responses
+  const origSend = res.send.bind(res);
   res.send = function (body) {
     if (typeof body === 'string' && body.includes('</head>') && !body.includes('G-7MGX2RJX2L')) {
-      body = body.replace('</head>', GA_SNIPPET + '\n</head>');
+      body = body.replace('</head>', GA_SNIPPET + '</head>');
     }
-    return orig(body);
+    return origSend(body);
   };
+
   next();
 });
 
