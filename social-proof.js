@@ -17,12 +17,36 @@
   ];
 
   const NAMES = [
-    ['Charles',  'A'], ['Martins', 'O'], ['Linda',   'M'], ['Peter',   'K'],
-    ['Sarah',    'B'], ['Ahmed',   'I'], ['Chioma',  'E'], ['James',   'R'],
-    ['Sophie',   'L'], ['Maya',    'K'], ['David',   'O'], ['Grace',   'T'],
-    ['Kwame',    'A'], ['Fatima',  'M'], ['Leo',     'S'], ['Amara',   'N'],
-    ['Tunde',    'B'], ['Chloe',   'D'], ['Marcus',  'W'], ['Ife',     'J'],
+    ['Adewale',   'O'], ['Chiamaka', 'E'], ['Babatunde','A'], ['Ngozi',    'I'],
+    ['Emeka',     'U'], ['Funmilayo','B'], ['Chukwuemeka','N'],['Adaeze',  'O'],
+    ['Olumide',   'A'], ['Blessing', 'C'], ['Kayode',   'F'], ['Amaka',    'N'],
+    ['Segun',     'O'], ['Chidinma', 'A'], ['Rotimi',   'B'], ['Ifeoma',   'O'],
+    ['Dapo',      'A'], ['Nneka',    'C'], ['Kunle',    'O'], ['Adaora',   'E'],
+    ['Tochukwu',  'N'], ['Yetunde',  'A'], ['Chidi',    'O'], ['Kemi',     'B'],
+    ['Uche',      'E'], ['Folake',   'A'], ['Obinna',   'C'], ['Titilayo', 'O'],
+    ['Abolaji',   'F'], ['Obiageli', 'N'], ['Femi',     'A'], ['Adunola',  'O'],
+    ['Chinedu',   'O'], ['Olawunmi', 'A'], ['Ikenna',   'U'], ['Bunmi',    'O'],
+    ['Gbenga',    'A'], ['Ebunoluwa','O'], ['Nnamdi',   'C'], ['Tokunbo',  'A'],
+    ['Chinonso',  'E'], ['Wuraola',  'O'], ['Onyeka',   'A'], ['Gbemisola','B'],
+    ['Somtochukwu','N'],['Abimbola', 'A'], ['Chukwudi', 'O'], ['Olayinka', 'F'],
+    ['Ifeanyi',   'O'], ['Morenike', 'A'], ['Ejike',    'N'], ['Damilola', 'O'],
+    ['Olanrewaju','B'], ['Chioma',   'O'], ['Mayowa',   'A'], ['Adaobi',   'C'],
+    ['Jide',      'O'], ['Uchenna',  'E'], ['Lekan',    'A'], ['Nkechi',   'O'],
+    ['Olawale',   'B'], ['Amarachi', 'N'], ['Biodun',   'A'], ['Ogechi',   'C'],
+    ['Adekunle',  'O'], ['Chinwe',   'A'], ['Wale',     'B'], ['Ezinne',   'O'],
+    ['Temitope',  'A'], ['Obinna',   'N'], ['Sola',     'O'], ['Adaeze',   'C'],
+    ['Kelechi',   'U'], ['Folasade', 'A'], ['Chukwuma', 'O'], ['Olubunmi', 'B'],
+    ['Abiodun',   'F'], ['Onyinye',  'C'], ['Gboyega',  'A'], ['Adanna',   'O'],
   ];
+
+  // Shuffle and use as a queue so no name repeats until all are exhausted
+  let _nameQueue = [];
+  function nextName() {
+    if (_nameQueue.length === 0) {
+      _nameQueue = NAMES.slice().sort(() => Math.random() - 0.5);
+    }
+    return _nameQueue.pop();
+  }
 
   const AVATAR_COLORS = [
     '#034f46','#1a6b5a','#2d8a70','#0f4c38',
@@ -103,7 +127,7 @@
 
   // ── Show one notification ────────────────────────────────────────────────────
   function showNotification() {
-    const [firstName, lastInitial] = rand(NAMES);
+    const [firstName, lastInitial] = nextName();
     const event   = rand(EVENTS);
     const course  = rand(COURSES);
     const color   = rand(AVATAR_COLORS);
