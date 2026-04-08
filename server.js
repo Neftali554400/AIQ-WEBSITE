@@ -32,6 +32,7 @@ const GA_SNIPPET = `<!-- Google Analytics 4 -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-7MGX2RJX2L"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-7MGX2RJX2L');</script>
 `;
+const CHAT_SNIPPET = `<script src="/chat-widget.js" defer></script>`;
 
 app.use((req, res, next) => {
   // Only intercept HTML requests
@@ -42,6 +43,9 @@ app.use((req, res, next) => {
         let content = fs.readFileSync(filePath, 'utf8');
         if (!content.includes('G-7MGX2RJX2L')) {
           content = content.replace('</head>', GA_SNIPPET + '</head>');
+        }
+        if (!content.includes('chat-widget.js')) {
+          content = content.replace('</body>', CHAT_SNIPPET + '</body>');
         }
         res.setHeader('Content-Type', 'text/html; charset=utf-8');
         return res.send(content);
@@ -55,8 +59,13 @@ app.use((req, res, next) => {
   // Also intercept res.send for dynamic responses
   const origSend = res.send.bind(res);
   res.send = function (body) {
-    if (typeof body === 'string' && body.includes('</head>') && !body.includes('G-7MGX2RJX2L')) {
-      body = body.replace('</head>', GA_SNIPPET + '</head>');
+    if (typeof body === 'string' && body.includes('</head>')) {
+      if (!body.includes('G-7MGX2RJX2L')) {
+        body = body.replace('</head>', GA_SNIPPET + '</head>');
+      }
+      if (!body.includes('chat-widget.js')) {
+        body = body.replace('</body>', CHAT_SNIPPET + '</body>');
+      }
     }
     return origSend(body);
   };
@@ -118,6 +127,7 @@ app.get('/robots.txt', (_req, res) => {
 
 // ── API routes ──────────────────────────────────────────────────────────────
 app.use('/api/auth', require('./routes/auth'));
+app.use('/api/chat', require('./routes/chat'));
 
 // ── 404 for unknown API calls ───────────────────────────────────────────────
 app.use('/api', (req, res) => res.status(404).json({ error: 'Not found.' }));
