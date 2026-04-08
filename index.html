@@ -83,7 +83,7 @@
     /* NAV */
     nav{position:fixed;top:0;left:0;right:0;z-index:1000;display:flex;align-items:center;justify-content:space-between;padding:1.1rem 2.5rem;background:rgba(10,10,8,0.97);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid rgba(255,255,235,0.06);transform:translate3d(0,0,0);-webkit-transform:translate3d(0,0,0)}
     .nav-logo{font-family:'EB Garamond',Georgia,serif;font-size:1.45rem;font-weight:500;color:var(--lumen);text-decoration:none;letter-spacing:-0.01em}
-    .nav-links{display:flex;align-items:center;gap:2rem;list-style:none}
+    .nav-links{display:flex;align-items:center;gap:1.25rem;list-style:none}
     .nav-links a{font-size:.875rem;font-weight:500;color:rgba(255,255,235,0.55);text-decoration:none;transition:color .15s ease}
     .nav-links a:hover,.nav-links a:focus-visible{color:var(--lumen)}
     .btn-nav{display:inline-flex;align-items:center;gap:.4rem;background:var(--fathom);color:var(--lumen);border:none;border-radius:9999px;padding:.55rem 1.25rem;font-family:'Figtree',sans-serif;font-size:.85rem;font-weight:600;text-decoration:none;cursor:pointer;transition:background .2s ease,transform .15s ease}
@@ -354,10 +354,10 @@
   <nav aria-label="Main navigation">
     <a href="/" class="nav-logo">AIQ</a>
     <ul class="nav-links">
-      <li><a href="/" class="active">Home</a></li>
       <li><a href="/courses">Courses</a></li>
       <li><a href="/about">About</a></li>
       <li><a href="/community">Community</a></li>
+      <li><a href="/pricing">Pricing</a></li>
       <li><a href="/blog">Blog</a></li>
     </ul>
     <a href="/signup" class="btn-nav" id="nav-start-btn">
@@ -462,7 +462,7 @@
     <div class="cards-grid">
 
       <!-- Video -->
-      <a href="/course-detail?id=video" class="course-card card-video" aria-labelledby="card-video-title">
+      <a href="/course-detail?c=video" class="course-card card-video" aria-labelledby="card-video-title">
         <div class="card-visual">
           <img src="thumb-video.svg" alt="AI Video Creation" style="width:100%;height:100%;object-fit:cover;display:block" />
           <div class="card-visual-fade" aria-hidden="true"></div>
@@ -481,7 +481,7 @@
       </a>
 
       <!-- Books -->
-      <a href="/course-detail?id=books" class="course-card card-book" aria-labelledby="card-book-title">
+      <a href="/course-detail?c=books" class="course-card card-book" aria-labelledby="card-book-title">
         <div class="card-visual">
           <img src="thumb-books.svg" alt="AI Writing and Publishing" style="width:100%;height:100%;object-fit:cover;display:block" />
           <div class="card-visual-fade" aria-hidden="true"></div>
@@ -500,7 +500,7 @@
       </a>
 
       <!-- Music -->
-      <a href="/course-detail?id=music" class="course-card card-music" aria-labelledby="card-music-title">
+      <a href="/course-detail?c=music" class="course-card card-music" aria-labelledby="card-music-title">
         <div class="card-visual">
           <img src="thumb-music.svg" alt="AI Music and Audio" style="width:100%;height:100%;object-fit:cover;display:block" />
           <div class="card-visual-fade" aria-hidden="true"></div>
@@ -519,7 +519,7 @@
       </a>
 
       <!-- Motion -->
-      <a href="/course-detail?id=motion" class="course-card card-motion" aria-labelledby="card-motion-title">
+      <a href="/course-detail?c=motion" class="course-card card-motion" aria-labelledby="card-motion-title">
         <div class="card-visual">
           <img src="thumb-motion.svg" alt="Motion Graphics with AI" style="width:100%;height:100%;object-fit:cover;display:block" />
           <div class="card-visual-fade" aria-hidden="true"></div>
@@ -538,7 +538,7 @@
       </a>
 
       <!-- Games -->
-      <a href="/course-detail?id=games" class="course-card card-games" aria-labelledby="card-games-title">
+      <a href="/course-detail?c=games" class="course-card card-games" aria-labelledby="card-games-title">
         <div class="card-visual">
           <img src="thumb-games.svg" alt="AI Game Development" style="width:100%;height:100%;object-fit:cover;display:block" />
           <div class="card-visual-fade" aria-hidden="true"></div>
@@ -557,7 +557,7 @@
       </a>
 
       <!-- Animate Images -->
-      <a href="/course-detail?id=animate" class="course-card card-animate" aria-labelledby="card-animate-title">
+      <a href="/course-detail?c=animate" class="course-card card-animate" aria-labelledby="card-animate-title">
         <div class="card-visual">
           <img src="thumb-animate.svg" alt="Animate Images with AI" style="width:100%;height:100%;object-fit:cover;display:block" />
           <div class="card-visual-fade" aria-hidden="true"></div>
@@ -576,7 +576,7 @@
       </a>
 
       <!-- Create Websites -->
-      <a href="/course-detail?id=web" class="course-card card-web" aria-labelledby="card-web-title">
+      <a href="/course-detail?c=web" class="course-card card-web" aria-labelledby="card-web-title">
         <div class="card-visual">
           <img src="thumb-web.svg" alt="Create Websites with AI" style="width:100%;height:100%;object-fit:cover;display:block" />
           <div class="card-visual-fade" aria-hidden="true"></div>
@@ -899,13 +899,13 @@
       <div>
         <div class="footer-col-head">Courses</div>
         <ul class="footer-links">
-          <li><a href="/course-detail?id=video">AI Video</a></li>
-          <li><a href="/course-detail?id=books">AI Writing</a></li>
-          <li><a href="/course-detail?id=music">AI Music</a></li>
-          <li><a href="/course-detail?id=motion">Motion Graphics</a></li>
-          <li><a href="/course-detail?id=games">AI Games</a></li>
-          <li><a href="/course-detail?id=animate">Image Animation</a></li>
-          <li><a href="/course-detail?id=web">AI Websites</a></li>
+          <li><a href="/course-detail?c=video">AI Video</a></li>
+          <li><a href="/course-detail?c=books">AI Writing</a></li>
+          <li><a href="/course-detail?c=music">AI Music</a></li>
+          <li><a href="/course-detail?c=motion">Motion Graphics</a></li>
+          <li><a href="/course-detail?c=games">AI Games</a></li>
+          <li><a href="/course-detail?c=animate">Image Animation</a></li>
+          <li><a href="/course-detail?c=web">AI Websites</a></li>
         </ul>
       </div>
       <div>
