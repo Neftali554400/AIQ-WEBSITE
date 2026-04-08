@@ -23,7 +23,7 @@
     .nav-logo{font-family:'EB Garamond',Georgia,serif;font-size:1.45rem;font-weight:500;color:var(--lumen);text-decoration:none;letter-spacing:-0.01em}
     .nav-links{display:flex;align-items:center;gap:1.5rem}
     .nav-links a{font-size:.875rem;color:rgba(255,255,235,.5);text-decoration:none;transition:color .15s}
-    .nav-links a:hover{color:var(--lumen)}
+    .nav-links a:hover,.nav-links a.active{color:var(--lumen);font-weight:600}
     .btn-nav{background:var(--fathom);color:var(--lumen);border:none;border-radius:9999px;padding:.55rem 1.25rem;font-family:'Figtree',sans-serif;font-size:.85rem;font-weight:600;text-decoration:none;cursor:pointer;transition:background .2s}
     .btn-nav:hover{background:var(--fathom-lt)}
 
@@ -134,13 +134,13 @@
 <body>
   <nav>
     <a href="/" class="nav-logo">AIQ</a>
-    <ul class="nav-links" style="display:flex;align-items:center;gap:1.5rem;list-style:none">
-      <li><a href="/" style="font-size:.875rem;color:rgba(255,255,235,.5);text-decoration:none;transition:color .15s">Home</a></li>
-      <li><a href="/courses" style="font-size:.875rem;color:rgba(255,255,235,.5);text-decoration:none;transition:color .15s">Courses</a></li>
-      <li><a href="/about" style="font-size:.875rem;color:rgba(255,255,235,.5);text-decoration:none;transition:color .15s">About</a></li>
-      <li><a href="/community" style="font-size:.875rem;color:rgba(255,255,235,.5);text-decoration:none;transition:color .15s">Community</a></li>
-      <li><a href="/blog" style="font-size:.875rem;color:rgba(255,255,235,.5);text-decoration:none;transition:color .15s">Blog</a></li>
-      <li><a href="/pricing" style="font-size:.875rem;color:var(--lumen);text-decoration:none;font-weight:600">Pricing</a></li>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/courses">Courses</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/community">Community</a></li>
+      <li><a href="/pricing" class="active">Pricing</a></li>
+      <li><a href="/blog">Blog</a></li>
     </ul>
     <a href="/signup" class="btn-nav">Get started</a>
   </nav>
