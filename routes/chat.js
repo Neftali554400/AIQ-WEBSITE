@@ -78,7 +78,10 @@ router.post('/', chatLimiter, async (req, res) => {
     const reply = response.content[0]?.text || "I'm sorry, I couldn't generate a response. Please try again.";
     res.json({ reply });
   } catch (err) {
-    console.error('[chat]', err.message);
+    console.error('[chat error]', err.status, err.message, err.error);
+    if (!process.env.ANTHROPIC_API_KEY) {
+      return res.status(500).json({ error: 'ANTHROPIC_API_KEY is not set on the server.' });
+    }
     res.status(500).json({ error: 'Chat unavailable right now. Please try again shortly.' });
   }
 });
