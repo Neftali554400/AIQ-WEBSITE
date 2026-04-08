@@ -5,24 +5,53 @@ const crypto  = require('crypto');
 const { Resend } = require('resend');
 const db      = require('../db/database');
 
+const rateLimit = require('express-rate-limit');
+
 const router   = express.Router();
 const COOKIE   = 'aiq_token';
 const SITE_URL = process.env.SITE_URL || 'http://localhost:3000';
 
-// ─── Failed attempt tracking (in-memory) ─────────────────────────────────────
-const failedAttempts = new Map(); // email -> { count, lastAt }
-function getAttempts(email) { return failedAttempts.get(email) || { count: 0, lastAt: 0 }; }
+// ─── Rate limiters ────────────────────────────────────────────────────────────
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many requests. Please wait a few minutes and try again.' },
+});
+const emailLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many email requests. Please try again in an hour.' },
+});
+
+// ─── Failed attempt tracking (in-memory, with TTL cleanup) ───────────────────
+const ATTEMPT_TTL    = 15 * 60 * 1000; // 15 min
+const failedAttempts = new Map();
+function getAttempts(email) {
+  const r = failedAttempts.get(email);
+  if (r && Date.now() - r.lastAt > ATTEMPT_TTL) { failedAttempts.delete(email); return { count: 0, lastAt: 0 }; }
+  return r || { count: 0, lastAt: 0 };
+}
 function recordFail(email) {
   const a = getAttempts(email);
   failedAttempts.set(email, { count: a.count + 1, lastAt: Date.now() });
   return a.count + 1;
 }
 function clearAttempts(email) { failedAttempts.delete(email); }
+// Purge stale entries every 10 minutes
+setInterval(() => {
+  const now = Date.now();
+  for (const [email, r] of failedAttempts) {
+    if (now - r.lastAt > ATTEMPT_TTL) failedAttempts.delete(email);
+  }
+}, 10 * 60 * 1000);
 
-// ─── Resend email client ──────────────────────────────────────────────────────
-function getResend() {
-  return new Resend(process.env.RESEND_API_KEY);
-}
+// ─── Resend email client (singleton) ─────────────────────────────────────────
+const resend = new Resend(process.env.RESEND_API_KEY);
+function getResend() { return resend; }
 
 async function sendOtpEmail(to, name, otp) {
   console.log('[sendOtpEmail] Sending to:', to);
@@ -136,7 +165,7 @@ function issueToken(res, userId, tv = 0) {
 }
 
 // ─── POST /api/auth/signup ───────────────────────────────────────────────────
-router.post('/signup', async (req, res) => {
+router.post('/signup', authLimiter, async (req, res) => {
   try {
     const { name, email, password } = req.body;
     if (!name || !email || !password)
@@ -163,7 +192,7 @@ router.post('/signup', async (req, res) => {
 });
 
 // ─── POST /api/auth/verify-otp ──────────────────────────────────────────────
-router.post('/verify-otp', async (req, res) => {
+router.post('/verify-otp', authLimiter, async (req, res) => {
   try {
     const { name, email, password, code } = req.body;
     if (!name || !email || !password || !code)
@@ -204,7 +233,7 @@ router.post('/verify-otp', async (req, res) => {
 });
 
 // ─── POST /api/auth/resend-otp ──────────────────────────────────────────────
-router.post('/resend-otp', async (req, res) => {
+router.post('/resend-otp', emailLimiter, async (req, res) => {
   try {
     const { name, email } = req.body;
     if (!email) return res.status(400).json({ error: 'Email required.' });
@@ -223,7 +252,7 @@ router.post('/resend-otp', async (req, res) => {
 });
 
 // ─── POST /api/auth/signin ───────────────────────────────────────────────────
-router.post('/signin', async (req, res) => {
+router.post('/signin', authLimiter, async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password)
@@ -303,7 +332,7 @@ router.post('/verify-signin-otp', async (req, res) => {
 });
 
 // ─── POST /api/auth/resend-signin-otp ───────────────────────────────────────
-router.post('/resend-signin-otp', async (req, res) => {
+router.post('/resend-signin-otp', emailLimiter, async (req, res) => {
   try {
     const { email } = req.body;
     if (!email) return res.status(400).json({ error: 'Email required.' });
@@ -458,7 +487,7 @@ router.patch('/update-profile', (req, res) => {
 });
 
 // ─── POST /api/auth/forgot-password ─────────────────────────────────────────
-router.post('/forgot-password', async (req, res) => {
+router.post('/forgot-password', emailLimiter, async (req, res) => {
   const OK_MSG = 'If an account with that email exists, a reset link has been sent.';
   try {
     const { email } = req.body;

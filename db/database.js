@@ -66,7 +66,17 @@ db.exec(`
 `);
 
 // Add token_version to existing databases that predate this column
-// Use nullable default — SQLite pre-3.37 rejects NOT NULL on ADD COLUMN
 try { db.exec('ALTER TABLE users ADD COLUMN token_version INTEGER DEFAULT 0'); } catch(e) {}
+
+// Performance indexes — safe to run on every start (IF NOT EXISTS)
+db.exec(`
+  CREATE INDEX IF NOT EXISTS idx_users_email          ON users(email);
+  CREATE INDEX IF NOT EXISTS idx_otp_email_used        ON otp_codes(email, used);
+  CREATE INDEX IF NOT EXISTS idx_otp_expires           ON otp_codes(expires_at);
+  CREATE INDEX IF NOT EXISTS idx_reset_token_used      ON reset_tokens(token, used);
+  CREATE INDEX IF NOT EXISTS idx_reset_user            ON reset_tokens(user_id);
+  CREATE INDEX IF NOT EXISTS idx_enrollments_user      ON enrollments(user_id);
+  CREATE INDEX IF NOT EXISTS idx_payments_user         ON payments(user_id);
+`);
 
 module.exports = db;

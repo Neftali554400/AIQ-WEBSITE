@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express      = require('express');
+const compression  = require('compression');
 const cookieParser = require('cookie-parser');
 const cors         = require('cors');
 const path         = require('path');
@@ -16,7 +17,8 @@ process.on('uncaughtException', (err) => {
 const app  = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(express.json());
+app.use(compression());
+app.use(express.json({ limit: '2mb' }));
 app.use(cookieParser());
 app.use(cors({
   origin:      process.env.SITE_URL || 'http://localhost:3000',
@@ -48,8 +50,15 @@ app.get('/account', (req, res) => {
   }
 });
 
-// Serve static files; extensions:['html'] lets /about serve about.html
-app.use(express.static(path.join(__dirname), { extensions: ['html'] }));
+// Serve static files with caching; extensions:['html'] lets /about serve about.html
+app.use(express.static(path.join(__dirname), {
+  extensions: ['html'],
+  maxAge: '1d',
+  setHeaders(res, filePath) {
+    // Don't cache HTML pages — always serve fresh
+    if (filePath.endsWith('.html')) res.setHeader('Cache-Control', 'no-cache');
+  },
+}));
 
 // ── API routes ──────────────────────────────────────────────────────────────
 app.use('/api/auth', require('./routes/auth'));
