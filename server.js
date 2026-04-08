@@ -17,6 +17,8 @@ process.on('uncaughtException', (err) => {
 const app  = express();
 const PORT = process.env.PORT || 3000;
 
+app.set('trust proxy', 1);
+
 app.use(compression());
 app.use(express.json({ limit: '2mb' }));
 app.use(cookieParser());
