@@ -61,6 +61,17 @@
     .enrolled-progress-fill{height:100%;background:linear-gradient(90deg,var(--fathom),#5ecfbb);border-radius:9999px}
     .enrolled-progress-label{font-size:.72rem;color:rgba(255,255,235,.3)}
 
+    /* WELCOME BACK / CONTINUE LEARNING */
+    .continue-banner{background:linear-gradient(135deg,rgba(3,79,70,.18) 0%,rgba(3,79,70,.06) 100%);border:1px solid rgba(3,79,70,.4);border-radius:1.25rem;padding:1.4rem 1.6rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:1.25rem;text-decoration:none;color:inherit;transition:border-color .2s ease,transform .2s ease}
+    .continue-banner:hover{border-color:rgba(3,79,70,.7);transform:translateY(-2px)}
+    .continue-icon{font-size:2rem;flex-shrink:0}
+    .continue-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#5ecfbb;margin-bottom:.25rem}
+    .continue-title{font-family:'EB Garamond',Georgia,serif;font-size:1.15rem;font-weight:500;color:var(--lumen);margin-bottom:.4rem}
+    .continue-bar{height:3px;background:rgba(255,255,235,.08);border-radius:9999px;overflow:hidden;margin-bottom:.25rem;max-width:280px}
+    .continue-bar-fill{height:100%;background:linear-gradient(90deg,var(--fathom),#5ecfbb);border-radius:9999px}
+    .continue-pct{font-size:.75rem;color:rgba(255,255,235,.4)}
+    .continue-arrow{margin-left:auto;width:34px;height:34px;border-radius:50%;border:1px solid rgba(3,79,70,.4);display:flex;align-items:center;justify-content:center;color:#5ecfbb;flex-shrink:0;font-size:1rem}
+
     .empty-state{background:rgba(255,255,235,.03);border:1px dashed rgba(255,255,235,.1);border-radius:1.25rem;padding:2.5rem;text-align:center}
     .empty-state p{font-size:.9rem;color:rgba(255,255,235,.35);margin-bottom:1rem}
     .btn-browse{display:inline-flex;align-items:center;gap:.4rem;background:var(--fathom);color:var(--lumen);border:none;border-radius:9999px;padding:.6rem 1.4rem;font-family:'Figtree',sans-serif;font-size:.85rem;font-weight:600;text-decoration:none;cursor:pointer;transition:background .2s ease}
@@ -201,6 +212,9 @@
         <div class="stat-label">Overall progress</div>
       </div>
     </div>
+
+    <!-- CONTINUE LEARNING (shown on welcome-back) -->
+    <div id="continue-section" style="display:none"></div>
 
     <!-- ENROLLED COURSES -->
     <div class="section">
@@ -542,6 +556,44 @@
           localStorage.setItem('aiq_user', JSON.stringify(user));
           document.getElementById('page-content').classList.add('visible');
           renderProfile();
+
+          // ── Welcome back experience ──────────────────────────
+          const params = new URLSearchParams(window.location.search);
+          if (params.get('wb') === '1') {
+            history.replaceState({}, '', '/account'); // clean URL bar
+            const firstName = (user.name || 'there').split(' ')[0];
+            setTimeout(() => {
+              showToast('Welcome back, ' + firstName + '! Pick up where you left off.', 'success');
+            }, 400);
+
+            // Find most-progressed in-progress course
+            const enrolled = user.enrolled || [];
+            let best = null, bestPct = 0;
+            enrolled.forEach(id => {
+              const meta = COURSE_META[id];
+              if (!meta) return;
+              const prog = (() => { try { return JSON.parse(localStorage.getItem('aiq_progress_' + id)) || {}; } catch(e) { return {}; } })();
+              const done = Object.values(prog).filter(Boolean).length;
+              const pct  = Math.round((done / meta.lessons) * 100);
+              if (pct > 0 && pct < 100 && pct >= bestPct) { best = { id, meta, done, pct }; bestPct = pct; }
+            });
+
+            if (best) {
+              const sec = document.getElementById('continue-section');
+              sec.style.display = 'block';
+              sec.innerHTML = `
+                <a href="/course-detail?c=${best.id}" class="continue-banner">
+                  <div class="continue-icon">${best.meta.icon}</div>
+                  <div style="flex:1;min-width:0">
+                    <div class="continue-label">Continue where you left off</div>
+                    <div class="continue-title">${best.meta.title}</div>
+                    <div class="continue-bar"><div class="continue-bar-fill" style="width:${best.pct}%"></div></div>
+                    <div class="continue-pct">${best.done} of ${best.meta.lessons} lessons · ${best.pct}% complete</div>
+                  </div>
+                  <div class="continue-arrow">→</div>
+                </a>`;
+            }
+          }
         } else {
           localStorage.removeItem('aiq_user');
           document.getElementById('auth-gate').classList.add('visible');

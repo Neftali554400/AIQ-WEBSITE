@@ -783,8 +783,11 @@
       } catch(e) {}
     })();
 
+    let _isReturning = false;
+
     function saveUser(data) {
       const existing = (() => { try { return JSON.parse(localStorage.getItem('aiq_user')) || {}; } catch(e) { return {}; } })();
+      _isReturning = !!(existing && existing.email); // true if already had an account
       const user = Object.assign({}, existing, data);
       if (!user.joined)      user.joined      = new Date().toISOString().split('T')[0];
       if (!user.enrolled)    user.enrolled    = [];
@@ -799,7 +802,11 @@
       const s = document.getElementById('success-state');
       s.classList.add('visible');
       s.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      setTimeout(() => { window.location.href = _nextUrl; }, 1800);
+      // Returning users get ?wb=1 so account page can show "welcome back"
+      const dest = _isReturning
+        ? (_nextUrl.startsWith('/account') ? '/account?wb=1' : _nextUrl)
+        : _nextUrl;
+      setTimeout(() => { window.location.href = dest; }, 1800);
     }
 
     function showLogin(e) {
