@@ -154,13 +154,19 @@ async function sendCourseCompleteEmail(to, name, courseTitle, certId, certUrl, o
 }
 
 // ─── Helper: issue JWT in httpOnly cookie ────────────────────────────────────
+const ADMIN_EMAILS = ['michael.neftali@gmail.com'];
+
 function issueToken(res, userId, tv = 0) {
-  const token = jwt.sign({ id: userId, tv }, process.env.JWT_SECRET, { expiresIn: '24h' });
+  const user      = db.prepare('SELECT email FROM users WHERE id = ?').get(userId);
+  const isAdmin   = user && ADMIN_EMAILS.includes(user.email);
+  const expiresIn = isAdmin ? '365d' : '24h';
+  const maxAge    = isAdmin ? 365 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000;
+  const token     = jwt.sign({ id: userId, tv }, process.env.JWT_SECRET, { expiresIn });
   res.cookie(COOKIE, token, {
     httpOnly: true,
     secure:   process.env.NODE_ENV === 'production',
     sameSite: 'lax',
-    maxAge:   24 * 60 * 60 * 1000,
+    maxAge,
   });
 }
 
