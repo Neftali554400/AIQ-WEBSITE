@@ -112,8 +112,9 @@ const ADMIN_EMAILS = ['michael.neftali@gmail.com'];
 app.use((req, res, next) => {
   if (req.method !== 'GET') return next();
   const p = req.path;
-  // Always pass through admin pages, static assets, and coming-soon
+  // Always pass through admin pages, API routes, static assets, and coming-soon
   if (ADMIN_PATHS.has(p)) return next();
+  if (p.startsWith('/api/')) return next();
   if (p === '/coming-soon') return next();
   if (/\.\w{2,5}$/.test(p)) return next(); // .js, .css, .svg, .png etc.
   // Let admins through to the full site
