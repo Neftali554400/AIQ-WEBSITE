@@ -137,6 +137,17 @@ app.get('/robots.txt', (_req, res) => {
   res.sendFile(path.join(__dirname, 'robots.txt'));
 });
 
+// ── Early access email capture ───────────────────────────────────────────────
+app.post('/api/early-access', express.json(), (req, res) => {
+  const { email } = req.body || {};
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return res.status(400).json({ error: 'Valid email required.' });
+  }
+  // Log to console — connect to Mailchimp/ConvertKit/DB later
+  console.log('[early-access]', email);
+  res.json({ ok: true });
+});
+
 // ── API routes ──────────────────────────────────────────────────────────────
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/chat', require('./routes/chat'));
