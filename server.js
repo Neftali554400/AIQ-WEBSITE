@@ -34,6 +34,8 @@ const GA_SNIPPET = `<!-- Google Analytics 4 -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-7MGX2RJX2L"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-7MGX2RJX2L');</script>
 `;
+const GTM_HEAD = `<!-- Google Tag Manager --><script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-56BM6RWR');</script><!-- End Google Tag Manager -->`;
+const GTM_BODY = `<!-- Google Tag Manager (noscript) --><noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-56BM6RWR" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript><!-- End Google Tag Manager (noscript) -->`;
 const CHAT_SNIPPET = `<script src="/chat-widget.js" defer></script>`;
 
 app.use((req, res, next) => {
@@ -45,6 +47,10 @@ app.use((req, res, next) => {
         let content = fs.readFileSync(filePath, 'utf8');
         if (!content.includes('G-7MGX2RJX2L')) {
           content = content.replace('</head>', GA_SNIPPET + '</head>');
+        }
+        if (!content.includes('GTM-56BM6RWR')) {
+          content = content.replace('<head>', '<head>' + GTM_HEAD);
+          content = content.replace('<body>', '<body>' + GTM_BODY);
         }
         if (!content.includes('chat-widget.js')) {
           content = content.replace('</body>', CHAT_SNIPPET + '</body>');
@@ -64,6 +70,10 @@ app.use((req, res, next) => {
     if (typeof body === 'string' && body.includes('</head>')) {
       if (!body.includes('G-7MGX2RJX2L')) {
         body = body.replace('</head>', GA_SNIPPET + '</head>');
+      }
+      if (!body.includes('GTM-56BM6RWR')) {
+        body = body.replace('<head>', '<head>' + GTM_HEAD);
+        body = body.replace('<body>', '<body>' + GTM_BODY);
       }
       if (!body.includes('chat-widget.js')) {
         body = body.replace('</body>', CHAT_SNIPPET + '</body>');
