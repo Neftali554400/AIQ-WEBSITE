@@ -141,11 +141,16 @@ app.use(express.static(path.join(__dirname), {
   },
 }));
 
-// ── OG image (social share preview) ─────────────────────────────────────────
+// ── OG images (social share previews) ───────────────────────────────────────
 app.get('/og-image.png', (_req, res) => {
   res.setHeader('Content-Type', 'image/svg+xml');
   res.setHeader('Cache-Control', 'public, max-age=86400');
   res.sendFile(path.join(__dirname, 'og-image.svg'));
+});
+app.get('/og-image-coming-soon.png', (_req, res) => {
+  res.setHeader('Content-Type', 'image/svg+xml');
+  res.setHeader('Cache-Control', 'public, max-age=86400');
+  res.sendFile(path.join(__dirname, 'og-image-coming-soon.svg'));
 });
 
 // ── Sitemap & robots ────────────────────────────────────────────────────────
