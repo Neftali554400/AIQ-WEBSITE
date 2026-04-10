@@ -107,8 +107,6 @@ app.get('/', (_req, res) => {
 
 // Redirect all other HTML page routes to / (coming soon)
 // Allow: admin pages, static assets (has extension), api, coming-soon itself, and logged-in admins
-const ADMIN_EMAILS = ['michael.neftali@gmail.com'];
-
 app.use((req, res, next) => {
   if (req.method !== 'GET') return next();
   const p = req.path;
@@ -117,15 +115,8 @@ app.use((req, res, next) => {
   if (p.startsWith('/api/')) return next();
   if (p === '/coming-soon') return next();
   if (/\.\w{2,5}$/.test(p)) return next(); // .js, .css, .svg, .png etc.
-  // Let admins through to the full site
-  const token = req.cookies['aiq_token'];
-  if (token) {
-    try {
-      const { id } = jwt.verify(token, process.env.JWT_SECRET);
-      const user   = db.prepare('SELECT email FROM users WHERE id = ?').get(id);
-      if (user && ADMIN_EMAILS.includes(user.email)) return next();
-    } catch(_) {}
-  }
+  // Let admins through — admin portal sets aiq_admin_bypass cookie on login
+  if (req.cookies['aiq_admin_bypass']) return next();
   // Everyone else → coming soon
   return res.redirect(302, '/');
 });

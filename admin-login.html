@@ -110,6 +110,8 @@
           loginTime: new Date().toISOString()
         };
         localStorage.setItem('aiq_admin_session', JSON.stringify(adminSession));
+        // Set a cookie so the server can bypass the coming-soon redirect for admins
+        document.cookie = 'aiq_admin_bypass=1; path=/; max-age=' + (30 * 24 * 60 * 60) + '; SameSite=Lax';
         window.location.href = '/admin';
       })
       .catch(() => {
