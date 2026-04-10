@@ -453,6 +453,8 @@
     let session = null;
     try { session = JSON.parse(localStorage.getItem('aiq_admin_session')); } catch(e) {}
     if (!session || !session.email) { window.location.href = '/admin-login'; }
+    // Ensure bypass cookie is always set for active admin sessions
+    document.cookie = 'aiq_admin_bypass=1; path=/; max-age=' + (30 * 24 * 60 * 60) + '; SameSite=Lax';
 
     const isSuperAdmin = session.email.toLowerCase() === SUPER_ADMIN_EMAIL.toLowerCase();
 
@@ -819,6 +821,7 @@
     // ─── SIGN OUT ─────────────────────────────────────────
     function adminSignOut() {
       localStorage.removeItem('aiq_admin_session');
+      document.cookie = 'aiq_admin_bypass=; path=/; max-age=0; SameSite=Lax';
       window.location.href = '/admin-login';
     }
 
