@@ -97,16 +97,37 @@ app.use((req, res, next) => {
 });
 
 // ── Server-side guard for /account ──────────────────────────────────────────
+// ── Coming soon: serve at / and redirect all public pages ───────────────────
+// Pages still accessible directly (admin only)
+const ADMIN_PATHS = new Set(['/admin', '/admin-login']);
+
+app.get('/', (_req, res) => {
+  res.sendFile(path.join(__dirname, 'coming-soon.html'));
+});
+
+// Redirect all other HTML page routes to / (coming soon)
+// Allow: admin pages, static assets (has extension), api, coming-soon itself
+app.use((req, res, next) => {
+  if (req.method !== 'GET') return next();
+  const p = req.path;
+  // Pass through admin, assets with extensions, and coming-soon
+  if (ADMIN_PATHS.has(p)) return next();
+  if (p === '/coming-soon') return next();
+  if (/\.\w{2,5}$/.test(p)) return next(); // .js, .css, .svg, .png etc.
+  // Redirect everything else to coming soon
+  return res.redirect(302, '/');
+});
+
 app.get('/account', (req, res) => {
   const token = req.cookies['aiq_token'];
-  if (!token) return res.redirect('/signup');
+  if (!token) return res.redirect('/');
   try {
     const { id } = jwt.verify(token, process.env.JWT_SECRET);
     const user = db.prepare('SELECT id FROM users WHERE id = ?').get(id);
-    if (!user) return res.redirect('/signup');
+    if (!user) return res.redirect('/');
     res.sendFile(path.join(__dirname, 'account.html'));
   } catch(e) {
-    res.redirect('/signup');
+    res.redirect('/');
   }
 });
 
