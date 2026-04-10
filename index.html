@@ -281,7 +281,8 @@
     .vid-card{background:rgba(255,255,235,.03);border:1px solid rgba(255,255,235,.09);border-radius:1.5rem;overflow:hidden;transition:border-color .25s ease,transform .2s ease,box-shadow .25s ease}
     .vid-card:hover{border-color:rgba(255,255,235,.18);transform:translateY(-4px);box-shadow:0 24px 64px rgba(0,0,0,.45)}
     .vid-thumb{position:relative;height:340px;background:linear-gradient(135deg,#0a1a12 0%,#061a2e 100%);overflow:hidden;cursor:pointer}
-    .vid-thumb-glow{position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 40%,rgba(3,79,70,.35) 0%,transparent 70%);pointer-events:none}
+    .vid-thumb-glow{position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 40%,rgba(3,79,70,.35) 0%,transparent 70%);pointer-events:none;transition:opacity .2s ease}
+    .vid-thumb.playing .vid-thumb-glow{opacity:0}
     /* centre play button — shown at rest, hidden when playing */
     .vid-play{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:2;transition:opacity .2s ease}
     .vid-thumb.playing .vid-play{opacity:0;pointer-events:none}
