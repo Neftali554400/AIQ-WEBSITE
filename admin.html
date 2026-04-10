@@ -160,6 +160,9 @@
       <button class="nav-item" id="admins-nav-item" onclick="switchPanel('admins', this)" style="display:none">
         <span class="nav-icon">🔐</span> Admin Accounts
       </button>
+      <button class="nav-item" onclick="switchPanel('earlyaccess', this)">
+        <span class="nav-icon">🔔</span> Early Access List
+      </button>
       <div class="nav-section-label">Site</div>
       <a href="/" class="nav-item" target="_blank">
         <span class="nav-icon">🌐</span> View Site
@@ -316,6 +319,33 @@
             </tr>
           </thead>
           <tbody id="admins-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- EARLY ACCESS PANEL -->
+    <div class="panel" id="panel-earlyaccess">
+      <div class="page-header">
+        <div class="page-eyebrow">Coming Soon</div>
+        <div class="page-title">Early Access List</div>
+      </div>
+
+      <div class="table-card">
+        <div class="table-header">
+          <span class="table-title">Waitlist Signups</span>
+          <button class="btn btn-primary" onclick="exportEarlyAccess()" style="font-size:.78rem;padding:.4rem 1rem">Export CSV</button>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Email</th>
+              <th>Signed Up</th>
+            </tr>
+          </thead>
+          <tbody id="earlyaccess-tbody">
+            <tr><td colspan="3" style="padding:2rem;text-align:center;color:rgba(255,255,235,.3)">Loading…</td></tr>
+          </tbody>
         </table>
       </div>
     </div>
@@ -497,6 +527,41 @@
       if (id === 'courses') renderCourseManager();
       if (id === 'students') loadStudents();
       if (id === 'admins') renderAdmins();
+      if (id === 'earlyaccess') loadEarlyAccess();
+    }
+
+    // ─── EARLY ACCESS ──────────────────────────────────────
+    async function loadEarlyAccess() {
+      const tbody = document.getElementById('earlyaccess-tbody');
+      tbody.innerHTML = '<tr><td colspan="3" style="padding:2rem;text-align:center;color:rgba(255,255,235,.3)">Loading…</td></tr>';
+      try {
+        const res  = await fetch('/api/admin/early-access', { credentials: 'include' });
+        const data = await res.json();
+        if (!data.length) {
+          tbody.innerHTML = '<tr><td colspan="3" style="padding:2rem;text-align:center;color:rgba(255,255,235,.3)">No signups yet.</td></tr>';
+          return;
+        }
+        tbody.innerHTML = data.map((row, i) => `
+          <tr>
+            <td style="padding:.75rem 1.5rem;font-size:.82rem;color:rgba(255,255,235,.35)">${i + 1}</td>
+            <td style="padding:.75rem 1.5rem;font-size:.85rem;color:var(--lumen)">${row.email}</td>
+            <td style="padding:.75rem 1.5rem;font-size:.82rem;color:rgba(255,255,235,.4)">${new Date(row.created_at).toLocaleString()}</td>
+          </tr>`).join('');
+      } catch(e) {
+        tbody.innerHTML = '<tr><td colspan="3" style="padding:2rem;text-align:center;color:#f87171">Failed to load.</td></tr>';
+      }
+    }
+
+    function exportEarlyAccess() {
+      fetch('/api/admin/early-access', { credentials: 'include' })
+        .then(r => r.json())
+        .then(data => {
+          const csv = 'Email,Signed Up\n' + data.map(r => `${r.email},${r.created_at}`).join('\n');
+          const a = document.createElement('a');
+          a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+          a.download = 'early-access-list.csv';
+          a.click();
+        });
     }
 
     // ─── DASHBOARD ────────────────────────────────────────

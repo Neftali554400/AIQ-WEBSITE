@@ -63,6 +63,12 @@ db.exec(`
     paid_at   DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id)
   );
+
+  CREATE TABLE IF NOT EXISTS early_access (
+    id         INTEGER PRIMARY KEY AUTOINCREMENT,
+    email      TEXT    UNIQUE NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
 `);
 
 // Add token_version to existing databases that predate this column

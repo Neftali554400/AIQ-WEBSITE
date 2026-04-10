@@ -169,9 +169,29 @@ app.post('/api/early-access', express.json(), (req, res) => {
   if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return res.status(400).json({ error: 'Valid email required.' });
   }
-  // Log to console — connect to Mailchimp/ConvertKit/DB later
-  console.log('[early-access]', email);
+  try {
+    db.prepare('INSERT OR IGNORE INTO early_access (email) VALUES (?)').run(email.toLowerCase().trim());
+    console.log('[early-access] saved:', email);
+  } catch (e) {
+    console.error('[early-access] db error:', e.message);
+  }
   res.json({ ok: true });
+});
+
+// ── Admin: early access list ─────────────────────────────────────────────────
+app.get('/api/admin/early-access', (req, res) => {
+  const token = req.cookies['aiq_token'];
+  if (!token) return res.status(401).json({ error: 'Unauthorized.' });
+  try {
+    const { id } = jwt.verify(token, process.env.JWT_SECRET);
+    const user = db.prepare('SELECT email FROM users WHERE id = ?').get(id);
+    const allowed = ['michael.neftali@gmail.com'];
+    if (!user || !allowed.includes(user.email)) return res.status(403).json({ error: 'Forbidden.' });
+    const rows = db.prepare('SELECT email, created_at FROM early_access ORDER BY created_at DESC').all();
+    res.json(rows);
+  } catch(e) {
+    res.status(401).json({ error: 'Unauthorized.' });
+  }
 });
 
 // ── API routes ──────────────────────────────────────────────────────────────
