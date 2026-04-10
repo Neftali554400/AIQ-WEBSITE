@@ -101,7 +101,10 @@ app.use((req, res, next) => {
 // Pages still accessible directly (admin only)
 const ADMIN_PATHS = new Set(['/admin', '/admin-login']);
 
-app.get('/', (_req, res) => {
+app.get('/', (req, res) => {
+  if (req.cookies['aiq_admin_bypass']) {
+    return res.sendFile(path.join(__dirname, 'index.html'));
+  }
   res.sendFile(path.join(__dirname, 'coming-soon.html'));
 });
 
