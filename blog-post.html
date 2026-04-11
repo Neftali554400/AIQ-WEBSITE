@@ -534,6 +534,6 @@
       (function(){var btn=document.getElementById("btn-ham"),menu=document.getElementById("mob-nav"),bars=btn.querySelectorAll(".bar");btn.addEventListener("click",function(){var open=menu.classList.toggle("open");btn.setAttribute("aria-expanded",open);if(open){bars[0].style.transform="translateY(7px) rotate(45deg)";bars[1].style.opacity="0";bars[2].style.transform="translateY(-7px) rotate(-45deg)";}else{bars[0].style.transform="";bars[1].style.opacity="";bars[2].style.transform="";}});menu.querySelectorAll("a").forEach(function(a){a.addEventListener("click",function(){menu.classList.remove("open");btn.setAttribute("aria-expanded","false");bars[0].style.transform="";bars[1].style.opacity="";bars[2].style.transform="";});});})();
 </script>
   <script src="auth.js"></script>
-<script src="/chat-widget.js" defer></script>
+
 </body>
 </html>
