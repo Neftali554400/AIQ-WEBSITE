@@ -149,9 +149,9 @@ app.use(express.static(path.join(__dirname), {
 
 // ── Favicon ──────────────────────────────────────────────────────────────────
 app.get('/favicon.ico', (_req, res) => {
-  res.setHeader('Content-Type', 'image/png');
+  res.setHeader('Content-Type', 'image/svg+xml');
   res.setHeader('Cache-Control', 'public, max-age=86400');
-  res.sendFile(path.join(__dirname, 'aiq-logo.png'));
+  res.sendFile(path.join(__dirname, 'favicon.svg'));
 });
 
 // ── OG images (social share previews) ───────────────────────────────────────
