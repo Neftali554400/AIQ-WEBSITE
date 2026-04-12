@@ -28,7 +28,13 @@
       "Bash(timeout 5 node server.js)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" https://aiq-website-production.up.railway.app/)",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\" https://aiq-courses.com/)",
-      "Bash(curl -s -o /dev/null -w \"%{http_code}\" https://aiq-courses.com/signup.html)"
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" https://aiq-courses.com/signup.html)",
+      "Bash(grep -l \"auth.js\" \"/Users/Apple/Downloads/Website Building/\"*.html)",
+      "Bash(node screenshot.mjs \"http://localhost:3000/certificate.html?course=video&name=Adewale%20Okonkwo&date=2026-04-08&cert=AIQ-VIDEO-3F8K2X\" cert-sig)",
+      "Bash(python3)",
+      "Bash(node -e \"fetch\\('https://api.anthropic.com/v1/messages', {method:'POST',headers:{'Content-Type':'application/json','x-api-key':process.env.ANTHROPIC_API_KEY||'test','anthropic-version':'2023-06-01'},body:JSON.stringify\\({model:'claude-haiku-4-5-20251001',max_tokens:50,messages:[{role:'user',content:'say hi'}]}\\)}\\).then\\(r=>r.json\\(\\)\\).then\\(d=>console.log\\(JSON.stringify\\(d\\)\\)\\).catch\\(e=>console.error\\(e.message\\)\\)\")",
+      "Bash(sed -i '' 's|<a href=\"/\" class=\"nav-logo\">AIQ</a>|<a href=\"/\" class=\"nav-logo\"><img src=\"/aiq-logo.png\" alt=\"AIQ Courses\" style=\"height:38px;width:auto;display:block\" /></a>|g' index.html courses.html about.html blog.html blog-post.html pricing.html terms.html privacy.html course-detail.html community.html signup.html account.html payment.html certificate.html blog-post.html 404.html)",
+      "Bash(sed -i '' 's|<span class=\"footer-logo\">AIQ</span>|<img src=\"/aiq-logo.png\" alt=\"AIQ Courses\" style=\"height:36px;width:auto;display:block;margin-bottom:.5rem\" />|g' index.html courses.html about.html blog.html blog-post.html pricing.html terms.html privacy.html community.html)"
     ]
   }
 }
