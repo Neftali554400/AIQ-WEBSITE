@@ -96,32 +96,9 @@ app.use((req, res, next) => {
   next();
 });
 
-// ── Server-side guard for /account ──────────────────────────────────────────
-// ── Coming soon: serve at / and redirect all public pages ───────────────────
-// Pages still accessible directly (admin only)
-const ADMIN_PATHS = new Set(['/admin', '/admin-login']);
-
+// ── Home ─────────────────────────────────────────────────────────────────────
 app.get('/', (req, res) => {
-  if (req.cookies['aiq_admin_bypass']) {
-    return res.sendFile(path.join(__dirname, 'index.html'));
-  }
-  res.sendFile(path.join(__dirname, 'coming-soon.html'));
-});
-
-// Redirect all other HTML page routes to / (coming soon)
-// Allow: admin pages, static assets (has extension), api, coming-soon itself, and logged-in admins
-app.use((req, res, next) => {
-  if (req.method !== 'GET') return next();
-  const p = req.path;
-  // Always pass through admin pages, API routes, static assets, and coming-soon
-  if (ADMIN_PATHS.has(p)) return next();
-  if (p.startsWith('/api/')) return next();
-  if (p === '/coming-soon') return next();
-  if (/\.\w{2,5}$/.test(p)) return next(); // .js, .css, .svg, .png etc.
-  // Let admins through — admin portal sets aiq_admin_bypass cookie on login
-  if (req.cookies['aiq_admin_bypass']) return next();
-  // Everyone else → coming soon
-  return res.redirect(302, '/');
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.get('/account', (req, res) => {
